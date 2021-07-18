@@ -10,9 +10,8 @@ import ImagePicker from "../components/ImagePicker";
 import CustomTextInput from "../components/CustomTextInput";
 
 export default function AccountScreen(props) {
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit } = useForm();
   const [localUrl, setLocalUrl] = useState("");
-  console.log(localUrl);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
   const firstName = useSelector((state) => state.auth.firstName);
@@ -35,8 +34,15 @@ export default function AccountScreen(props) {
     formData.append("id", userId);
     formData.append("firstName", data.firstName);
     formData.append("lastName", data.lastName);
+    data.oldPassword === undefined
+      ? null
+      : formData.append("old_password", data.oldPassword);
+    data.newPassword === undefined
+      ? null
+      : formData.append("new_password", data.newPassword);
 
     dispatch(updateUser(formData));
+    props.navigation.goBack();
   };
   return (
     <View style={SharedStyles.screen}>
@@ -89,7 +95,7 @@ export default function AccountScreen(props) {
             control={control}
             name="imageUrl"
             defaultValue={null}
-            rules={{ required: true }}
+            rules={{ required: false }}
             render={({ field: { onChange, value } }) => (
               <ImagePicker
                 onChange={onChange}
@@ -101,12 +107,50 @@ export default function AccountScreen(props) {
               />
             )}
           />
+          <View style={{ marginTop: 10 }}>
+            <Controller
+              name="oldPassword"
+              initialValue=""
+              control={control}
+              rules={{ required: false }}
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <CustomTextInput
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Old Password"
+                    isPassword
+                  />
+                );
+              }}
+            />
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <Controller
+              name="newPassword"
+              initialValue=""
+              control={control}
+              rules={{ required: false }}
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <CustomTextInput
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="New Password"
+                    isPassword
+                  />
+                );
+              }}
+            />
+          </View>
           <TouchableOpacity
+            style={{ width: "100%" }}
             onPress={handleSubmit(onSubmit)}
-            style={styles.badgeContainer}
           >
-            <View style={styles.badge}>
-              <Text style={styles.badgText}>Update Profile</Text>
+            <View style={styles.signInButton}>
+              <Text style={styles.textSignIn}>Update Profile</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -191,21 +235,18 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginVertical: 4,
   },
-  badgeContainer: {
-    width: "30%",
-    height: 22,
-  },
-  badge: {
+  signInButton: {
+    height: 44,
     width: "100%",
-    height: "100%",
+    backgroundColor: Colors.primaryColor,
     justifyContent: "center",
-    borderRadius: 8,
     alignItems: "center",
-    backgroundColor: "#FFF0C1",
-    borderRadius: 6,
+    marginTop: 20,
+    borderRadius: 10,
+    flexDirection: "row",
   },
-  badgText: {
-    fontSize: 9,
-    color: Colors.primaryColor,
+  textSignIn: {
+    color: "white",
+    fontSize: 14,
   },
 });

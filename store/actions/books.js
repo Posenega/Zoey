@@ -201,3 +201,12 @@ export const fetchUserBooks = () => {
       });
   };
 };
+
+export const deleteBook = (bookId) => {
+  return (dispatch, getState) => {
+    const token = getState().auth.token;
+    axios.delete(`/api/books/${bookId}`, {
+      headers: { Authorization: "Bearer " + token },
+    });
+  };
+};

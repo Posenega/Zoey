@@ -8,10 +8,13 @@ import Colors from "../constants/Colors";
 import FavoriteButton from "../components/Icons/FavoriteButton";
 import BackButton from "../components/Icons/BackButton";
 import {
+  deleteBook,
   fetchFavoriteBooks,
   requestAddFavoriteBook,
   requestRemoveFavoriteBook,
 } from "../store/actions/books";
+import DeleteButton from "../components/Icons/DeleteButton";
+import EditButton from "../components/Icons/EditButton";
 
 export default function BookDetailScreen(props) {
   const id = props.route.params.id;
@@ -20,7 +23,7 @@ export default function BookDetailScreen(props) {
   const displayedBook = useSelector((state) =>
     state.books.books.find((book) => book.id === id)
   );
-
+  const userId = useSelector((state) => state.auth.userId);
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
   }, []);
@@ -91,6 +94,21 @@ export default function BookDetailScreen(props) {
           >
             <FavoriteButton size={20} color={isFavorite ? "red" : "#C9C9C9"} />
           </TouchableOpacity>
+          {userId === displayedBook.creator ? (
+            <View style={{ marginLeft: 15, flexDirection: "row" }}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(deleteBook(displayedBook._id));
+                  props.navigation.goBack();
+                }}
+              >
+                <DeleteButton />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {}} style={{ marginLeft: 15 }}>
+                <EditButton />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
         <Text numberOfLines={1} style={styles.author}>
           {displayedBook.author}
