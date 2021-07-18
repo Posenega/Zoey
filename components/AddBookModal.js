@@ -38,6 +38,7 @@ export default function AddBookModal() {
   const [typeSelector, setTypeSelector] = useState("");
   const [categorySelector, setCategorySelector] = useState("");
   const addBookStatus = useSelector((state) => state.books.addBookStatus);
+  const editedBook = useSelector((state) => state.addBookModal.editedBook);
 
   const modalizeRef = useRef(null);
   const dispatch = useDispatch();
@@ -93,7 +94,9 @@ export default function AddBookModal() {
     >
       <View style={styles.modal}>
         <View style={styles.modalHeader}>
-          <Text style={styles.headerText}>Add a book</Text>
+          <Text style={styles.headerText}>
+            {editedBook ? "Edit your book" : "Add your book"}
+          </Text>
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
             style={styles.badgeContainer}
@@ -102,25 +105,12 @@ export default function AddBookModal() {
               {addBookStatus === "LOADING" ? (
                 <ActivityIndicator size="small" color={Colors.primaryColor} />
               ) : (
-                <Text style={styles.badgText}>Add your book</Text>
+                <Text style={styles.badgText}>
+                  {editedBook ? "Edit your book" : "Add your book"}
+                </Text>
               )}
             </View>
           </TouchableOpacity>
-          {/* <Text style={styles.headerText}>Add a book</Text>
-          <TouchableOpacity
-            style={{ width: '100%' }}
-            onPress={handleSubmit(onSubmit)}>
-            <Badge
-              style={styles.badge}
-              color={Colors.primaryColor}
-              backgroundColor='#FFF0C1'>
-              {addBookStatus === 'PENDING' ? (
-                <ActivityIndicator size='small' color='#2b2b2b' />
-              ) : (
-                'Add your book'
-              )}
-            </Badge>
-          </TouchableOpacity> */}
         </View>
         <View style={styles.modalBody}>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -154,30 +144,6 @@ export default function AddBookModal() {
                 )}
               />
             </View>
-            {/* <View style={{ marginBottom: 10 }}>
-              <Controller
-                control={control}
-                name="imageUrl"
-                defaultValue=""
-                rules={{
-                  required: true,
-                  validate: (val) => {
-                    if (val.match(/\.(jpeg|jpg|gif|png)$/) === null) {
-                      return "Please enter a correct image url.";
-                    }
-                    return true;
-                  },
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <CustomTextInput
-                    placeholder="Image url (Temporary)"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-            </View> */}
             <Controller
               control={control}
               name="description"
@@ -220,6 +186,7 @@ export default function AddBookModal() {
                   onChange={onChange}
                   value={value}
                   text="Add book cover"
+                  aspect={[2, 3]}
                   sendData={useCallback((result) => {
                     setLocalUrl(result);
                   }, [])}

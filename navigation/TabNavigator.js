@@ -27,11 +27,18 @@ const TabNavigator = () => (
     <BottomTab.Screen
       name="Explore"
       component={BooksNavigator}
-      options={{
+      options={({ route }) => ({
         tabBarIcon: ({ color, size }) => (
           <CategoryButton color={color} size={size} />
         ),
-      }}
+        tabBarStyle: (() => {
+          const routeName = getFocusedRouteNameFromRoute(route);
+          if (routeName === "detail") {
+            return { display: "none" };
+          }
+          return {};
+        })(),
+      })}
     />
     <BottomTab.Screen
       name="Favorites"
@@ -77,6 +84,9 @@ const TabNavigator = () => (
           tabBarStyle: (() => {
             const routeName = getFocusedRouteNameFromRoute(route);
             if (routeName === "settings") {
+              return { display: "none" };
+            }
+            if (routeName === "account") {
               return { display: "none" };
             }
             return {};

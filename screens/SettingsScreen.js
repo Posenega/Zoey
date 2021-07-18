@@ -11,16 +11,16 @@ import ProfileButton from "../components/Icons/ProfileButton";
 import ShowValueInput from "../components/Icons/ShowValueInput";
 import LockIcon from "../components/Icons/LockIcon";
 import NotificationIcon from "../components/Icons/NotificationIcon";
-import { logout, getUser } from "../store/actions/auth";
+import { logout } from "../store/actions/auth";
 
 export default function SettingsScreen(props) {
   const dispatch = useDispatch();
 
   const userId = useSelector((state) => state.auth.userId);
 
-  useEffect(() => {
-    dispatch(getUser(userId));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getUser(userId));
+  // }, []);
 
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);

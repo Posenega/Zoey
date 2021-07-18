@@ -39,7 +39,7 @@ const authUser = (authMode, dispatch, firstName, lastName, email, password) => {
     })
     .catch((e) => console.log(e));
 };
-const authSuccess = (token, email, firstName, lastName, userId) => {
+const authSuccess = (token, email, firstName, lastName, userId, imageUrl) => {
   return {
     type: AUTH_SUCCESS,
     token,
@@ -47,6 +47,7 @@ const authSuccess = (token, email, firstName, lastName, userId) => {
     firstName,
     lastName,
     userId,
+    imageUrl,
   };
 };
 
@@ -66,10 +67,12 @@ export const tryAutoLogin = () => {
   return async (dispatch, getState) => {
     const userData = await SecureStore.getItemAsync("userData");
     if (userData) {
-      const { token, email, firstName, lastName, userId } =
+      const { token, email, firstName, lastName, userId, imageUrl } =
         JSON.parse(userData);
 
-      dispatch(authSuccess(token, email, firstName, lastName, userId));
+      dispatch(
+        authSuccess(token, email, firstName, lastName, userId, imageUrl)
+      );
     } else {
       dispatch(tryAutoLoginFail());
     }
@@ -102,24 +105,45 @@ export const updateUser = (data) => {
       },
     }).then((response) => {
       const { firstName, lastName, imageUrl } = response.data;
-      dispatch({ type: UPDATE_USER_SUCCESS, firstName, lastName, imageUrl });
+      const { token, email, userId } = getState().auth;
+      SecureStore.setItemAsync(
+        "userData",
+        JSON.stringify({
+          token,
+          email,
+          firstName,
+          lastName,
+          userId,
+          imageUrl,
+        })
+      );
+      dispatch(updateUserSuccess(firstName, lastName, imageUrl));
     });
   };
 };
 
-export const getUser = (id) => {
-  return (dispatch, getState) => {
-    const token = getState().auth.token;
-
-    axios({
-      method: "get",
-      url: `/api/users/${id}`,
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }).then((response) => {
-      const { firstName, lastName, imageUrl } = response.data.user;
-      dispatch({ type: GET_USER, firstName, lastName, imageUrl });
-    });
+export const updateUserSuccess = (firstName, lastName, imageUrl) => {
+  const updatedState = { firstName, lastName };
+  if (imageUrl) updatedState.imageUrl = imageUrl;
+  return {
+    type: UPDATE_USER_SUCCESS,
+    updatedState,
   };
 };
+
+// export const getUser = (id) => {
+//   return (dispatch, getState) => {
+//     const token = getState().auth.token;
+
+//     axios({
+//       method: "get",
+//       url: `/api/users/${id}`,
+//       headers: {
+//         Authorization: "Bearer " + token,
+//       },
+//     }).then((response) => {
+//       const { firstName, lastName, imageUrl } = response.data.user;
+//       dispatch({ type: GET_USER, firstName, lastName, imageUrl });
+//     });
+//   };
+// };

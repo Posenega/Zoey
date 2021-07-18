@@ -15,10 +15,11 @@ import {
 } from "../store/actions/books";
 import DeleteButton from "../components/Icons/DeleteButton";
 import EditButton from "../components/Icons/EditButton";
+import { modalSetEditMode } from "../store/actions/addBookModal";
 
 export default function BookDetailScreen(props) {
   const id = props.route.params.id;
-
+  const addBookModalRef = useSelector((state) => state.addBookModal.ref);
   const dispatch = useDispatch();
   const displayedBook = useSelector((state) =>
     state.books.books.find((book) => book.id === id)
@@ -104,7 +105,13 @@ export default function BookDetailScreen(props) {
               >
                 <DeleteButton />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} style={{ marginLeft: 15 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(modalSetEditMode(displayedBook));
+                  addBookModalRef?.current?.open();
+                }}
+                style={{ marginLeft: 15 }}
+              >
                 <EditButton />
               </TouchableOpacity>
             </View>

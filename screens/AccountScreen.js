@@ -101,6 +101,7 @@ export default function AccountScreen(props) {
                 onChange={onChange}
                 value={value}
                 text="Update profile picture"
+                aspect={[1, 1]}
                 sendData={useCallback((result) => {
                   setLocalUrl(result);
                 }, [])}

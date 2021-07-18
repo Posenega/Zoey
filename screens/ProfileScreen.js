@@ -7,7 +7,7 @@ import SettingsButton from "../components/Icons/SettingsButton";
 import Colors from "../constants/Colors";
 import Books from "../components/Books";
 import { fetchUserBooks } from "../store/actions/books";
-import { getUser } from "../store/actions/auth";
+// import { getUser } from "../store/actions/auth";
 
 export default function ProfileScreen(props) {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export default function ProfileScreen(props) {
 
   useEffect(() => {
     dispatch(fetchUserBooks());
-    dispatch(getUser(userId));
+    // dispatch(getUser(userId));
   }, []);
 
   const allBooks = useSelector((state) => {
@@ -51,7 +51,7 @@ export default function ProfileScreen(props) {
       </View>
       <View style={styles.body}>
         <Text style={{ ...styles.mediumText, textAlign: "left" }}>
-          User's / Your Books
+          Your Books
         </Text>
         <Books books={allBooks} navigation={props.navigation} />
       </View>

@@ -10,7 +10,7 @@ export default function ImagePicker(props) {
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [2, 3],
+      aspect: props.aspect,
       quality: 1,
     });
 

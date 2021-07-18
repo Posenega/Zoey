@@ -27,6 +27,7 @@ const authReducer = (state = initialState, action) => {
         firstName: action.firstName,
         lastName: action.lastName,
         userId: action.userId,
+        imageUrl: action.imageUrl,
         tryAutoLogin: false,
       };
     case LOGOUT:
@@ -36,14 +37,7 @@ const authReducer = (state = initialState, action) => {
     case UPDATE_USER_START:
       return { ...state };
     case UPDATE_USER_SUCCESS:
-      return { ...state };
-    case GET_USER:
-      return {
-        ...state,
-        imageUrl: action.imageUrl,
-        firstName: action.firstName,
-        lastName: action.lastName,
-      };
+      return { ...state, ...action.updatedState };
     default:
       return state;
   }

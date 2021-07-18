@@ -54,6 +54,7 @@ const booksReducer = (state = initialState, action) => {
       return {
         ...state,
         books: [toBeAddedBook, ...state.books],
+        userBooks: [toBeAddedBook, ...state.userBooks],
         addBookStatus: "SUCCESS",
       };
     case ADD_BOOK_FINISH:
