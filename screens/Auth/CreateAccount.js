@@ -11,18 +11,22 @@ import StepThree from "../../components/steps/StepThree";
 
 import BackButton from "../../components/Icons/BackButton";
 import { signupUser } from "../../store/actions/auth";
+import StepFour from "../../components/steps/StepFour";
 
 export default function CreateAccount(props) {
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
   const data = useRef({});
 
   const dispatch = useDispatch();
 
   const handleStepForward = () => {
-    if (step < 3) {
+    if (step < 4) {
       setStep(step + 1);
-    } else {
+    }
+    if (step === 3) {
       const { firstName, lastName, email, password } = data.current;
+      setEmail(email);
       dispatch(signupUser(firstName, lastName, email, password));
     }
   };
@@ -50,8 +54,10 @@ export default function CreateAccount(props) {
         onChange={(gData) => (data.current = { ...data.current, ...gData })}
       />
     );
-  } else {
+  } else if (step === 3) {
     currentStep = <StepThree />;
+  } else {
+    currentStep = <StepFour email={email} />;
   }
   const backButton = (
     <View style={styles.backButton}>
@@ -63,7 +69,7 @@ export default function CreateAccount(props) {
       {backButton}
       <View style={styles.header}>
         <Text>Sign Up</Text>
-        <Text>Step: {step}/3</Text>
+        {step === 4 ? <Text>Verification</Text> : <Text>Step: {step}/3</Text>}
       </View>
       <View style={styles.progressBar}>
         <Progress.Bar
@@ -74,12 +80,14 @@ export default function CreateAccount(props) {
         />
       </View>
       {currentStep}
-      <TouchableWithoutFeedback onPress={handleStepForward}>
-        <View style={styles.signInButton}>
-          <Text style={styles.textSignIn}>Continue</Text>
-          <ArrowButton color="white" size={18} />
-        </View>
-      </TouchableWithoutFeedback>
+      {step === 4 ? null : (
+        <TouchableWithoutFeedback onPress={handleStepForward}>
+          <View style={styles.signInButton}>
+            <Text style={styles.textSignIn}>Continue</Text>
+            <ArrowButton color="white" size={18} />
+          </View>
+        </TouchableWithoutFeedback>
+      )}
     </View>
   );
 }
