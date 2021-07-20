@@ -9,8 +9,9 @@ export default checkTokenExpirationMiddleware =
     SecureStore.getItemAsync("userData").then((userData) => {
       if (userData) {
         const { token } = JSON.parse(userData);
-
-        if (jwtDecode(token).exp < Date.now() / 1000) {
+        if (!token) {
+          next(action);
+        } else if (jwtDecode(token).exp < Date.now() / 1000) {
           next(action);
           dispatch(logout());
         } else {

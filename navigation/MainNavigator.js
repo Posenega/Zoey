@@ -6,10 +6,12 @@ import { tryAutoLogin } from "../store/actions/auth";
 import AuthNavigator from "./AuthNavigator";
 import TabNavigator from "./TabNavigator";
 import SplashScreen from "../screens/SplashScreen";
+import VerificationScreen from "../screens/Auth/VerificationScreen";
 
 const MainNavigator = () => {
-  const isAuth = useSelector((state) => state.auth.token);
+  const isAuth = useSelector((state) => !!state.auth.token);
   const isTryAutoLogin = useSelector((state) => state.auth.tryAutoLogin);
+  const isVerify = useSelector((state) => state.auth.isVerify);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,6 +22,8 @@ const MainNavigator = () => {
     <NavigationContainer>
       {isTryAutoLogin ? (
         <SplashScreen />
+      ) : isVerify ? (
+        <VerificationScreen />
       ) : isAuth ? (
         <TabNavigator />
       ) : (

@@ -81,7 +81,9 @@ export const requestAddBook = (data) => {
           type,
           category,
           author,
+          creator,
         } = response.data.book;
+        console.log(imageUrl);
         dispatch(
           addBookSuccess(
             title,
@@ -90,6 +92,7 @@ export const requestAddBook = (data) => {
             description,
             type,
             category,
+            creator,
             id
           )
         );
@@ -109,6 +112,7 @@ export const addBookSuccess = (
   description,
   type,
   category,
+  creator,
   id
 ) => {
   // console.log({ title, image, author, description, type, category, id });
@@ -120,6 +124,7 @@ export const addBookSuccess = (
     description,
     // type,
     category,
+    creator,
     id,
   };
 };

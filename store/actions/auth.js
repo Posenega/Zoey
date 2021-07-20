@@ -10,6 +10,7 @@ export const LOGOUT = "LOGOUT";
 export const UPDATE_USER_START = "UPDATE_USER_START";
 export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
 export const GET_USER = "GET_USER";
+export const SET_VERIFY_USER = "SET_VERIFY_USER";
 
 const authUser = (
   authMode,
@@ -40,20 +41,24 @@ const authUser = (
           imageUrl,
         })
       )
-        .then(() =>
-          dispatch(
-            authSuccess(token, email, firstName, lastName, userId, imageUrl)
-          )
-        )
+        .then(() => {
+          if (!token) {
+            dispatch(setVerifyUser(email, userId));
+          } else {
+            dispatch(
+              authSuccess(token, email, firstName, lastName, userId, imageUrl)
+            );
+          }
+        })
         .catch((e) => console.log(e));
     })
     .catch((e) => {
-      console.log(e.response.data);
-      console.log(e.response.status);
-      setError("password", {
-        type: "server",
-        message: e.response.data?.message || "Unknown error has occured.",
-      });
+      if (setError) {
+        setError("password", {
+          type: "server",
+          message: e.response.data?.message || "Unknown error has occured.",
+        });
+      }
     });
 };
 const authSuccess = (token, email, firstName, lastName, userId, imageUrl) => {
@@ -87,13 +92,21 @@ export const tryAutoLogin = () => {
       const { token, email, firstName, lastName, userId, imageUrl } =
         JSON.parse(userData);
 
-      dispatch(
-        authSuccess(token, email, firstName, lastName, userId, imageUrl)
-      );
+      if (!token) {
+        dispatch(setVerifyUser(email, userId));
+      } else {
+        dispatch(
+          authSuccess(token, email, firstName, lastName, userId, imageUrl)
+        );
+      }
     } else {
       dispatch(tryAutoLoginFail());
     }
   };
+};
+
+export const setVerifyUser = (email, userId) => {
+  return { type: SET_VERIFY_USER, email, userId };
 };
 
 export const logout = () => {
@@ -148,19 +161,52 @@ export const updateUserSuccess = (firstName, lastName, imageUrl) => {
   };
 };
 
-// export const getUser = (id) => {
-//   return (dispatch, getState) => {
-//     const token = getState().auth.token;
-
-//     axios({
-//       method: "get",
-//       url: `/api/users/${id}`,
-//       headers: {
-//         Authorization: "Bearer " + token,
-//       },
-//     }).then((response) => {
-//       const { firstName, lastName, imageUrl } = response.data.user;
-//       dispatch({ type: GET_USER, firstName, lastName, imageUrl });
-//     });
-//   };
-// };
+export const verifyUser = (confirmationCode, setError) => {
+  return (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    axios({
+      method: "POST",
+      url: `/api/users/${userId}/confirm`,
+      data: {
+        confirmationCode,
+      },
+    })
+      .then((response) => {
+        const {
+          email,
+          firstName,
+          lastName,
+          _id: userId,
+          imageUrl,
+        } = response.data.user;
+        SecureStore.setItemAsync(
+          "userData",
+          JSON.stringify({
+            token: response.data.token,
+            email,
+            firstName,
+            lastName,
+            userId,
+            imageUrl,
+          })
+        ).then(() => {
+          dispatch(
+            authSuccess(
+              response.data.token,
+              email,
+              firstName,
+              lastName,
+              userId,
+              imageUrl
+            )
+          );
+        });
+      })
+      .catch((e) => {
+        setError("code", {
+          type: "server",
+          message: e.response?.data?.message || "Unknown error has occured.",
+        });
+      });
+  };
+};

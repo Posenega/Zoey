@@ -11,7 +11,6 @@ import StepThree from "../../components/steps/StepThree";
 
 import BackButton from "../../components/Icons/BackButton";
 import { signupUser } from "../../store/actions/auth";
-import StepFour from "../../components/steps/StepFour";
 
 export default function CreateAccount(props) {
   const [step, setStep] = useState(1);
@@ -21,7 +20,7 @@ export default function CreateAccount(props) {
   const dispatch = useDispatch();
 
   const handleStepForward = () => {
-    if (step < 4) {
+    if (step < 3) {
       setStep(step + 1);
     }
     if (step === 3) {
@@ -32,7 +31,7 @@ export default function CreateAccount(props) {
   };
   const handleStepbackward = () => {
     if (step === 1) {
-      props.navigation.navigate("auth");
+      props.navigation.goBack();
     } else {
       setStep(step - 1);
     }
@@ -54,10 +53,8 @@ export default function CreateAccount(props) {
         onChange={(gData) => (data.current = { ...data.current, ...gData })}
       />
     );
-  } else if (step === 3) {
-    currentStep = <StepThree />;
   } else {
-    currentStep = <StepFour email={email} />;
+    currentStep = <StepThree />;
   }
   const backButton = (
     <View style={styles.backButton}>

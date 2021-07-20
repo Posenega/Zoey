@@ -44,13 +44,15 @@ const booksReducer = (state = initialState, action) => {
       return { ...state, addBookStatus: "LOADING" };
     case ADD_BOOK_SUCCESS:
       const toBeAddedBook = {
-        id: action.id,
+        _id: action.id,
         title: action.title,
         imageUrl: action.image,
         author: action.author,
         category: action.category,
         description: action.description,
+        creator: action.creator,
       };
+      console.log([toBeAddedBook, ...state.books]);
       return {
         ...state,
         books: [toBeAddedBook, ...state.books],

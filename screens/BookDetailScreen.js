@@ -22,7 +22,7 @@ export default function BookDetailScreen(props) {
   const addBookModalRef = useSelector((state) => state.addBookModal.ref);
   const dispatch = useDispatch();
   const displayedBook = useSelector((state) =>
-    state.books.books.find((book) => book.id === id)
+    state.books.books.find((book) => book?._id === id)
   );
   const userId = useSelector((state) => state.auth.userId);
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function BookDetailScreen(props) {
   }, []);
 
   const isFavorite = useSelector((state) =>
-    state.books.favoriteBooks.some((book) => book._id === displayedBook._id)
+    state.books.favoriteBooks.some((book) => book?._id === displayedBook._id)
   );
 
   const bookType = () => {
@@ -40,7 +40,6 @@ export default function BookDetailScreen(props) {
       return "Exchange";
     }
   };
-
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.imageContainer}>

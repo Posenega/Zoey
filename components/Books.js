@@ -12,12 +12,12 @@ import Book from "./Book";
 import HorizontalBook from "./HorizontalBook";
 
 export default function Books({ books, navigation, isHorizontal }) {
+  console.log(books);
   const renderBook = (itemData) => {
     const book = itemData.item;
-
     let BookComponent = () => (
       <Book
-        id={book._id}
+        id={book?._id}
         color={book.color}
         backgroundColor={book.backgroundColor}
         title={book.title}
@@ -32,7 +32,7 @@ export default function Books({ books, navigation, isHorizontal }) {
         <HorizontalBook
           title={book.title}
           image={`${axios.defaults.baseURL}/${book.imageUrl}`}
-          id={book.id}
+          id={book?._id}
           navigation={navigation}
         />
       );

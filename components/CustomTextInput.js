@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   TextInput,
   StyleSheet,
   TouchableWithoutFeedback,
   Text,
-} from 'react-native';
-import ShowValueInput from '../components/Icons/ShowValueInput';
+} from "react-native";
+import ShowValueInput from "../components/Icons/ShowValueInput";
 
 export default function CustomTextInput(props) {
   const styles = StyleSheet.create({
     inputContainer: {
       height: 44,
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
     },
     passwordContainer: {
-      backgroundColor: '#ededed',
+      backgroundColor: "#ededed",
       borderRadius: 10,
-      width: '100%',
+      width: "100%",
     },
     input: {
-      color: '#2b2b2b',
+      color: "#2b2b2b",
       fontSize: 12,
-      backgroundColor: '#ededed',
+      backgroundColor: "#ededed",
       paddingHorizontal: 12,
-      height: '100%',
-      width: '100%',
+      height: "100%",
+      width: "100%",
       borderRadius: 10,
     },
     inputPassword: {
-      color: '#2b2b2b',
+      color: "#2b2b2b",
       fontSize: 12,
       paddingHorizontal: 12,
       height: 43,
@@ -38,31 +38,29 @@ export default function CustomTextInput(props) {
       borderRadius: 10,
     },
     inputFocus: {
-      borderColor: '#2b2b2b',
+      borderColor: "#2b2b2b",
       borderWidth: 2,
-      backgroundColor: '#f9f9f9',
+      backgroundColor: "#f9f9f9",
     },
     borderHack: {
       borderWidth: 2,
-      borderColor: props.error ? '#FFDCDC' : '#ededed',
+      borderColor: props.error ? "#FFDCDC" : "#ededed",
     },
     errorText: {
       fontSize: 10,
       marginLeft: 10,
       marginTop: 0.5,
-      color: '#999999',
+      color: "#999999",
     },
     errorInput: {
-      backgroundColor: '#FFDCDC',
+      backgroundColor: "#FFDCDC",
     },
   });
 
   const [focus, setFocus] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const focusStyle = focus ? styles.inputFocus : styles.borderHack;
-  const focusPasswordStyle = focus
-    ? styles.inputFocus
-    : styles.borderHack;
+  const focusPasswordStyle = focus ? styles.inputFocus : styles.borderHack;
 
   let inputStyle;
   if (props.isPassword) {
@@ -99,8 +97,9 @@ export default function CustomTextInput(props) {
                   ...props.style,
                   ...focusPasswordStyle,
                 }
-            : styles.inputContainer
-        }>
+            : { ...styles.inputContainer, ...props.style }
+        }
+      >
         <TextInput
           secureTextEntry={!passwordShown && props.isPassword}
           passwordRules={true}
@@ -114,24 +113,23 @@ export default function CustomTextInput(props) {
             setFocus(false);
           }}
           style={inputStyle}
-          placeholderTextColor={props.error ? '#E24949' : '#999999'}
+          placeholderTextColor={props.error ? "#E24949" : "#999999"}
         />
 
         {props.isPassword ? (
           <TouchableWithoutFeedback
-            onPress={() => setPasswordShown(!passwordShown)}>
+            onPress={() => setPasswordShown(!passwordShown)}
+          >
             <View style={{ marginRight: 6 }}>
               <ShowValueInput
                 size={14}
-                color={passwordShown ? '#2b2b2b' : '#999999'}
+                color={passwordShown ? "#2b2b2b" : "#999999"}
               />
             </View>
           </TouchableWithoutFeedback>
         ) : null}
       </View>
-      {props.error && (
-        <Text style={styles.errorText}>{props.error}</Text>
-      )}
+      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
     </>
   );
 }
