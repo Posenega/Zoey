@@ -11,7 +11,15 @@ export const UPDATE_USER_START = "UPDATE_USER_START";
 export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
 export const GET_USER = "GET_USER";
 
-const authUser = (authMode, dispatch, firstName, lastName, email, password) => {
+const authUser = (
+  authMode,
+  dispatch,
+  firstName,
+  lastName,
+  email,
+  password,
+  setError
+) => {
   axios
     .post(`/api/users/${authMode === "SIGN_UP" ? "signup" : "login"}`, {
       firstName,
@@ -20,8 +28,7 @@ const authUser = (authMode, dispatch, firstName, lastName, email, password) => {
       password,
     })
     .then((res) => {
-      const { token, email, firstName, lastName, userId } = res.data;
-
+      const { token, email, firstName, lastName, userId, imageUrl } = res.data;
       SecureStore.setItemAsync(
         "userData",
         JSON.stringify({
@@ -30,14 +37,24 @@ const authUser = (authMode, dispatch, firstName, lastName, email, password) => {
           firstName,
           lastName,
           userId,
+          imageUrl,
         })
       )
         .then(() =>
-          dispatch(authSuccess(token, email, firstName, lastName, userId))
+          dispatch(
+            authSuccess(token, email, firstName, lastName, userId, imageUrl)
+          )
         )
         .catch((e) => console.log(e));
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e.response.data);
+      console.log(e.response.status);
+      setError("password", {
+        type: "server",
+        message: e.response.data?.message || "Unknown error has occured.",
+      });
+    });
 };
 const authSuccess = (token, email, firstName, lastName, userId, imageUrl) => {
   return {
@@ -57,9 +74,9 @@ export const signupUser = (firstName, lastName, email, password, userId) => {
   };
 };
 
-export const loginUser = (email, password) => {
+export const loginUser = (email, password, setError) => {
   return (dispatch, getState) => {
-    authUser("LOG_IN", dispatch, null, null, email, password);
+    authUser("LOG_IN", dispatch, null, null, email, password, setError);
   };
 };
 

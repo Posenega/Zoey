@@ -21,12 +21,17 @@ import BackButton from "../../components/Icons/BackButton";
 import { loginUser } from "../../store/actions/auth";
 
 export default function SignInScreen(props) {
-  const { control, handleSubmit } = useForm();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
 
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    dispatch(loginUser(data.email, data.password));
+    dispatch(loginUser(data.email, data.password, setError));
   };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -52,6 +57,7 @@ export default function SignInScreen(props) {
             name="email"
             initialValue=""
             control={control}
+            rules={{ required: "Please provide a valid email." }}
             render={({ field: { onChange, onBlur, value } }) => {
               return (
                 <CustomTextInput
@@ -59,6 +65,7 @@ export default function SignInScreen(props) {
                   onChangeText={onChange}
                   value={value}
                   placeholder="Email"
+                  error={errors.email?.message}
                 />
               );
             }}
@@ -69,6 +76,7 @@ export default function SignInScreen(props) {
             name="password"
             initialValue=""
             control={control}
+            rules={{ required: "Please provide a valid password." }}
             render={({ field: { onChange, onBlur, value } }) => {
               return (
                 <CustomTextInput
@@ -77,6 +85,7 @@ export default function SignInScreen(props) {
                   value={value}
                   placeholder="Password"
                   isPassword
+                  error={errors.password?.message}
                 />
               );
             }}

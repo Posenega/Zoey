@@ -33,7 +33,12 @@ import ImagePicker from "./ImagePicker";
 import { Header } from "@react-navigation/elements";
 
 export default function AddBookModal() {
-  const { control, handleSubmit, reset } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const [localUrl, setLocalUrl] = useState();
   const [typeSelector, setTypeSelector] = useState("");
   const [categorySelector, setCategorySelector] = useState("");
@@ -118,13 +123,16 @@ export default function AddBookModal() {
               control={control}
               name="title"
               defaultValue=""
-              rules={{ required: true }}
+              rules={{
+                required: "Title is required.",
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomTextInput
                   placeholder="Title"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  error={errors.title?.message}
                 />
               )}
             />
@@ -133,13 +141,14 @@ export default function AddBookModal() {
                 control={control}
                 name="author"
                 defaultValue=""
-                rules={{ required: true }}
+                rules={{ required: "Author name is required." }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <CustomTextInput
                     placeholder="Author"
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
+                    error={errors.author?.message}
                   />
                 )}
               />
@@ -148,7 +157,13 @@ export default function AddBookModal() {
               control={control}
               name="description"
               defaultValue=""
-              rules={{ required: true }}
+              rules={{
+                required: "Description is required.",
+                minLength: {
+                  value: 5,
+                  message: "Description must be greater than 5 characters.",
+                },
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomTextInput
                   style={{ height: 70 }}
@@ -157,6 +172,7 @@ export default function AddBookModal() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  error={errors.description?.message}
                 />
               )}
             />
@@ -164,7 +180,6 @@ export default function AddBookModal() {
               items={[
                 { label: "Exchange", value: "exchange" },
                 { label: "Sell", value: "sell" },
-                { label: "E-Book", value: "e-book" },
               ]}
               onChange={(val) => setTypeSelector(val)}
             />
@@ -180,7 +195,7 @@ export default function AddBookModal() {
               control={control}
               name="imageUrl"
               defaultValue={null}
-              rules={{ required: true }}
+              rules={{ required: "Image is required." }}
               render={({ field: { onChange, value } }) => (
                 <ImagePicker
                   onChange={onChange}
@@ -193,6 +208,9 @@ export default function AddBookModal() {
                 />
               )}
             />
+            {errors.imageUrl?.message && (
+              <Text>{errors.imageUrl?.message}</Text>
+            )}
           </ScrollView>
         </View>
       </View>
