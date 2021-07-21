@@ -12,7 +12,9 @@ import IconPlaceholder from "./IconPlaceholder";
 const MessageInfoContainer = (props) => {
   return (
     <TouchableWithoutFeedback
-      onPress={() => props.navigation.navigate("chatRoom")}
+      onPress={() =>
+        props.navigation.navigate("chatRoom", { chatId: props.chatId })
+      }
     >
       <View style={styles.bigContainer}>
         <View style={styles.profileMessageContainer}>

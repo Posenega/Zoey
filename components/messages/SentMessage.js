@@ -1,17 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Colors from '../../constants/Colors';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import Colors from "../../constants/Colors";
 
-export default function ReceivedMainContainer() {
+export default function SentMessage({ messageText }) {
   return (
     <View style={styles.rmmc}>
       <View
         style={{
           ...styles.messageContainer,
           ...styles.rmc,
-        }}>
+        }}
+      >
         <Text style={{ ...styles.textMessage, ...styles.rtm }}>
-          Lorem ipsum
+          {messageText}
         </Text>
       </View>
     </View>
@@ -20,8 +21,8 @@ export default function ReceivedMainContainer() {
 
 const styles = StyleSheet.create({
   rmmc: {
-    width: '100%',
-    alignItems: 'flex-end',
+    width: "100%",
+    alignItems: "flex-end",
   },
   messageContainer: {
     // minWidth: 100,
@@ -35,13 +36,13 @@ const styles = StyleSheet.create({
   rmc: {
     backgroundColor: Colors.primaryColor,
     borderBottomEndRadius: 0,
-    color: 'white',
+    color: "white",
   },
   textMessage: {
     fontSize: 10,
     lineHeight: 15,
   },
   rtm: {
-    color: 'white',
+    color: "white",
   },
 });

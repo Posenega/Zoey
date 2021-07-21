@@ -16,6 +16,7 @@ import {
 import DeleteButton from "../components/Icons/DeleteButton";
 import EditButton from "../components/Icons/EditButton";
 import { modalSetEditMode } from "../store/actions/addBookModal";
+import { addChat } from "../store/actions/chats";
 
 export default function BookDetailScreen(props) {
   const id = props.route.params.id;
@@ -136,7 +137,16 @@ export default function BookDetailScreen(props) {
             </View>
           )}
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("Messages")}
+            onPress={() => {
+              dispatch(
+                addChat(
+                  Math.random().toString(),
+                  Math.random().toString(),
+                  displayedBook.author
+                )
+              );
+              props.navigation.navigate("Messages");
+            }}
           >
             <View style={styles.messageContainer}>
               <MessageButton size={20} color="white" />
