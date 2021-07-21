@@ -7,6 +7,7 @@ import SettingsButton from "../components/Icons/SettingsButton";
 import Colors from "../constants/Colors";
 import Books from "../components/Books";
 import { fetchUserBooks } from "../store/actions/books";
+import IconPlaceholder from "../components/IconPlaceholder";
 // import { getUser } from "../store/actions/auth";
 
 export default function ProfileScreen(props) {
@@ -35,12 +36,16 @@ export default function ProfileScreen(props) {
           />
         </View>
         <View style={styles.userInfo}>
-          <Image
-            style={styles.image}
-            source={{
-              uri: `${axios.defaults.baseURL}/${imageUrl}`,
-            }}
-          />
+          {imageUrl ? (
+            <Image
+              style={styles.image}
+              source={{
+                uri: `${axios.defaults.baseURL}/${imageUrl}`,
+              }}
+            />
+          ) : (
+            <IconPlaceholder size={68} iconSize={60} />
+          )}
           <Text
             numberOfLines={1}
             style={{ ...styles.mediumText, textAlign: "center" }}

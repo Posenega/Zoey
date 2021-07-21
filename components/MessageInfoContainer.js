@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import Colors from "../constants/Colors";
+import IconPlaceholder from "./IconPlaceholder";
 
 const MessageInfoContainer = (props) => {
   return (
@@ -17,13 +18,17 @@ const MessageInfoContainer = (props) => {
         <View style={styles.profileMessageContainer}>
           <View style={styles.profilePictureContainer}>
             <View style={styles.profilePicture}>
-              <Image
-                resizeMode="cover"
-                style={{ flex: 1 }}
-                source={{
-                  uri: props.imageUrl,
-                }}
-              />
+              {props.imageUrl ? (
+                <Image
+                  resizeMode="cover"
+                  style={{ flex: 1 }}
+                  source={{
+                    uri: props.imageUrl,
+                  }}
+                />
+              ) : (
+                <IconPlaceholder />
+              )}
             </View>
           </View>
           <View style={styles.discussionInfo}>

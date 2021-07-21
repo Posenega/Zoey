@@ -93,7 +93,10 @@ export default function AddBookModal() {
   return (
     <Modalize
       onOpened={() => dispatch(modalOpen())}
-      onClosed={() => dispatch(modalClose())}
+      onClosed={() => {
+        reset();
+        dispatch(modalClose());
+      }}
       ref={modalizeRef}
       adjustToContentHeight
     >
@@ -176,20 +179,52 @@ export default function AddBookModal() {
                 />
               )}
             />
-            <DropDownMenu
-              items={[
-                { label: "Exchange", value: "exchange" },
-                { label: "Sell", value: "sell" },
-              ]}
-              onChange={(val) => setTypeSelector(val)}
+            <Controller
+              control={control}
+              name="type"
+              defaultValue=""
+              rules={{
+                required: "Type is required.",
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <DropDownMenu
+                  items={[
+                    { label: "Exchange", value: "exchange" },
+                    { label: "Sell", value: "sell" },
+                  ]}
+                  onBlur={onBlur}
+                  value={value}
+                  onChange={(val) => {
+                    onChange();
+                    setTypeSelector(val);
+                  }}
+                  error={errors.type?.message}
+                />
+              )}
             />
             {typeSelector === "sell" ? <PriceComponent /> : null}
-            <DropDownMenu
-              items={[
-                { label: "Technology", value: "Technology" },
-                { label: "Science", value: "Science" },
-              ]}
-              onChange={(val) => setCategorySelector(val)}
+            <Controller
+              control={control}
+              name="category"
+              defaultValue=""
+              rules={{
+                required: "Category is required.",
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <DropDownMenu
+                  items={[
+                    { label: "Technology", value: "Technology" },
+                    { label: "Science", value: "Science" },
+                  ]}
+                  onBlur={onBlur}
+                  value={value}
+                  onChange={(val) => {
+                    onChange();
+                    setTypeSelector(val);
+                  }}
+                  error={errors.category?.message}
+                />
+              )}
             />
             <Controller
               control={control}
@@ -205,12 +240,10 @@ export default function AddBookModal() {
                   sendData={useCallback((result) => {
                     setLocalUrl(result);
                   }, [])}
+                  error={errors.imageUrl?.message}
                 />
               )}
             />
-            {errors.imageUrl?.message && (
-              <Text>{errors.imageUrl?.message}</Text>
-            )}
           </ScrollView>
         </View>
       </View>

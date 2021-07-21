@@ -120,7 +120,7 @@ const tryAutoLoginFail = () => {
   return { type: TRY_AUTO_LOGIN_FAIL };
 };
 
-export const updateUser = (data) => {
+export const updateUser = (data, setError, goBack) => {
   return (dispatch, getState) => {
     const token = getState().auth.token;
 
@@ -133,22 +133,30 @@ export const updateUser = (data) => {
         "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + token,
       },
-    }).then((response) => {
-      const { firstName, lastName, imageUrl } = response.data;
-      const { token, email, userId } = getState().auth;
-      SecureStore.setItemAsync(
-        "userData",
-        JSON.stringify({
-          token,
-          email,
-          firstName,
-          lastName,
-          userId,
-          imageUrl,
-        })
-      );
-      dispatch(updateUserSuccess(firstName, lastName, imageUrl));
-    });
+    })
+      .then((response) => {
+        const { firstName, lastName, imageUrl } = response.data;
+        const { token, email, userId } = getState().auth;
+        SecureStore.setItemAsync(
+          "userData",
+          JSON.stringify({
+            token,
+            email,
+            firstName,
+            lastName,
+            userId,
+            imageUrl,
+          })
+        );
+        dispatch(updateUserSuccess(firstName, lastName, imageUrl));
+        goBack();
+      })
+      .catch((e) => {
+        setError("oldPassword", {
+          type: "server",
+          message: e.response.data?.message || "Unknown error has occured.",
+        });
+      });
   };
 };
 

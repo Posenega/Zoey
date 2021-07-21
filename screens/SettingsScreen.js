@@ -12,6 +12,7 @@ import ShowValueInput from "../components/Icons/ShowValueInput";
 import LockIcon from "../components/Icons/LockIcon";
 import NotificationIcon from "../components/Icons/NotificationIcon";
 import { logout } from "../store/actions/auth";
+import IconPlaceholder from "../components/IconPlaceholder";
 
 export default function SettingsScreen(props) {
   const dispatch = useDispatch();
@@ -44,12 +45,16 @@ export default function SettingsScreen(props) {
         </View>
         <View style={styles.headerContent}>
           <View style={styles.imageContainer}>
-            <Image
-              style={styles.image}
-              source={{
-                uri: `${axios.defaults.baseURL}/${imageUrl}`,
-              }}
-            />
+            {imageUrl ? (
+              <Image
+                style={styles.image}
+                source={{
+                  uri: `${axios.defaults.baseURL}/${imageUrl}`,
+                }}
+              />
+            ) : (
+              <IconPlaceholder size={60} iconSize={50} />
+            )}
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.welcome}>Welcome</Text>

@@ -1,5 +1,13 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import SharedStyles from "../constants/SharedStyles";
 import Colors from "../constants/Colors";
 import { useForm, Controller } from "react-hook-form";
@@ -10,7 +18,12 @@ import ImagePicker from "../components/ImagePicker";
 import CustomTextInput from "../components/CustomTextInput";
 
 export default function AccountScreen(props) {
-  const { control, handleSubmit } = useForm();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
   const [localUrl, setLocalUrl] = useState("");
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
@@ -41,122 +54,137 @@ export default function AccountScreen(props) {
       ? null
       : formData.append("new_password", data.newPassword);
 
-    dispatch(updateUser(formData));
-    props.navigation.goBack();
+    dispatch(updateUser(formData, setError, props.navigation.goBack));
+    // props.navigation.goBack();
   };
+
   return (
-    <View style={SharedStyles.screen}>
-      <View style={styles.header}>
-        <View style={styles.topHeader}>
-          <View style={{ marginRight: 10 }}>
-            <ArrowButton
-              onPress={() => {
-                props.navigation.goBack();
-              }}
-              back
-              size={24}
-              color="#2b2b2b"
-            />
-          </View>
-          <Text style={styles.topHeaderText}>Account</Text>
-        </View>
-        <View>
-          <Controller
-            control={control}
-            name="firstName"
-            defaultValue={firstName}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <CustomTextInput
-                placeholder="First Name"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={SharedStyles.screen}>
+        <View style={styles.header}>
+          <View style={styles.topHeader}>
+            <View style={{ marginRight: 10 }}>
+              <ArrowButton
+                onPress={() => {
+                  props.navigation.goBack();
+                }}
+                back
+                size={24}
+                color="#2b2b2b"
               />
-            )}
-          />
-          <View style={{ marginTop: 10 }}>
+            </View>
+            <Text style={styles.topHeaderText}>Account</Text>
+          </View>
+          <View>
             <Controller
               control={control}
-              name="lastName"
-              defaultValue={lastName}
-              rules={{ required: true }}
+              name="firstName"
+              defaultValue={firstName}
+              rules={{ required: "Please provide a first name." }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomTextInput
-                  placeholder="Last Name"
+                  placeholder="First Name"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  error={errors.firstName?.message}
                 />
               )}
             />
-          </View>
-          <Controller
-            control={control}
-            name="imageUrl"
-            defaultValue={null}
-            rules={{ required: false }}
-            render={({ field: { onChange, value } }) => (
-              <ImagePicker
-                onChange={onChange}
-                value={value}
-                text="Update profile picture"
-                aspect={[1, 1]}
-                sendData={useCallback((result) => {
-                  setLocalUrl(result);
-                }, [])}
+            <View style={{ marginTop: 10 }}>
+              <Controller
+                control={control}
+                name="lastName"
+                defaultValue={lastName}
+                rules={{ required: "Please provide a last name." }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <CustomTextInput
+                    placeholder="Last Name"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    error={errors.lastName?.message}
+                  />
+                )}
               />
-            )}
-          />
-          <View style={{ marginTop: 10 }}>
-            <Controller
-              name="oldPassword"
-              initialValue=""
-              control={control}
-              rules={{ required: false }}
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <CustomTextInput
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Old Password"
-                    isPassword
-                  />
-                );
-              }}
-            />
-          </View>
-          <View style={{ marginTop: 10 }}>
-            <Controller
-              name="newPassword"
-              initialValue=""
-              control={control}
-              rules={{ required: false }}
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <CustomTextInput
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="New Password"
-                    isPassword
-                  />
-                );
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            style={{ width: "100%" }}
-            onPress={handleSubmit(onSubmit)}
-          >
-            <View style={styles.signInButton}>
-              <Text style={styles.textSignIn}>Update Profile</Text>
             </View>
-          </TouchableOpacity>
+            <Controller
+              control={control}
+              name="imageUrl"
+              defaultValue={null}
+              rules={{ required: false }}
+              render={({ field: { onChange, value } }) => (
+                <ImagePicker
+                  onChange={onChange}
+                  value={value}
+                  text="Update profile picture"
+                  aspect={[1, 1]}
+                  sendData={useCallback((result) => {
+                    setLocalUrl(result);
+                  }, [])}
+                />
+              )}
+            />
+            <View style={{ marginTop: 10 }}>
+              <Controller
+                name="oldPassword"
+                initialValue=""
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return (
+                    <CustomTextInput
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Old Password"
+                      isPassword
+                      error={errors.oldPassword?.message}
+                    />
+                  );
+                }}
+              />
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <Controller
+                name="newPassword"
+                initialValue=""
+                control={control}
+                rules={{
+                  required: false,
+                  minLength: {
+                    value: 6,
+                    message: "Password must be 6 characters long.",
+                  },
+                }}
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return (
+                    <CustomTextInput
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="New Password"
+                      isPassword
+                      error={errors.newPassword?.message}
+                    />
+                  );
+                }}
+              />
+            </View>
+            <TouchableOpacity
+              style={{ width: "100%" }}
+              onPress={handleSubmit(onSubmit)}
+            >
+              <View style={styles.signInButton}>
+                <Text style={styles.textSignIn}>Update Profile</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

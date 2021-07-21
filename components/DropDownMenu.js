@@ -38,47 +38,50 @@ export default function DropDownMenu(props) {
   });
 
   return (
-    <TouchableWithoutFeedback onPress={toggleCollapse}>
-      <Animated.View
-        style={{
-          ...styles.typeContainer,
-          height: collapseAnimation,
-        }}
-      >
-        <View style={styles.header}>
-          <Text style={currentLabel ? styles.itemText : styles.typeText}>
-            {currentLabel || "Select a type"}
-          </Text>
+    <View>
+      <TouchableWithoutFeedback onPress={toggleCollapse}>
+        <Animated.View
+          style={{
+            ...styles.typeContainer,
+            height: collapseAnimation,
+          }}
+        >
+          <View style={styles.header}>
+            <Text style={currentLabel ? styles.itemText : styles.typeText}>
+              {currentLabel || "Select a type"}
+            </Text>
 
-          <ArrowButton
-            onPress={toggleCollapse}
-            SvgStyle={{ transform: [{ rotate: spin }] }}
-            size={20}
-            color="#999999"
-          />
-        </View>
-        {props.items.map((item) => {
-          return (
-            <TouchableWithoutFeedback
-              key={item.value}
-              onPress={() => {
-                toggleCollapse();
-                setCurrentValue(item.value);
-                setCurrentLabel(item.label);
-              }}
-            >
-              <View
-                style={{
-                  ...styles.item,
+            <ArrowButton
+              onPress={toggleCollapse}
+              SvgStyle={{ transform: [{ rotate: spin }] }}
+              size={20}
+              color="#999999"
+            />
+          </View>
+          {props.items.map((item) => {
+            return (
+              <TouchableWithoutFeedback
+                key={item.value}
+                onPress={() => {
+                  toggleCollapse();
+                  setCurrentValue(item.value);
+                  setCurrentLabel(item.label);
                 }}
               >
-                <Text style={styles.itemText}>{item.label}</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          );
-        })}
-      </Animated.View>
-    </TouchableWithoutFeedback>
+                <View
+                  style={{
+                    ...styles.item,
+                  }}
+                >
+                  <Text style={styles.itemText}>{item.label}</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            );
+          })}
+        </Animated.View>
+      </TouchableWithoutFeedback>
+      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
+    </View>
   );
 }
 
@@ -109,5 +112,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "rubik-medium",
     color: Colors.accentColor,
+  },
+  errorText: {
+    fontSize: 10,
+    marginLeft: 10,
+    marginTop: 0.5,
+    color: "#999999",
   },
 });

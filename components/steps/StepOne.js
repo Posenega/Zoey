@@ -1,28 +1,24 @@
 import React, { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { View, StyleSheet } from "react-native";
 import CustomTextInput from "../CustomTextInput";
 
-export default function StepOne(props) {
-  const { control, watch } = useForm();
-
-  useEffect(() => {
-    props.onChange(watch());
-  }, [watch()]);
+export default function StepOne({ control, errors }) {
   return (
     <View>
       <Controller
         name="firstName"
         initialValue=""
         control={control}
+        rules={{ required: "Please enter your first name." }}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              style={styles.textInput}
               placeholder="First Name"
+              error={errors.firstName?.message}
             />
           );
         }}
@@ -32,6 +28,7 @@ export default function StepOne(props) {
         name="lastName"
         initialValue=""
         control={control}
+        rules={{ required: "Please enter your last name." }}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
@@ -40,6 +37,7 @@ export default function StepOne(props) {
               value={value}
               style={styles.textInput}
               placeholder="Last Name"
+              error={errors.lastName?.message}
             />
           );
         }}
@@ -50,6 +48,6 @@ export default function StepOne(props) {
 
 const styles = StyleSheet.create({
   textInput: {
-    marginBottom: 15,
+    marginTop: 10,
   },
 });

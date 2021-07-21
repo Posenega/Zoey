@@ -8,6 +8,7 @@ import ArrowButton from "../../components/Icons/ArrowButton";
 import StepOne from "../../components/steps/StepOne";
 import StepTwo from "../../components/steps/StepTwo";
 import StepThree from "../../components/steps/StepThree";
+import { useForm, Controller } from "react-hook-form";
 
 import BackButton from "../../components/Icons/BackButton";
 import { signupUser } from "../../store/actions/auth";
@@ -15,16 +16,19 @@ import { signupUser } from "../../store/actions/auth";
 export default function CreateAccount(props) {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
-  const data = useRef({});
-
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
 
-  const handleStepForward = () => {
+  const onSubmit = (data) => {
     if (step < 3) {
       setStep(step + 1);
     }
     if (step === 3) {
-      const { firstName, lastName, email, password } = data.current;
+      const { firstName, lastName, email, password } = data;
       setEmail(email);
       dispatch(signupUser(firstName, lastName, email, password));
     }
@@ -36,25 +40,13 @@ export default function CreateAccount(props) {
       setStep(step - 1);
     }
   };
-  let currentStep = (
-    <StepOne
-      onChange={(gData) => (data.current = { ...data.current, ...gData })}
-    />
-  );
+  let currentStep = <StepOne control={control} errors={errors} />;
   if (step === 2) {
-    currentStep = (
-      <StepTwo
-        onChange={(gData) => (data.current = { ...data.current, ...gData })}
-      />
-    );
+    currentStep = <StepTwo control={control} errors={errors} />;
   } else if (step === 1) {
-    currentStep = (
-      <StepOne
-        onChange={(gData) => (data.current = { ...data.current, ...gData })}
-      />
-    );
+    currentStep = <StepOne control={control} errors={errors} />;
   } else {
-    currentStep = <StepThree />;
+    currentStep = <StepThree control={control} errors={errors} />;
   }
   const backButton = (
     <View style={styles.backButton}>
@@ -78,7 +70,7 @@ export default function CreateAccount(props) {
       </View>
       {currentStep}
       {step === 4 ? null : (
-        <TouchableWithoutFeedback onPress={handleStepForward}>
+        <TouchableWithoutFeedback onPress={handleSubmit(onSubmit)}>
           <View style={styles.signInButton}>
             <Text style={styles.textSignIn}>Continue</Text>
             <ArrowButton color="white" size={18} />
@@ -115,8 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderRadius: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 100,
+    justifyContent: "center",
   },
   textSignIn: {
     color: "white",
