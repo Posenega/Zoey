@@ -6,19 +6,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import CustomTextInput from "../../components/CustomTextInput";
 import FacebookButton from "../../components/Icons/FacebookButton";
 import GooglButton from "../../components/Icons/GoogleButton";
 import AppleButton from "../../components/Icons/AppleButton";
-import Colors from "../../constants/Colors";
+
 import ArrowButton from "../../components/Icons/ArrowButton";
 import BackButton from "../../components/Icons/BackButton";
 import { loginUser } from "../../store/actions/auth";
+import Colors from "../../constants/Colors";
 
 export default function SignInScreen(props) {
   const {
@@ -31,14 +33,24 @@ export default function SignInScreen(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
+    if (isLoading) {
+      return;
+    }
     dispatch(loginUser(data.email, data.password, setError));
   };
+  const isLoading = useSelector((state) => state.auth.isLoading);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.singInScreen}>
         <View style={styles.backButton}>
           <BackButton
-            onPress={() => props.navigation.goBack()}
+            onPress={() => {
+              if (isLoading) {
+                return;
+              }
+              props.navigation.goBack();
+            }}
             size={40}
             color="#2b2b2b"
           />
@@ -122,8 +134,14 @@ export default function SignInScreen(props) {
           onPress={handleSubmit(onSubmit)}
         >
           <View style={styles.signInButton}>
-            <Text style={styles.textSignIn}>Sign In</Text>
-            <ArrowButton color="white" size={18} />
+            {isLoading ? (
+              <ActivityIndicator size="small" color={Colors.accentColor} />
+            ) : (
+              <>
+                <Text style={styles.textSignIn}>Sign In</Text>
+                <ArrowButton color="white" size={18} />
+              </>
+            )}
           </View>
         </TouchableOpacity>
       </View>

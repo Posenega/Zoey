@@ -3,10 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import SharedStyles from "../constants/SharedStyles";
 import Colors from "../constants/Colors";
@@ -29,8 +29,12 @@ export default function AccountScreen(props) {
   const userId = useSelector((state) => state.auth.userId);
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
+  const isLoading = useSelector((state) => state.auth.isLoading);
 
   const onSubmit = (data) => {
+    if (isLoading) {
+      return;
+    }
     let formData = new FormData();
 
     let filename = localUrl.split("/").pop();
@@ -178,7 +182,11 @@ export default function AccountScreen(props) {
               onPress={handleSubmit(onSubmit)}
             >
               <View style={styles.signInButton}>
-                <Text style={styles.textSignIn}>Update Profile</Text>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color={Colors.accentColor} />
+                ) : (
+                  <Text style={styles.textSignIn}>Update Profile</Text>
+                )}
               </View>
             </TouchableOpacity>
           </View>

@@ -1,13 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import CustomButton from "../../components/CustomButton";
 import CustomTextInput from "../../components/CustomTextInput";
 import { useForm, Controller } from "react-hook-form";
 import { logout, verifyUser } from "../../store/actions/auth";
+import Colors from "../../constants/Colors";
 
 export default function VerificationScreen() {
   const email = useSelector((state) => state.auth.email);
+  const isLoading = useSelector((state) => state.auth.isLoading);
   const {
     control,
     handleSubmit,
@@ -50,13 +52,19 @@ export default function VerificationScreen() {
           );
         }}
       />
-      <CustomButton onPress={handleSubmit(onSubmit)}>Proceed</CustomButton>
+      <CustomButton onPress={handleSubmit(onSubmit)}>
+        {isLoading ? (
+          <ActivityIndicator size="small" color={Colors.accentColor} />
+        ) : (
+          "Proceed"
+        )}
+      </CustomButton>
       <CustomButton
         onPress={() => {
           dispatch(logout());
         }}
       >
-        go back
+        Go back
       </CustomButton>
     </View>
   );

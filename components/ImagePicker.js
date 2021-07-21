@@ -8,7 +8,7 @@ export default function ImagePicker(props) {
   const [image, setImage] = useState(props.value || null);
   const pickImage = async () => {
     let result = await ExpoImagePicker.launchImageLibraryAsync({
-      mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: props.aspect,
       quality: 1,

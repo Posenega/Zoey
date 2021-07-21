@@ -1,12 +1,12 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 import MessagesScreen, {
   messageOptions,
-} from '../screens/messages/MessagesScreen';
-import Colors from '../constants/Colors';
+} from "../screens/messages/MessagesScreen";
+import Colors from "../constants/Colors";
 import DirectMessagesScreen, {
   directMessagesOptions,
-} from '../screens/messages/DirectMessagesScreen';
+} from "../screens/messages/DirectMessagesScreen";
 
 const Stack = createStackNavigator();
 
@@ -15,11 +15,11 @@ const defaultNavOptions = {
   headerTransparent: true,
 
   headerTitleStyle: {
-    fontFamily: 'rubik-bold',
+    fontFamily: "rubik-bold",
     fontSize: 18,
     color: Colors.accentColor,
   },
-  headerTitleAlign: 'left',
+  headerTitleAlign: "left",
 };
 const directMessagesScreenOptions = {
   headerShown: false,
@@ -28,13 +28,13 @@ const directMessagesScreenOptions = {
 const MessageNavigator = () => (
   <Stack.Navigator screenOptions={defaultNavOptions}>
     <Stack.Screen
-      name='messages'
+      name="messages"
       component={MessagesScreen}
       options={messageOptions}
     />
     <Stack.Screen
       screenOptions={directMessagesScreenOptions}
-      name='chatRoom'
+      name="chatRoom"
       component={DirectMessagesScreen}
       options={directMessagesOptions}
     />

@@ -58,7 +58,14 @@ export default function ProfileScreen(props) {
         <Text style={{ ...styles.mediumText, textAlign: "left" }}>
           Your Books
         </Text>
-        <Books books={allBooks} navigation={props.navigation} />
+        {allBooks.length <= 0 ? (
+          <View style={styles.center}>
+            <Text style={styles.text}>You don't have any books yet.</Text>
+            <Text style={styles.text}>Go create Some!</Text>
+          </View>
+        ) : (
+          <Books books={allBooks} navigation={props.navigation} />
+        )}
       </View>
     </View>
   );
@@ -101,5 +108,17 @@ const styles = StyleSheet.create({
 
   body: {
     flex: 2.5,
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  text: {
+    color: Colors.accentColor,
+    fontFamily: "rubik-bold",
+    fontSize: 15,
+    marginVertical: 5,
+    letterSpacing: 1,
   },
 });

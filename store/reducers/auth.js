@@ -6,6 +6,8 @@ import {
   UPDATE_USER_SUCCESS,
   GET_USER,
   SET_VERIFY_USER,
+  SET_LOADING,
+  STOP_LOADING,
 } from "../actions/auth";
 
 const initialState = {
@@ -17,22 +19,16 @@ const initialState = {
   tryAutoLogin: true,
   imageUrl: "",
   isVerify: false,
+  isLoading: false,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_LOADING:
+      return { ...state, isLoading: true };
+    case STOP_LOADING:
+      return { ...state, isLoading: false };
     case AUTH_SUCCESS:
-      console.log({
-        ...state,
-        token: action.token,
-        email: action.email,
-        firstName: action.firstName,
-        lastName: action.lastName,
-        userId: action.userId,
-        imageUrl: action.imageUrl,
-        tryAutoLogin: false,
-        isVerify: false,
-      });
       return {
         ...state,
         token: action.token,
@@ -51,7 +47,7 @@ const authReducer = (state = initialState, action) => {
     case UPDATE_USER_START:
       return { ...state };
     case UPDATE_USER_SUCCESS:
-      return { ...state, ...action.updatedState };
+      return { ...state, ...action.updatedState, isLoading: false };
     case SET_VERIFY_USER:
       return {
         ...initialState,
@@ -60,6 +56,7 @@ const authReducer = (state = initialState, action) => {
         tryAutoLogin: false,
         userId: action.userId,
       };
+
     default:
       return state;
   }

@@ -1,33 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import Badge from '../components/Badge';
-import MessageButton from '../components/Icons/MessageButton';
-import Colors from '../constants/Colors';
-import FavoriteButton from '../components/Icons/FavoriteButton';
-import BackButton from '../components/Icons/BackButton';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import Badge from "../components/Badge";
+import MessageButton from "../components/Icons/MessageButton";
+import Colors from "../constants/Colors";
+import FavoriteButton from "../components/Icons/FavoriteButton";
+import BackButton from "../components/Icons/BackButton";
 import {
   deleteBook,
   fetchFavoriteBooks,
   requestAddFavoriteBook,
   requestRemoveFavoriteBook,
-} from '../store/actions/books';
-import DeleteButton from '../components/Icons/DeleteButton';
-import EditButton from '../components/Icons/EditButton';
-import { modalSetEditMode } from '../store/actions/addBookModal';
+} from "../store/actions/books";
+import DeleteButton from "../components/Icons/DeleteButton";
+import EditButton from "../components/Icons/EditButton";
+import { modalSetEditMode } from "../store/actions/addBookModal";
 
 export default function BookDetailScreen(props) {
   const id = props.route.params.id;
-  const addBookModalRef = useSelector(
-    (state) => state.addBookModal.ref
-  );
+  const addBookModalRef = useSelector((state) => state.addBookModal.ref);
   const dispatch = useDispatch();
   const displayedBook = useSelector((state) =>
     state.books.books.find((book) => book?._id === id)
@@ -38,16 +30,14 @@ export default function BookDetailScreen(props) {
   }, []);
 
   const isFavorite = useSelector((state) =>
-    state.books.favoriteBooks.some(
-      (book) => book?._id === displayedBook._id
-    )
+    state.books.favoriteBooks.some((book) => book?._id === displayedBook._id)
   );
 
   const bookType = () => {
-    if (displayedBook.type === 'sell') {
-      return 'For sale';
-    } else if (displayedBook.type === 'exchange') {
-      return 'Exchange';
+    if (displayedBook.type === "sell") {
+      return "For sale";
+    } else if (displayedBook.type === "exchange") {
+      return "Exchange";
     }
   };
   return (
@@ -57,20 +47,21 @@ export default function BookDetailScreen(props) {
           style={{
             width: 40,
             height: 40,
-            position: 'absolute',
+            position: "absolute",
             zIndex: 1,
             left: 10,
             top: 50,
-          }}>
+          }}
+        >
           <BackButton
             onPress={() => props.navigation.goBack()}
             size={40}
-            color='white'
+            color="white"
           />
         </View>
         <Image
           style={styles.bluredImage}
-          resizeMode='cover'
+          resizeMode="cover"
           blurRadius={8}
           source={{
             uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
@@ -99,23 +90,19 @@ export default function BookDetailScreen(props) {
                   ? requestRemoveFavoriteBook(id)
                   : requestAddFavoriteBook(id)
               );
-            }}>
-            <FavoriteButton
-              size={20}
-              color={isFavorite ? 'red' : '#C9C9C9'}
-            />
+            }}
+          >
+            <FavoriteButton size={20} color={isFavorite ? "red" : "#C9C9C9"} />
           </TouchableOpacity>
           {userId === displayedBook.creator ? (
-            <View style={{ marginLeft: 15, flexDirection: 'row' }}>
+            <View style={{ marginLeft: 15, flexDirection: "row" }}>
               <TouchableOpacity
                 onPress={() => {
                   dispatch(
-                    deleteBook(
-                      displayedBook._id,
-                      props.navigation.goBack
-                    )
+                    deleteBook(displayedBook._id, props.navigation.goBack)
                   );
-                }}>
+                }}
+              >
                 <DeleteButton />
               </TouchableOpacity>
               {/* <TouchableOpacity
@@ -132,25 +119,27 @@ export default function BookDetailScreen(props) {
         <Text numberOfLines={1} style={styles.author}>
           {displayedBook.author}
         </Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
           <Badge
             style={styles.badge}
             color={Colors.primaryColor}
-            backgroundColor='#FFF0C1'>
+            backgroundColor="#FFF0C1"
+          >
             {bookType()}
           </Badge>
         </View>
-        <Text style={styles.description}>
-          {displayedBook.description}
-        </Text>
+        <Text style={styles.description}>{displayedBook.description}</Text>
         <View style={styles.footerContainer}>
-          <View style={styles.price}>
-            <Text>50,000L.L.</Text>
-          </View>
+          {displayedBook.type === "sell" && displayedBook.price && (
+            <View style={styles.price}>
+              <Text>{displayedBook.price + " L.L"}</Text>
+            </View>
+          )}
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('Messages')}>
+            onPress={() => props.navigation.navigate("Messages")}
+          >
             <View style={styles.messageContainer}>
-              <MessageButton size={20} color='white' />
+              <MessageButton size={20} color="white" />
               <Text style={styles.message}>Messages</Text>
             </View>
           </TouchableOpacity>
@@ -167,39 +156,39 @@ export const screenOptions = {
 const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: -10,
   },
   backButtonContainer: {},
   detailsContainer: {
     flex: 1.3,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     padding: 20,
   },
   bluredImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   image: {
     height: 224,
     width: 165,
     borderRadius: 10,
-    overflow: 'hidden',
-    position: 'absolute',
+    overflow: "hidden",
+    position: "absolute",
   },
   headerContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   title: {
-    fontFamily: 'rubik-bold',
+    fontFamily: "rubik-bold",
     fontSize: 14,
   },
   author: {
     fontSize: 10,
-    color: '#979797',
+    color: "#979797",
     marginTop: 5,
   },
   badge: {
@@ -213,27 +202,28 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   footerContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 12,
   },
   price: {
+    marginRight: 15,
     paddingHorizontal: 18,
     paddingVertical: 13,
-    backgroundColor: '#EDEDED',
+    backgroundColor: "#EDEDED",
     borderRadius: 10,
   },
   messageContainer: {
     width: 130,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 13,
     paddingHorizontal: 20,
-    marginLeft: 15,
+
     backgroundColor: Colors.primaryColor,
     borderRadius: 10,
   },
   message: {
-    color: 'white',
+    color: "white",
   },
 });

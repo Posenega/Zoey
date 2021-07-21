@@ -22,6 +22,7 @@ export default function MessageComposer() {
 
 const styles = StyleSheet.create({
   messageComposer: {
+    flex: 1,
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",

@@ -5,180 +5,68 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Text,
-  ScrollView,
+  FlatList,
+  KeyboardAvoidingView,
 } from "react-native";
 import Colors from "../../constants/Colors";
 import DirectMessageHeader from "../../components/DirectMessageHeader";
 import MessageComposer from "../../components/MessageComposer";
 
+const renderMessage = (itemData) => {
+  if (!itemData.item.isMe) {
+    return (
+      <View style={styles.smmc}>
+        <View
+          style={{
+            ...styles.messageContainer,
+            ...styles.smc,
+          }}
+        >
+          <Text style={{ ...styles.textMessage, ...styles.stm }}>
+            {itemData.item.message}
+          </Text>
+        </View>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.rmmc}>
+        <View
+          style={{
+            ...styles.messageContainer,
+            ...styles.rmc,
+          }}
+        >
+          <Text style={{ ...styles.textMessage, ...styles.rtm }}>
+            {itemData.item.message}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+};
+
 export default function DirectMessagesScreen(props) {
+  const messages = [
+    { id: "1", message: "Hello dude", isMe: true },
+    { id: "2", message: "Heyyz", isMe: false },
+  ];
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
-        <DirectMessageHeader navigation={props.navigation} />
-        <View style={{ paddingHorizontal: 18, flex: 9 }}>
-          <View style={styles.messageList}>
-            <ScrollView>
-              <View style={styles.smmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.smc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.stm }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean a nunc imperdiet sapien egestas sodales eget ac
-                    ligula. Quisque vel interdum est. Nunc porta, tellus vitae
-                    scelerisque euismod, nisi nunc posuere odio, vel aliquet
-                    nibh massa sed magna. Aliquam erat volutpat. Nam faucibus
-                    elementum tellus sed aliquam. Curabitur molestie, ante eu
-                    malesuada laoreet,
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.rmmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.rmc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.rtm }}>
-                    Lorem ipsum
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.smmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.smc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.stm }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean a nunc imperdiet sapien egestas sodales eget ac
-                    ligula. Quisque vel interdum est. Nunc porta, tellus vitae
-                    scelerisque euismod, nisi nunc posuere odio, vel aliquet
-                    nibh massa sed magna. Aliquam erat volutpat. Nam faucibus
-                    elementum tellus sed aliquam. Curabitur molestie, ante eu
-                    malesuada laoreet,
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.rmmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.rmc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.rtm }}>
-                    Lorem ipsum
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.smmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.smc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.stm }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean a nunc imperdiet sapien egestas sodales eget ac
-                    ligula. Quisque vel interdum est. Nunc porta, tellus vitae
-                    scelerisque euismod, nisi nunc posuere odio, vel aliquet
-                    nibh massa sed magna. Aliquam erat volutpat. Nam faucibus
-                    elementum tellus sed aliquam. Curabitur molestie, ante eu
-                    malesuada laoreet,
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.rmmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.rmc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.rtm }}>
-                    Lorem ipsum
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.smmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.smc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.stm }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean a nunc imperdiet sapien egestas sodales eget ac
-                    ligula. Quisque vel interdum est. Nunc porta, tellus vitae
-                    scelerisque euismod, nisi nunc posuere odio, vel aliquet
-                    nibh massa sed magna. Aliquam erat volutpat. Nam faucibus
-                    elementum tellus sed aliquam. Curabitur molestie, ante eu
-                    malesuada laoreet,
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.rmmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.rmc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.rtm }}>
-                    Lorem ipsum
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.smmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.smc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.stm }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean a nunc imperdiet sapien egestas sodales eget ac
-                    ligula. Quisque vel interdum est. Nunc porta, tellus vitae
-                    scelerisque euismod, nisi nunc posuere odio, vel aliquet
-                    nibh massa sed magna. Aliquam erat volutpat. Nam faucibus
-                    elementum tellus sed aliquam. Curabitur molestie, ante eu
-                    malesuada laoreet,
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.rmmc}>
-                <View
-                  style={{
-                    ...styles.messageContainer,
-                    ...styles.rmc,
-                  }}
-                >
-                  <Text style={{ ...styles.textMessage, ...styles.rtm }}>
-                    Lorem ipsum
-                  </Text>
-                </View>
-              </View>
-            </ScrollView>
+        <View>
+          <View style={{ ...styles.messageList, flex: 9 }}>
+            <FlatList
+              data={messages}
+              renderItem={renderMessage}
+              stickyHeaderIndices={[0]}
+              ListHeaderComponent={
+                <DirectMessageHeader navigation={props.navigation} />
+              }
+            />
           </View>
-          <View style={styles.composerContainer}>
-            <MessageComposer />
-          </View>
+
+          <MessageComposer />
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -196,12 +84,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
   },
-  composerContainer: {
-    flex: 1,
-  },
+
   messageContainer: {
     // minWidth: 100,
-    maxWidth: 275,
+    maxWidth: "80%",
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 6,
