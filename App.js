@@ -13,7 +13,7 @@ import thunk from 'redux-thunk';
 import authReducer from './store/reducers/auth';
 import checkTokenExpirationMiddleware from './store/middlewares/checkTokenExpiration';
 
-axios.defaults.baseURL = 'http://192.168.1.107:5000';
+axios.defaults.baseURL = 'https://stormy-garden-51665.herokuapp.com';
 
 const fetchFonts = () => {
   return Font.loadAsync({
