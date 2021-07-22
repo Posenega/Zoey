@@ -8,16 +8,16 @@ import {
   SET_VERIFY_USER,
   SET_LOADING,
   STOP_LOADING,
-} from "../actions/auth";
+} from '../actions/auth';
 
 const initialState = {
-  token: "",
-  email: "",
-  firstName: "",
-  lastName: "",
-  userId: "",
+  token: '',
+  email: '',
+  firstName: '',
+  lastName: '',
+  userId: '',
   tryAutoLogin: true,
-  imageUrl: "",
+  imageUrl: '',
   isVerify: false,
   isLoading: false,
 };
@@ -39,6 +39,7 @@ const authReducer = (state = initialState, action) => {
         imageUrl: action.imageUrl,
         tryAutoLogin: false,
         isVerify: false,
+        isLoading: false,
       };
     case LOGOUT:
       return { ...initialState, tryAutoLogin: false };

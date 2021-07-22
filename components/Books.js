@@ -1,5 +1,5 @@
-import React from "react";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 import {
   View,
   FlatList,
@@ -7,12 +7,11 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
-} from "react-native";
-import Book from "./Book";
-import HorizontalBook from "./HorizontalBook";
+} from 'react-native';
+import Book from './Book';
+import HorizontalBook from './HorizontalBook';
 
 export default function Books({ books, navigation, isHorizontal }) {
-  console.log(books);
   const renderBook = (itemData) => {
     const book = itemData.item;
     let BookComponent = () => (
@@ -44,7 +43,9 @@ export default function Books({ books, navigation, isHorizontal }) {
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       style={
-        !isHorizontal ? { flex: 1 } : { flex: 1, paddingHorizontal: "4.8%" }
+        !isHorizontal
+          ? { flex: 1 }
+          : { flex: 1, paddingHorizontal: '4.8%' }
       }
       horizontal={isHorizontal}
       data={books}

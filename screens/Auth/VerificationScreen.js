@@ -1,11 +1,17 @@
-import React from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import CustomButton from "../../components/CustomButton";
-import CustomTextInput from "../../components/CustomTextInput";
-import { useForm, Controller } from "react-hook-form";
-import { logout, verifyUser } from "../../store/actions/auth";
-import Colors from "../../constants/Colors";
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import CustomButton from '../../components/CustomButton';
+import CustomTextInput from '../../components/CustomTextInput';
+import { useForm, Controller } from 'react-hook-form';
+import { logout, verifyUser } from '../../store/actions/auth';
+import Colors from '../../constants/Colors';
+import BackButton from '../../components/Icons/BackButton';
 
 export default function VerificationScreen() {
   const email = useSelector((state) => state.auth.email);
@@ -22,49 +28,56 @@ export default function VerificationScreen() {
   };
   return (
     <View style={styles.verificationScreen}>
-      <Text>An email has been sent to {email}</Text>
-      <Text>Please go to the link in your email.</Text>
+      <View style={styles.backButton}>
+        <BackButton
+          size={40}
+          color='#2b2b2b'
+          onPress={() => {
+            dispatch(logout());
+          }}
+        />
+      </View>
+
+      <Text style={{ textAlign: 'center', paddingHorizontal: 18 }}>
+        A verification code has been sent to {email}
+      </Text>
       <Controller
         control={control}
-        name="code"
-        defaultValue=""
+        name='code'
+        defaultValue=''
         rules={{
           minLength: {
             value: 4,
-            message: "Please code should be 4 characters",
+            message: 'Please code should be 4 characters',
           },
           maxLength: {
             value: 4,
-            message: "Please code should be 4 characters",
+            message: 'Please code should be 4 characters',
           },
         }}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
-              placeholder="Enter code..."
+              placeholder='Enter code...'
               style={styles.input}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
               error={errors.code?.message}
-              keyboardType="number-pad"
+              keyboardType='number-pad'
             />
           );
         }}
       />
       <CustomButton onPress={handleSubmit(onSubmit)}>
         {isLoading ? (
-          <ActivityIndicator size="small" color={Colors.accentColor} />
+          <ActivityIndicator
+            size='small'
+            color={Colors.accentColor}
+          />
         ) : (
-          "Proceed"
+          'Proceed'
         )}
-      </CustomButton>
-      <CustomButton
-        onPress={() => {
-          dispatch(logout());
-        }}
-      >
-        Go back
       </CustomButton>
     </View>
   );
@@ -73,11 +86,17 @@ export default function VerificationScreen() {
 const styles = StyleSheet.create({
   verificationScreen: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F9F9F9',
   },
   input: {
     marginHorizontal: 20,
     marginVertical: 10,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 25,
+    top: 75,
   },
 });

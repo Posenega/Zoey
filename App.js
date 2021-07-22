@@ -19,7 +19,7 @@ import checkTokenExpirationMiddleware from './store/middlewares/checkTokenExpira
 import { Alert } from 'react-native';
 import chatsReducer from './store/reducers/chats';
 
-axios.defaults.baseURL = 'https://stormy-garden-51665.herokuapp.com';
+axios.defaults.baseURL = 'http://192.168.1.107:5000';
 
 const fetchFonts = () => {
   return Font.loadAsync({

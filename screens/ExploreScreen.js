@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,16 +7,17 @@ import {
   Keyboard,
   Button,
   ScrollView,
-} from "react-native";
-import { useHeaderHeight } from "@react-navigation/elements";
-import Books from "../components/Books";
-import { useSelector, useDispatch } from "react-redux";
-import SharedStyles from "../constants/SharedStyles";
-import CustomTextInput from "../components/CustomTextInput";
-import Colors from "../constants/Colors";
-import FilterButton from "../components/Icons/FilterButton";
-import { Modalize } from "react-native-modalize";
-import { fetchBooks, filterBooks } from "../store/actions/books";
+  TouchableOpacity,
+} from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
+import Books from '../components/Books';
+import { useSelector, useDispatch } from 'react-redux';
+import SharedStyles from '../constants/SharedStyles';
+import CustomTextInput from '../components/CustomTextInput';
+import Colors from '../constants/Colors';
+import FilterButton from '../components/Icons/FilterButton';
+import { Modalize } from 'react-native-modalize';
+import { fetchBooks, filterBooks } from '../store/actions/books';
 
 export default function ExploreScreen(props) {
   useEffect(() => {
@@ -41,23 +42,24 @@ export default function ExploreScreen(props) {
           // ...SharedStyles.screen,
           flex: 1,
           paddingTop: headerHeight,
-        }}
-      >
+        }}>
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <View style={styles.inputContainer}>
               <CustomTextInput
                 style={styles.searchInput}
                 onChangeText={(text) => dispatch(filterBooks(text))}
-                placeholderTextColor="#999999"
-                placeholder="Search a title ..."
+                placeholderTextColor='#999999'
+                placeholder='Search a title ...'
               />
             </View>
-            <View style={styles.filterContainer}>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={styles.filterContainer}>
               <View style={styles.filterBox}>
                 <FilterButton />
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         {/* <View style={styles.header}>
@@ -86,7 +88,9 @@ export default function ExploreScreen(props) {
         )}
 
         <View style={styles.forYou}>
-          {!isFiltering && <Text style={styles.forYouText}>For You</Text>}
+          {!isFiltering && (
+            <Text style={styles.forYouText}>For You</Text>
+          )}
           <Books
             navigation={props.navigation}
             books={isFiltering ? filteredBooks : allBooks}
@@ -99,31 +103,31 @@ export default function ExploreScreen(props) {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: "4.8%",
-    width: "100%",
+    paddingHorizontal: '4.8%',
+    width: '100%',
     height: 50,
   },
   header: {
     height: 50,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   inputContainer: {
     flex: 5,
   },
   filterContainer: {
     flex: 1,
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
   },
   searchInput: {
-    width: "100%",
+    width: '100%',
     marginVertical: 0,
-    fontFamily: "rubik-bold",
+    fontFamily: 'rubik-bold',
   },
   filterBox: {
     backgroundColor: Colors.primaryColor,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
     width: 44,
     height: 44,
@@ -132,24 +136,24 @@ const styles = StyleSheet.create({
     height: 270,
   },
   trendingNowText: {
-    paddingHorizontal: "4.8%",
+    paddingHorizontal: '4.8%',
     marginTop: 20,
     marginBottom: 10,
-    fontFamily: "rubik-bold",
+    fontFamily: 'rubik-bold',
     fontSize: 16,
   },
   forYou: {
-    paddingHorizontal: "4.8%",
+    paddingHorizontal: '4.8%',
     flex: 1,
     marginTop: 20,
   },
   forYouText: {
     marginBottom: 10,
-    fontFamily: "rubik-bold",
+    fontFamily: 'rubik-bold',
     fontSize: 16,
   },
 });
 
 export const screenOptions = {
-  headerTitle: "Explore",
+  headerTitle: 'Explore',
 };

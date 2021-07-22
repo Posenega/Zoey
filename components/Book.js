@@ -9,7 +9,6 @@ import {
 import Badge from './Badge';
 
 export default function Book(props) {
-  console.log(props.image);
   return (
     <TouchableWithoutFeedback
       onPress={() =>
