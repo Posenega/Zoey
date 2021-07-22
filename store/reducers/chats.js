@@ -1,4 +1,4 @@
-import { ADD_CHAT, ADD_MESSAGE } from "../actions/chats";
+import { ADD_CHAT, ADD_MESSAGE, SET_CHATS } from "../actions/chats";
 
 const initialState = {
   myChats: [],
@@ -45,6 +45,8 @@ export default chatsReducer = (state = initialState, action) => {
         .filter((chat) => chat._id !== targetedChat._id)
         .concat(targetedChat);
       return { ...state, myChats: updatedChats };
+    case SET_CHATS:
+      return { ...state, myChats: action.chats };
     default:
       return state;
   }
