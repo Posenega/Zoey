@@ -72,13 +72,13 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <StatusBar
+      {/* <StatusBar
         barStyle={
           store.getState().themes.includes("dark")
             ? "light-content"
             : "dark-content"
         }
-      />
+      /> */}
       <MainNavigator />
       <AddBookModal />
     </Provider>
