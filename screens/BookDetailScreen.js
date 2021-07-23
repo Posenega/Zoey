@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import Badge from "../components/Badge";
 import MessageButton from "../components/Icons/MessageButton";
-import Colors from "../constants/Colors";
+import Colors, { getThemeColor } from "../constants/Colors";
 import FavoriteButton from "../components/Icons/FavoriteButton";
 import BackButton from "../components/Icons/BackButton";
 import {
@@ -18,7 +18,8 @@ import EditButton from "../components/Icons/EditButton";
 import { modalSetEditMode } from "../store/actions/addBookModal";
 import { addChat } from "../store/actions/chats";
 
-export default function BookDetailScreen(props) {
+function BookDetailScreen(props) {
+  const styles = getStyles(props.theme);
   const id = props.route.params.id;
   const addBookModalRef = useSelector((state) => state.addBookModal.ref);
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ export default function BookDetailScreen(props) {
       return "Exchange";
     }
   };
-  console.log(displayedBook.condition);
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.imageContainer}>
@@ -94,7 +95,10 @@ export default function BookDetailScreen(props) {
               );
             }}
           >
-            <FavoriteButton size={20} color={isFavorite ? "red" : "#C9C9C9"} />
+            <FavoriteButton
+              size={20}
+              color={isFavorite ? "red" : getThemeColor("idle", props.theme)}
+            />
           </TouchableOpacity>
           {userId === displayedBook.creator ? (
             <View style={{ marginLeft: 15, flexDirection: "row" }}>
@@ -105,7 +109,7 @@ export default function BookDetailScreen(props) {
                   );
                 }}
               >
-                <DeleteButton />
+                <DeleteButton color={getThemeColor("idle", props.theme)} />
               </TouchableOpacity>
               {/* <TouchableOpacity
                 onPress={() => {
@@ -124,14 +128,14 @@ export default function BookDetailScreen(props) {
         <View style={{ flexDirection: "row" }}>
           <Badge
             style={styles.badge}
-            color={Colors.primaryColor}
+            color={getThemeColor("primary", props.theme)}
             backgroundColor="#FFF0C1"
           >
             {bookType()}
           </Badge>
           <Badge
             style={styles.badge}
-            color={Colors.primaryColor}
+            color={getThemeColor("primary", props.theme)}
             backgroundColor="#FFF0C1"
           >
             {displayedBook.condition}
@@ -175,77 +179,90 @@ export const screenOptions = {
   headerShown: false,
 };
 
-const styles = StyleSheet.create({
-  imageContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: -10,
-  },
-  backButtonContainer: {},
-  detailsContainer: {
-    flex: 1.3,
-    backgroundColor: "white",
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    padding: 20,
-  },
-  bluredImage: {
-    width: "100%",
-    height: "100%",
-  },
-  image: {
-    height: 224,
-    width: 165,
-    borderRadius: 10,
-    overflow: "hidden",
-    position: "absolute",
-  },
-  headerContainer: {
-    flexDirection: "row",
-  },
-  title: {
-    fontFamily: "rubik-bold",
-    fontSize: 14,
-  },
-  author: {
-    fontSize: 10,
-    color: "#979797",
-    marginTop: 5,
-  },
-  badge: {
-    maxWidth: 75,
-    marginRight: 5,
-    height: 22,
-    marginTop: 24,
-  },
-  description: {
-    flex: 1,
-    marginTop: 12,
-  },
-  footerContainer: {
-    flexDirection: "row",
-    marginTop: 12,
-  },
-  price: {
-    marginRight: 15,
-    paddingHorizontal: 18,
-    paddingVertical: 13,
-    backgroundColor: "#EDEDED",
-    borderRadius: 10,
-  },
-  messageContainer: {
-    width: 130,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 13,
-    paddingHorizontal: 20,
+const getStyles = (theme) =>
+  StyleSheet.create({
+    imageContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: -20,
+    },
+    detailsContainer: {
+      flex: 1.3,
+      backgroundColor: "white",
+      borderTopRightRadius: 20,
+      borderTopLeftRadius: 20,
+      padding: 20,
+      backgroundColor: getThemeColor("main", theme),
+    },
+    bluredImage: {
+      width: "100%",
+      height: "100%",
+    },
+    image: {
+      height: 224,
+      width: 165,
+      borderRadius: 10,
+      overflow: "hidden",
+      position: "absolute",
+    },
+    headerContainer: {
+      flexDirection: "row",
+    },
+    title: {
+      fontFamily: "rubik-bold",
+      fontSize: 14,
+      color: getThemeColor("text", theme),
+    },
+    author: {
+      fontSize: 10,
+      color: "#979797",
+      marginTop: 5,
+    },
+    badge: {
+      maxWidth: 75,
+      marginRight: 5,
+      height: 22,
+      marginTop: 24,
+    },
+    description: {
+      flex: 1,
+      marginTop: 12,
+      color: getThemeColor("text", theme),
+    },
+    footerContainer: {
+      flexDirection: "row",
+      marginTop: 12,
+    },
+    price: {
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 15,
+      paddingHorizontal: 18,
+      paddingVertical: 13,
+      backgroundColor: "#EDEDED",
+      borderRadius: 10,
+    },
+    messageContainer: {
+      width: 130,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      alignItems: "center",
+      paddingVertical: 13,
+      paddingHorizontal: 20,
 
-    backgroundColor: Colors.primaryColor,
-    borderRadius: 10,
-  },
-  message: {
-    color: "white",
-  },
-});
+      backgroundColor: getThemeColor("primary", theme),
+      borderRadius: 10,
+    },
+    message: {
+      marginLeft: 5,
+      color: "white",
+    },
+  });
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(BookDetailScreen);

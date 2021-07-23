@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import SharedStyles from "../constants/SharedStyles";
 import SettingsButton from "../components/Icons/SettingsButton";
 import ArrowButton from "../components/Icons/ArrowButton";
@@ -21,13 +21,13 @@ import NotificationIcon from "../components/Icons/NotificationIcon";
 import { logout } from "../store/actions/auth";
 import IconPlaceholder from "../components/IconPlaceholder";
 import { setTheme } from "../store/actions/theme";
-import themes from "../constants/Colors";
+import themes, { getThemeColor } from "../constants/Colors";
 
-export default function SettingsScreen(props) {
+function SettingsScreen(props) {
   const dispatch = useDispatch();
-
+  const styles = getStyles(props.theme);
   const userId = useSelector((state) => state.auth.userId);
-
+  const currentTheme = useSelector((state) => state.themes.theme);
   // useEffect(() => {
   //   dispatch(getUser(userId));
   // }, []);
@@ -47,7 +47,7 @@ export default function SettingsScreen(props) {
               }}
               back
               size={24}
-              color="#2b2b2b"
+              color={getThemeColor("text", props.theme)}
             />
           </View>
           <Text style={styles.topHeaderText}>Settings</Text>
@@ -73,7 +73,7 @@ export default function SettingsScreen(props) {
           </View>
           <TouchableWithoutFeedback onPress={() => dispatch(logout())}>
             <View style={styles.SignOut}>
-              <Logout />
+              <Logout color={getThemeColor("text", props.theme)} />
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -86,33 +86,49 @@ export default function SettingsScreen(props) {
         >
           <SettingContainer
             style={styles.firstContainer}
-            icon={<ProfileButton size={20} color="#2b2b2b" />}
+            icon={
+              <ProfileButton
+                size={20}
+                color={getThemeColor("text", props.theme)}
+              />
+            }
           >
             Account
           </SettingContainer>
         </TouchableOpacity>
-        <SettingContainer icon={<LockIcon size={20} color="#2b2b2b" />}>
+        <SettingContainer
+          icon={
+            <LockIcon size={20} color={getThemeColor("text", props.theme)} />
+          }
+        >
           Privacy
         </SettingContainer>
         <TouchableOpacity
           onPress={() => {
-            dispatch(setTheme("light"));
+            currentTheme === "dark"
+              ? dispatch(setTheme("light"))
+              : dispatch(setTheme("dark"));
           }}
         >
-          <SettingContainer icon={<ShowValueInput size={20} color="#2b2b2b" />}>
-            Light
+          <SettingContainer
+            icon={
+              <ShowValueInput
+                size={20}
+                color={getThemeColor("text", props.theme)}
+              />
+            }
+          >
+            Appearance
           </SettingContainer>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(setTheme("dark"));
-          }}
+        <SettingContainer
+          icon={
+            <NotificationIcon
+              size={20}
+              color={getThemeColor("text", props.theme)}
+            />
+          }
         >
-          <SettingContainer icon={<ShowValueInput size={20} color="#2b2b2b" />}>
-            Dark
-          </SettingContainer>
-        </TouchableOpacity>
-        <SettingContainer icon={<NotificationIcon size={20} color="#2b2b2b" />}>
           Notifications
         </SettingContainer>
       </View>
@@ -124,76 +140,85 @@ export default function SettingsScreen(props) {
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    paddingTop: "10%",
-    flex: 1,
-    width: "100%",
-  },
-  topHeader: {
-    flexDirection: "row",
-    height: 55,
-    width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  topHeaderText: {
-    fontFamily: "rubik-bold",
-    fontSize: 18,
-  },
-  headerContent: {
-    flex: 1,
-    width: "100%",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#d9d9d9",
-    flexDirection: "row",
-  },
-  imageContainer: {
-    justifyContent: "center",
-  },
-  image: {
-    height: 60,
-    width: 60,
-    borderRadius: 60,
-  },
-  userInfo: {
-    flexDirection: "column",
-    padding: 10,
-    flex: 6,
-    justifyContent: "center",
-  },
-  welcome: {
-    color: "#999999",
-    fontSize: 12,
-  },
-  userName: {
-    fontSize: 16,
-    fontFamily: "rubik-medium",
-    color: "#2b2b2b",
-  },
-  SignOut: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-end",
-    width: "100%",
-  },
-  body: {
-    flex: 3.5,
-  },
-  firstContainer: {
-    marginTop: 30,
-  },
-  footer: {
-    flex: 0.6,
-    borderTopWidth: 1,
-    borderColor: "#d9d9d9",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textFooter: {
-    color: "#999999",
-    fontSize: 10,
-    marginVertical: 4,
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    header: {
+      paddingTop: "10%",
+      flex: 1,
+      width: "100%",
+    },
+    topHeader: {
+      flexDirection: "row",
+      height: 55,
+      width: "100%",
+      justifyContent: "flex-start",
+      alignItems: "center",
+    },
+    topHeaderText: {
+      fontFamily: "rubik-bold",
+      fontSize: 18,
+      color: getThemeColor("text", theme),
+    },
+    headerContent: {
+      flex: 1,
+      width: "100%",
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: getThemeColor("horizontalLine", theme),
+      flexDirection: "row",
+    },
+    imageContainer: {
+      justifyContent: "center",
+    },
+    image: {
+      height: 60,
+      width: 60,
+      borderRadius: 60,
+    },
+    userInfo: {
+      flexDirection: "column",
+      padding: 10,
+      flex: 6,
+      justifyContent: "center",
+    },
+    welcome: {
+      color: "#999999",
+      fontSize: 12,
+    },
+    userName: {
+      fontSize: 16,
+      fontFamily: "rubik-medium",
+      color: getThemeColor("text", theme),
+    },
+    SignOut: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      width: "100%",
+    },
+    body: {
+      flex: 3.5,
+    },
+    firstContainer: {
+      marginTop: 30,
+    },
+    footer: {
+      flex: 0.6,
+      borderTopWidth: 1,
+      borderColor: getThemeColor("horizontalLine", theme),
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    textFooter: {
+      color: "#999999",
+      fontSize: 10,
+      marginVertical: 4,
+    },
+  });
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(SettingsScreen);

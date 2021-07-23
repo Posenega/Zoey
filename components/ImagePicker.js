@@ -1,61 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import CustomTextInput from './CustomTextInput';
-import ImageIcon from './Icons/ImageIcon';
-import * as ExpoImagePicker from 'expo-image-picker';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import CustomTextInput from "./CustomTextInput";
+import ImageIcon from "./Icons/ImageIcon";
+import * as ExpoImagePicker from "expo-image-picker";
+import { connect } from "react-redux";
+import { getThemeColor } from "../constants/Colors";
 
-export default function ImagePicker(props) {
+function ImagePicker(props) {
   const styles = StyleSheet.create({
     imageSelector: {
-      backgroundColor: props.error ? '#FFDCDC' : '#ededed',
+      borderWidth: props.error ? 2 : null,
+      borderColor: props.error ? "#E24949" : null,
+      backgroundColor: getThemeColor("formBackground", props.theme),
       paddingHorizontal: 12,
       height: 44,
-      width: '100%',
+      width: "100%",
       borderRadius: 10,
       marginTop: 10,
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
     },
     imageSelected: {
-      backgroundColor: '#ededed',
+      backgroundColor: getThemeColor("background", props.theme),
       paddingHorizontal: 12,
       height: 44,
-      width: '100%',
+      width: "100%",
       borderRadius: 10,
       borderWidth: 2,
-      borderColor: '#2b2b2b',
+      borderColor: getThemeColor("inputBorder", props.theme),
       marginTop: 10,
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
     },
     text: {
       marginLeft: 10,
       fontSize: 12,
-      color: props.error ? '#E24949' : '#999999',
+      color: props.error
+        ? "#E24949"
+        : getThemeColor("placeholder", props.theme),
     },
     textSelected: {
       marginLeft: 10,
       fontSize: 12,
-      color: '#2b2b2b',
+      color: getThemeColor("text", props.theme),
     },
     imagePreview: {
       marginTop: 10,
-      width: '100%',
+      width: "100%",
       height: 256,
-      alignItems: 'center',
+      alignItems: "center",
     },
-    image: { width: 192, height: '100%', borderRadius: 10 },
+    image: { width: 192, height: "100%", borderRadius: 10 },
     errorText: {
       fontSize: 10,
       marginLeft: 10,
       marginTop: 0.5,
-      color: '#999999',
+      color: getThemeColor("placeholder", props.theme),
     },
   });
 
@@ -80,13 +80,11 @@ export default function ImagePicker(props) {
 
   useEffect(() => {
     const getPermissions = async () => {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         const { status } =
           await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert(
-            'Sorry, we need camera roll permissions to make this work!'
-          );
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
     };
@@ -96,11 +94,14 @@ export default function ImagePicker(props) {
   return (
     <>
       <TouchableOpacity onPress={pickImage}>
-        <View
-          style={image ? styles.imageSelected : styles.imageSelector}>
+        <View style={image ? styles.imageSelected : styles.imageSelector}>
           <ImageIcon
             color={
-              props.error ? '#E24949' : image ? '#2b2b2b' : '#999999'
+              props.error
+                ? "#E24949"
+                : image
+                ? getThemeColor("text", props.theme)
+                : getThemeColor("placeholder", props.theme)
             }
           />
           <Text style={image ? styles.textSelected : styles.text}>
@@ -118,9 +119,14 @@ export default function ImagePicker(props) {
           />
         </View>
       )}
-      {props.error && (
-        <Text style={styles.errorText}>{props.error}</Text>
-      )}
+      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
     </>
   );
 }
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(ImagePicker);

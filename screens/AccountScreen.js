@@ -9,15 +9,16 @@ import {
   ActivityIndicator,
 } from "react-native";
 import SharedStyles from "../constants/SharedStyles";
-import Colors from "../constants/Colors";
+import Colors, { getThemeColor } from "../constants/Colors";
 import { useForm, Controller } from "react-hook-form";
 import ArrowButton from "../components/Icons/ArrowButton";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store/actions/auth";
 import ImagePicker from "../components/ImagePicker";
 import CustomTextInput from "../components/CustomTextInput";
 
-export default function AccountScreen(props) {
+function AccountScreen(props) {
+  const styles = getStyles(props.theme);
   const {
     control,
     handleSubmit,
@@ -74,7 +75,7 @@ export default function AccountScreen(props) {
                 }}
                 back
                 size={24}
-                color="#2b2b2b"
+                color={getThemeColor("text", props.theme)}
               />
             </View>
             <Text style={styles.topHeaderText}>Account</Text>
@@ -183,7 +184,7 @@ export default function AccountScreen(props) {
             >
               <View style={styles.signInButton}>
                 {isLoading ? (
-                  <ActivityIndicator size="small" color={Colors.accentColor} />
+                  <ActivityIndicator size="small" color="white" />
                 ) : (
                   <Text style={styles.textSignIn}>Update Profile</Text>
                 )}
@@ -200,90 +201,99 @@ export const accountOptions = {
   headerTitle: "Account",
 };
 
-const styles = StyleSheet.create({
-  header: {
-    paddingTop: "10%",
-    flex: 1,
-    width: "100%",
-  },
-  topHeader: {
-    flexDirection: "row",
-    height: 55,
-    width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  topHeaderText: {
-    fontFamily: "rubik-bold",
-    fontSize: 18,
-  },
-  headerContent: {
-    flex: 1,
-    width: "100%",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#d9d9d9",
-    flexDirection: "row",
-  },
-  imageContainer: {
-    justifyContent: "center",
-  },
-  image: {
-    height: 60,
-    width: 60,
-    borderRadius: 60,
-  },
-  userInfo: {
-    flexDirection: "column",
-    padding: 10,
-    flex: 6,
-    justifyContent: "center",
-  },
-  welcome: {
-    color: "#999999",
-    fontSize: 12,
-  },
-  userName: {
-    fontSize: 16,
-    fontFamily: "rubik-medium",
-    color: "#2b2b2b",
-  },
-  SignOut: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-end",
-    width: "100%",
-  },
-  body: {
-    flex: 3.5,
-  },
-  firstContainer: {
-    marginTop: 30,
-  },
-  footer: {
-    flex: 0.6,
-    borderTopWidth: 1,
-    borderColor: "#d9d9d9",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textFooter: {
-    color: "#999999",
-    fontSize: 10,
-    marginVertical: 4,
-  },
-  signInButton: {
-    height: 44,
-    width: "100%",
-    backgroundColor: Colors.primaryColor,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    borderRadius: 10,
-    flexDirection: "row",
-  },
-  textSignIn: {
-    color: "white",
-    fontSize: 14,
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    header: {
+      paddingTop: "10%",
+      flex: 1,
+      width: "100%",
+    },
+    topHeader: {
+      flexDirection: "row",
+      height: 55,
+      width: "100%",
+      justifyContent: "flex-start",
+      alignItems: "center",
+    },
+    topHeaderText: {
+      fontFamily: "rubik-bold",
+      fontSize: 18,
+      color: getThemeColor("text", theme),
+    },
+    headerContent: {
+      flex: 1,
+      width: "100%",
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: "#d9d9d9",
+      flexDirection: "row",
+    },
+    imageContainer: {
+      justifyContent: "center",
+    },
+    image: {
+      height: 60,
+      width: 60,
+      borderRadius: 60,
+    },
+    userInfo: {
+      flexDirection: "column",
+      padding: 10,
+      flex: 6,
+      justifyContent: "center",
+    },
+    welcome: {
+      color: "#999999",
+      fontSize: 12,
+    },
+    userName: {
+      fontSize: 16,
+      fontFamily: "rubik-medium",
+      color: "#2b2b2b",
+    },
+    SignOut: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      width: "100%",
+    },
+    body: {
+      flex: 3.5,
+    },
+    firstContainer: {
+      marginTop: 30,
+    },
+    footer: {
+      flex: 0.6,
+      borderTopWidth: 1,
+      borderColor: "#d9d9d9",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    textFooter: {
+      color: "#999999",
+      fontSize: 10,
+      marginVertical: 4,
+    },
+    signInButton: {
+      height: 44,
+      width: "100%",
+      backgroundColor: getThemeColor("primary", theme),
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 20,
+      borderRadius: 10,
+      flexDirection: "row",
+    },
+    textSignIn: {
+      color: "white",
+      fontSize: 14,
+    },
+  });
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(AccountScreen);

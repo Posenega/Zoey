@@ -15,6 +15,8 @@ export const lightColors = {
   formBackground: "#EDEDED",
   background: "#F9F9F9",
   main: "#FFFFFF",
+  inputBorder: "#2B2B2B",
+  horizontalLine: "#D9D9D9",
 };
 
 export const darkColors = {
@@ -25,6 +27,8 @@ export const darkColors = {
   formBackground: "#3D3D3D",
   background: "#202020",
   main: "#131313",
+  inputBorder: "#3D3D3D",
+  horizontalLine: "#404040",
 };
 
 const themes = {

@@ -7,8 +7,9 @@ import {
   Text,
 } from "react-native";
 import ShowValueInput from "../components/Icons/ShowValueInput";
-
-export default function CustomTextInput(props) {
+import { connect } from "react-redux";
+import { getThemeColor } from "../constants/Colors";
+function CustomTextInput(props) {
   const styles = StyleSheet.create({
     inputContainer: {
       height: 44,
@@ -16,21 +17,21 @@ export default function CustomTextInput(props) {
       alignItems: "center",
     },
     passwordContainer: {
-      backgroundColor: "#ededed",
+      backgroundColor: getThemeColor("formBackground", props.theme),
       borderRadius: 10,
       width: "100%",
     },
     input: {
-      color: "#2b2b2b",
+      color: getThemeColor("text", props.theme),
       fontSize: 12,
-      backgroundColor: "#ededed",
+      backgroundColor: getThemeColor("formBackground", props.theme),
       paddingHorizontal: 12,
       height: "100%",
       width: "100%",
       borderRadius: 10,
     },
     inputPassword: {
-      color: "#2b2b2b",
+      color: getThemeColor("text", props.theme),
       fontSize: 12,
       paddingHorizontal: 12,
       height: 43,
@@ -38,29 +39,33 @@ export default function CustomTextInput(props) {
       borderRadius: 10,
     },
     inputFocus: {
-      borderColor: "#2b2b2b",
+      borderColor: getThemeColor("inputBorder", props.theme),
       borderWidth: 2,
-      backgroundColor: "#f9f9f9",
+      backgroundColor: getThemeColor("background", props.theme),
     },
-    borderHack: {
-      borderWidth: 2,
-      borderColor: props.error ? "#FFDCDC" : "#ededed",
-    },
+    // borderHack: {
+    //   borderWidth: 2,
+    //   borderColor: props.error
+    //     ? "#FFDCDC"
+    //     : getThemeColor("formBackground", props.theme),
+    // },
     errorText: {
       fontSize: 10,
       marginLeft: 10,
       marginTop: 0.5,
-      color: "#999999",
+      color: getThemeColor("placeholder", props.theme),
     },
     errorInput: {
-      backgroundColor: "#FFDCDC",
+      // backgroundColor: "#FFDCDC",
+      borderWidth: 2,
+      borderColor: "#E24949",
     },
   });
 
   const [focus, setFocus] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
-  const focusStyle = focus ? styles.inputFocus : styles.borderHack;
-  const focusPasswordStyle = focus ? styles.inputFocus : styles.borderHack;
+  const focusStyle = focus && styles.inputFocus;
+  const focusPasswordStyle = focus && styles.inputFocus;
 
   let inputStyle;
   if (props.isPassword) {
@@ -133,3 +138,10 @@ export default function CustomTextInput(props) {
     </>
   );
 }
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(CustomTextInput);

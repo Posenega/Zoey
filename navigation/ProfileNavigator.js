@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import Colors from "../constants/Colors";
+import Colors, { getThemeColor } from "../constants/Colors";
 import ProfileScreen, {
   screenOptions as profileScreenOptions,
 } from "../screens/ProfileScreen";
@@ -14,23 +14,26 @@ import BookDetailScreen, {
 import AccountScreen, {
   accountOptions as accountScreenOptions,
 } from "../screens/AccountScreen";
+import { connect } from "react-redux";
 
 const Stack = createStackNavigator();
 
-const defaultNavOptions = {
-  headerShown: false,
-  headerTransparent: true,
-
-  headerTitleStyle: {
-    fontFamily: "rubik-bold",
-    fontSize: 18,
-    color: Colors.accentColor,
-  },
-  headerTitleAlign: "left",
-};
-
-const ProfileNavigator = () => (
-  <Stack.Navigator screenOptions={defaultNavOptions}>
+const ProfileNavigator = (props) => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+      headerTransparent: true,
+      headerTitleStyle: {
+        fontFamily: "rubik-bold",
+        fontSize: 18,
+        color: getThemeColor("text", props.theme),
+      },
+      cardStyle: {
+        backgroundColor: getThemeColor("background", props.theme),
+      },
+      headerTitleAlign: "left",
+    }}
+  >
     <Stack.Screen
       name="profile"
       component={ProfileScreen}
@@ -53,4 +56,10 @@ const ProfileNavigator = () => (
     />
   </Stack.Navigator>
 );
-export default ProfileNavigator;
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(ProfileNavigator);

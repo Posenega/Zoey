@@ -17,7 +17,7 @@ const defaultNavOptions = {
   headerTitleStyle: {
     fontFamily: "rubik-bold",
     fontSize: 18,
-    color: Colors.accentColor,
+    color: getThemeColor("text", props.theme),
   },
   headerTitleAlign: "left",
 };

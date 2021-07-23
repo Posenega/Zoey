@@ -39,7 +39,7 @@ const TabNavigator = (props) => (
           }
           return {
             elevation: 0,
-            borderWidth: 0,
+            borderTopWidth: 0,
             height: 55,
             backgroundColor: getThemeColor("main", props.theme),
           };
@@ -55,7 +55,7 @@ const TabNavigator = (props) => (
         ),
         tabBarStyle: {
           elevation: 0,
-          borderWidth: 0,
+          borderTopWidth: 0,
           height: 55,
           backgroundColor: getThemeColor("main", props.theme),
         },
@@ -83,7 +83,7 @@ const TabNavigator = (props) => (
           }
           return {
             elevation: 0,
-            borderWidth: 0,
+            borderTopWidth: 0,
             height: 55,
             backgroundColor: getThemeColor("main", props.theme),
           };
@@ -106,9 +106,12 @@ const TabNavigator = (props) => (
             if (routeName === "account") {
               return { display: "none" };
             }
+            if (routeName === "detail") {
+              return { display: "none" };
+            }
             return {
               elevation: 0,
-              borderWidth: 0,
+              borderTopWidth: 0,
               height: 55,
               backgroundColor: getThemeColor("main", props.theme),
             };

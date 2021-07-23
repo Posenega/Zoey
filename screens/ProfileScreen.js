@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import SharedStyles from "../constants/SharedStyles";
 import SettingsButton from "../components/Icons/SettingsButton";
-import Colors from "../constants/Colors";
+import Colors, { getThemeColor } from "../constants/Colors";
 import Books from "../components/Books";
 import { fetchUserBooks } from "../store/actions/books";
 import IconPlaceholder from "../components/IconPlaceholder";
 // import { getUser } from "../store/actions/auth";
 
-export default function ProfileScreen(props) {
+function ProfileScreen(props) {
+  const styles = getStyles(props.theme);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
 
@@ -32,6 +33,7 @@ export default function ProfileScreen(props) {
         <View style={styles.topHeader}>
           <Text style={styles.headerText}>Profile</Text>
           <SettingsButton
+            color={getThemeColor("text", props.theme)}
             onPress={() => props.navigation.navigate("settings")}
           />
         </View>
@@ -70,55 +72,63 @@ export default function ProfileScreen(props) {
     </View>
   );
 }
+const getStyles = (theme) =>
+  StyleSheet.create({
+    header: {
+      paddingTop: "10%",
+      flex: 1,
+      flexDirection: "column",
+    },
+    mediumText: {
+      width: "85%",
+      marginTop: 15,
+      fontSize: 16,
+      fontFamily: "rubik-medium",
+      color: getThemeColor("text", theme),
+    },
+    topHeader: {
+      flexDirection: "row",
+      height: 55,
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    headerText: {
+      fontFamily: "rubik-bold",
+      fontSize: 18,
+      color: getThemeColor("text", theme),
+    },
+    userInfo: {
+      flexDirection: "column",
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    image: {
+      height: 68,
+      width: 68,
+      borderRadius: 60,
+    },
 
-const styles = StyleSheet.create({
-  header: {
-    paddingTop: "10%",
-    flex: 1,
-    flexDirection: "column",
-  },
-  mediumText: {
-    width: "85%",
-    marginTop: 15,
-    fontSize: 16,
-    fontFamily: "rubik-medium",
-    color: Colors.accentColor,
-  },
-  topHeader: {
-    flexDirection: "row",
-    height: 55,
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerText: {
-    fontFamily: "rubik-bold",
-    fontSize: 18,
-  },
-  userInfo: {
-    flexDirection: "column",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  image: {
-    height: 68,
-    width: 68,
-    borderRadius: 60,
-  },
+    body: {
+      flex: 2.5,
+    },
+    center: {
+      justifyContent: "center",
+      alignItems: "center",
+      flex: 1,
+    },
+    text: {
+      color: getThemeColor("text", theme),
+      fontFamily: "rubik-bold",
+      fontSize: 15,
+      marginVertical: 5,
+      letterSpacing: 1,
+    },
+  });
 
-  body: {
-    flex: 2.5,
-  },
-  center: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
-  text: {
-    color: Colors.accentColor,
-    fontFamily: "rubik-bold",
-    fontSize: 15,
-    marginVertical: 5,
-    letterSpacing: 1,
-  },
-});
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(ProfileScreen);

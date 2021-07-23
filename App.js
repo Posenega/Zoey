@@ -16,6 +16,8 @@ import checkTokenExpirationMiddleware from "./store/middlewares/checkTokenExpira
 import { Alert, StatusBar } from "react-native";
 import chatsReducer from "./store/reducers/chats";
 import themesReducer from "./store/reducers/theme";
+import { setTheme } from "./store/actions/theme";
+import * as SecureStore from "expo-secure-store";
 
 axios.defaults.baseURL = "http://192.168.1.114:5000";
 
@@ -25,6 +27,12 @@ const fetchFonts = () => {
     "rubik-bold": require("./assets/fonts/Rubik-Bold.ttf"),
     "rubik-medium": require("./assets/fonts/Rubik-Medium.ttf"),
   });
+};
+
+const fetchTheme = async () => {
+  const theme = await SecureStore.getItemAsync("theme");
+  const parsedTheme = JSON.parse(theme);
+  return parsedTheme.theme;
 };
 
 export default function App() {
@@ -70,15 +78,20 @@ export default function App() {
     applyMiddleware(thunk, checkTokenExpirationMiddleware)
   );
 
+  fetchTheme().then((theme) => {
+    if (theme === "light" || theme === "dark") {
+      store.dispatch(setTheme(theme));
+    }
+  });
+  const statusBarTheme =
+    store.getState().themes.theme === "dark" ? "dark-content" : "light-content";
   return (
     <Provider store={store}>
-      {/* <StatusBar
-        barStyle={
-          store.getState().themes.includes("dark")
-            ? "light-content"
-            : "dark-content"
-        }
-      /> */}
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={statusBarTheme}
+      />
       <MainNavigator />
       <AddBookModal />
     </Provider>

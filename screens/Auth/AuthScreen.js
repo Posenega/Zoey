@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { connect } from "react-redux";
 import CustomButton from "../../components/CustomButton";
-import Colors from "../../constants/Colors";
+import Colors, { getThemeColor } from "../../constants/Colors";
 
-export default function AuthScreen(props) {
+function AuthScreen(props) {
+  const styles = getStyles(props.theme);
   return (
     <View style={styles.authScreen}>
       <Text style={styles.header}>Welcome to BookApp</Text>
@@ -23,31 +25,39 @@ export default function AuthScreen(props) {
   );
 }
 
-const styles = StyleSheet.create({
-  authScreen: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    fontFamily: "rubik-bold",
-    fontSize: 20,
-    color: Colors.accentColor,
-    marginBottom: 5,
-  },
-  subHeader: {
-    fontSize: 14,
-    color: "#979797",
-    marginTop: 5,
-    marginBottom: 10,
-  },
+const getStyles = (theme) =>
+  StyleSheet.create({
+    authScreen: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    header: {
+      fontFamily: "rubik-bold",
+      fontSize: 20,
+      color: getThemeColor("text", theme),
+      marginBottom: 5,
+    },
+    subHeader: {
+      fontSize: 14,
+      color: "#979797",
+      marginTop: 5,
+      marginBottom: 10,
+    },
+    signIn: {
+      marginTop: 5,
+      fontSize: 10,
+      color: "#979797",
+    },
+    signInButton: {
+      color: getThemeColor("primary", theme),
+      fontFamily: "rubik-bold",
+    },
+  });
 
-  signIn: {
-    marginTop: 5,
-    fontSize: 10,
-    color: "#979797",
-  },
-  signInButton: {
-    color: Colors.primaryColor,
-  },
-});
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(AuthScreen);

@@ -139,6 +139,7 @@ const getStyles = (theme) =>
       marginBottom: 10,
       fontFamily: "rubik-bold",
       fontSize: 16,
+      color: getThemeColor("text", theme),
     },
     forYou: {
       paddingHorizontal: "4.8%",
@@ -149,6 +150,7 @@ const getStyles = (theme) =>
       marginBottom: 10,
       fontFamily: "rubik-bold",
       fontSize: 16,
+      color: getThemeColor("text", theme),
     },
   });
 

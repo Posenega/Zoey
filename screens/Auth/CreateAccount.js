@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useRef, useEffect } from "react";
+import { useSelector, useDispatch, connect } from "react-redux";
 import {
   View,
   Text,
@@ -7,22 +7,23 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
-} from 'react-native';
-import * as Progress from 'react-native-progress';
-import CustomTextInput from '../../components/CustomTextInput';
-import Colors from '../../constants/Colors';
-import ArrowButton from '../../components/Icons/ArrowButton';
-import StepOne from '../../components/steps/StepOne';
-import StepTwo from '../../components/steps/StepTwo';
-import StepThree from '../../components/steps/StepThree';
-import { useForm, Controller } from 'react-hook-form';
+} from "react-native";
+import * as Progress from "react-native-progress";
+import CustomTextInput from "../../components/CustomTextInput";
+import Colors, { getThemeColor } from "../../constants/Colors";
+import ArrowButton from "../../components/Icons/ArrowButton";
+import StepOne from "../../components/steps/StepOne";
+import StepTwo from "../../components/steps/StepTwo";
+import StepThree from "../../components/steps/StepThree";
+import { useForm, Controller } from "react-hook-form";
 
-import BackButton from '../../components/Icons/BackButton';
-import { signupUser } from '../../store/actions/auth';
+import BackButton from "../../components/Icons/BackButton";
+import { signupUser } from "../../store/actions/auth";
 
-export default function CreateAccount(props) {
+function CreateAccount(props) {
+  const styles = getStyles(props.theme);
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const isLoading = useSelector((state) => state.auth.isLoading);
   const {
     control,
@@ -43,9 +44,7 @@ export default function CreateAccount(props) {
     if (step === 2) {
       const { firstName, lastName, email, password } = data;
       setEmail(email);
-      dispatch(
-        signupUser(firstName, lastName, email, password, setError)
-      );
+      dispatch(signupUser(firstName, lastName, email, password, setError));
     }
   };
   const handleStepbackward = () => {
@@ -60,9 +59,7 @@ export default function CreateAccount(props) {
   };
   let currentStep = <StepOne control={control} errors={errors} />;
   if (step === 2) {
-    currentStep = (
-      <StepTwo control={control} errors={errors} watch={watch} />
-    );
+    currentStep = <StepTwo control={control} errors={errors} watch={watch} />;
   } else if (step === 1) {
     currentStep = <StepOne control={control} errors={errors} />;
   } else {
@@ -72,7 +69,7 @@ export default function CreateAccount(props) {
     <View style={styles.backButton}>
       <BackButton
         size={40}
-        color='#2b2b2b'
+        color={getThemeColor("text", props.theme)}
         onPress={handleStepbackward}
       />
     </View>
@@ -82,12 +79,12 @@ export default function CreateAccount(props) {
       <View style={styles.createAccountScreen}>
         {backButton}
         <View style={styles.header}>
-          <Text>Sign Up</Text>
-          <Text>Step: {step}/2</Text>
+          <Text style={styles.headerText}>Sign Up</Text>
+          <Text style={styles.headerText}>Step: {step}/2</Text>
         </View>
         <View style={styles.progressBar}>
           <Progress.Bar
-            color={Colors.primaryColor}
+            color={getThemeColor("primary", props.theme)}
             progress={step / 2}
             width={null}
             borderWidth={0}
@@ -98,14 +95,11 @@ export default function CreateAccount(props) {
           <TouchableWithoutFeedback onPress={handleSubmit(onSubmit)}>
             <View style={styles.signInButton}>
               {isLoading ? (
-                <ActivityIndicator
-                  size='small'
-                  color={Colors.accentColor}
-                />
+                <ActivityIndicator size="small" color="white" />
               ) : (
                 <>
                   <Text style={styles.textSignIn}>Continue</Text>
-                  <ArrowButton color='white' size={18} />
+                  <ArrowButton color="white" size={18} />
                 </>
               )}
             </View>
@@ -115,43 +109,53 @@ export default function CreateAccount(props) {
     </TouchableWithoutFeedback>
   );
 }
-const styles = StyleSheet.create({
-  createAccountScreen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 62,
-    backgroundColor: '#F9F9F9',
-  },
-  header: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  progressBar: {
-    marginTop: 15,
-    marginBottom: 32,
-    width: '100%',
-  },
+const getStyles = (theme) =>
+  StyleSheet.create({
+    createAccountScreen: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingHorizontal: 62,
+    },
+    header: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    headerText: {
+      color: getThemeColor("text", theme),
+    },
+    progressBar: {
+      marginTop: 15,
+      marginBottom: 32,
+      width: "100%",
+    },
 
-  signInButton: {
-    height: 44,
-    width: '100%',
-    backgroundColor: Colors.primaryColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 25,
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  textSignIn: {
-    color: 'white',
-    fontSize: 14,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 25,
-    top: 75,
-  },
-});
+    signInButton: {
+      height: 44,
+      width: "100%",
+      backgroundColor: getThemeColor("primary", theme),
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 25,
+      borderRadius: 10,
+      flexDirection: "row",
+      justifyContent: "center",
+    },
+    textSignIn: {
+      color: "white",
+      fontSize: 14,
+    },
+    backButton: {
+      position: "absolute",
+      left: 25,
+      top: 75,
+    },
+  });
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(CreateAccount);
