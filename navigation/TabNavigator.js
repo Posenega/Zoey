@@ -2,7 +2,7 @@ import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BooksNavigator from "./BooksNavigator";
-import Colors from "../constants/Colors";
+import Colors, { getThemeColor } from "../constants/Colors";
 import CategoryButton from "../components/Icons/CategoryButton";
 import FavoriteButton from "../components/Icons/FavoriteButton";
 import MessageButton from "../components/Icons/MessageButton";
@@ -12,15 +12,16 @@ import FavoritesNavigator from "./FavoritesNavigator";
 import MessageNavigator from "./MessageNavigator";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import ProfileNavigator from "./ProfileNavigator";
+import { connect } from "react-redux";
 
 const BottomTab = createBottomTabNavigator();
 
-const TabNavigator = () => (
+const TabNavigator = (props) => (
   <BottomTab.Navigator
     screenOptions={{
       headerShown: false,
-      tabBarActiveTintColor: Colors.primaryColor,
-      tabBarInactiveTintColor: "#C9C9C9",
+      tabBarActiveTintColor: getThemeColor("primary", props.theme),
+      tabBarInactiveTintColor: getThemeColor("idle", props.theme),
       tabBarShowLabel: false,
     }}
   >
@@ -36,7 +37,12 @@ const TabNavigator = () => (
           if (routeName === "detail") {
             return { display: "none" };
           }
-          return {};
+          return {
+            elevation: 0,
+            borderWidth: 0,
+            height: 55,
+            backgroundColor: getThemeColor("main", props.theme),
+          };
         })(),
       })}
     />
@@ -47,6 +53,12 @@ const TabNavigator = () => (
         tabBarIcon: ({ color, size }) => (
           <FavoriteButton color={color} size={size} />
         ),
+        tabBarStyle: {
+          elevation: 0,
+          borderWidth: 0,
+          height: 55,
+          backgroundColor: getThemeColor("main", props.theme),
+        },
       }}
     />
     <BottomTab.Screen
@@ -69,7 +81,12 @@ const TabNavigator = () => (
           if (routeName === "chatRoom") {
             return { display: "none" };
           }
-          return {};
+          return {
+            elevation: 0,
+            borderWidth: 0,
+            height: 55,
+            backgroundColor: getThemeColor("main", props.theme),
+          };
         })(),
       })}
     />
@@ -89,7 +106,12 @@ const TabNavigator = () => (
             if (routeName === "account") {
               return { display: "none" };
             }
-            return {};
+            return {
+              elevation: 0,
+              borderWidth: 0,
+              height: 55,
+              backgroundColor: getThemeColor("main", props.theme),
+            };
           })(),
         };
       }}
@@ -97,4 +119,9 @@ const TabNavigator = () => (
   </BottomTab.Navigator>
 );
 
-export default TabNavigator;
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(TabNavigator);

@@ -13,8 +13,9 @@ import AddBookModal from "./components/AddBookModal";
 import thunk from "redux-thunk";
 import authReducer from "./store/reducers/auth";
 import checkTokenExpirationMiddleware from "./store/middlewares/checkTokenExpiration";
-import { Alert } from "react-native";
+import { Alert, StatusBar } from "react-native";
 import chatsReducer from "./store/reducers/chats";
+import themesReducer from "./store/reducers/theme";
 
 axios.defaults.baseURL = "http://192.168.1.114:5000";
 
@@ -61,6 +62,7 @@ export default function App() {
     addBookModal: addBookModalReducer,
     auth: authReducer,
     chats: chatsReducer,
+    themes: themesReducer,
   });
 
   const store = createStore(
@@ -70,6 +72,13 @@ export default function App() {
 
   return (
     <Provider store={store}>
+      <StatusBar
+        barStyle={
+          store.getState().themes.includes("dark")
+            ? "light-content"
+            : "dark-content"
+        }
+      />
       <MainNavigator />
       <AddBookModal />
     </Provider>

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -7,19 +7,21 @@ import {
   Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import SharedStyles from '../constants/SharedStyles';
-import SettingsButton from '../components/Icons/SettingsButton';
-import ArrowButton from '../components/Icons/ArrowButton';
-import Logout from '../components/Icons/LogoutButton';
-import SettingContainer from '../components/SettingContainer';
-import ProfileButton from '../components/Icons/ProfileButton';
-import ShowValueInput from '../components/Icons/ShowValueInput';
-import LockIcon from '../components/Icons/LockIcon';
-import NotificationIcon from '../components/Icons/NotificationIcon';
-import { logout } from '../store/actions/auth';
-import IconPlaceholder from '../components/IconPlaceholder';
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import SharedStyles from "../constants/SharedStyles";
+import SettingsButton from "../components/Icons/SettingsButton";
+import ArrowButton from "../components/Icons/ArrowButton";
+import Logout from "../components/Icons/LogoutButton";
+import SettingContainer from "../components/SettingContainer";
+import ProfileButton from "../components/Icons/ProfileButton";
+import ShowValueInput from "../components/Icons/ShowValueInput";
+import LockIcon from "../components/Icons/LockIcon";
+import NotificationIcon from "../components/Icons/NotificationIcon";
+import { logout } from "../store/actions/auth";
+import IconPlaceholder from "../components/IconPlaceholder";
+import { setTheme } from "../store/actions/theme";
+import themes from "../constants/Colors";
 
 export default function SettingsScreen(props) {
   const dispatch = useDispatch();
@@ -45,7 +47,7 @@ export default function SettingsScreen(props) {
               }}
               back
               size={24}
-              color='#2b2b2b'
+              color="#2b2b2b"
             />
           </View>
           <Text style={styles.topHeaderText}>Settings</Text>
@@ -69,8 +71,7 @@ export default function SettingsScreen(props) {
               {firstName} {lastName}
             </Text>
           </View>
-          <TouchableWithoutFeedback
-            onPress={() => dispatch(logout())}>
+          <TouchableWithoutFeedback onPress={() => dispatch(logout())}>
             <View style={styles.SignOut}>
               <Logout />
             </View>
@@ -80,24 +81,38 @@ export default function SettingsScreen(props) {
       <View style={styles.body}>
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate('account');
-          }}>
+            props.navigation.navigate("account");
+          }}
+        >
           <SettingContainer
             style={styles.firstContainer}
-            icon={<ProfileButton size={20} color='#2b2b2b' />}>
+            icon={<ProfileButton size={20} color="#2b2b2b" />}
+          >
             Account
           </SettingContainer>
         </TouchableOpacity>
-        <SettingContainer
-          icon={<LockIcon size={20} color='#2b2b2b' />}>
+        <SettingContainer icon={<LockIcon size={20} color="#2b2b2b" />}>
           Privacy
         </SettingContainer>
-        <SettingContainer
-          icon={<ShowValueInput size={20} color='#2b2b2b' />}>
-          Appearance
-        </SettingContainer>
-        <SettingContainer
-          icon={<NotificationIcon size={20} color='#2b2b2b' />}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setTheme("light"));
+          }}
+        >
+          <SettingContainer icon={<ShowValueInput size={20} color="#2b2b2b" />}>
+            Light
+          </SettingContainer>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setTheme("dark"));
+          }}
+        >
+          <SettingContainer icon={<ShowValueInput size={20} color="#2b2b2b" />}>
+            Dark
+          </SettingContainer>
+        </TouchableOpacity>
+        <SettingContainer icon={<NotificationIcon size={20} color="#2b2b2b" />}>
           Notifications
         </SettingContainer>
       </View>
@@ -111,31 +126,31 @@ export default function SettingsScreen(props) {
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: '10%',
+    paddingTop: "10%",
     flex: 1,
-    width: '100%',
+    width: "100%",
   },
   topHeader: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 55,
-    width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   topHeaderText: {
-    fontFamily: 'rubik-bold',
+    fontFamily: "rubik-bold",
     fontSize: 18,
   },
   headerContent: {
     flex: 1,
-    width: '100%',
+    width: "100%",
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#d9d9d9',
-    flexDirection: 'row',
+    borderColor: "#d9d9d9",
+    flexDirection: "row",
   },
   imageContainer: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   image: {
     height: 60,
@@ -143,25 +158,25 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   userInfo: {
-    flexDirection: 'column',
+    flexDirection: "column",
     padding: 10,
     flex: 6,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   welcome: {
-    color: '#999999',
+    color: "#999999",
     fontSize: 12,
   },
   userName: {
     fontSize: 16,
-    fontFamily: 'rubik-medium',
-    color: '#2b2b2b',
+    fontFamily: "rubik-medium",
+    color: "#2b2b2b",
   },
   SignOut: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    width: '100%',
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: "100%",
   },
   body: {
     flex: 3.5,
@@ -172,12 +187,12 @@ const styles = StyleSheet.create({
   footer: {
     flex: 0.6,
     borderTopWidth: 1,
-    borderColor: '#d9d9d9',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#d9d9d9",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textFooter: {
-    color: '#999999',
+    color: "#999999",
     fontSize: 10,
     marginVertical: 4,
   },
