@@ -10,7 +10,7 @@ export default function DirectMessageHeader({ username, navigation }) {
       <View style={{ marginRight: 10 }}>
         <ArrowButton
           SvgStyle={{ transform: [{ rotateY: "180deg" }] }}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.replace("messages")}
           size={20}
           color="#2b2b2b"
         />

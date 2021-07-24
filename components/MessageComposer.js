@@ -1,12 +1,13 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View, TextInput, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import SendButton from "../components/Icons/SendButton";
-import Colors from "../constants/Colors";
+import Colors, { getThemeColor } from "../constants/Colors";
 import { addMessage } from "../store/actions/chats";
 
-export default function MessageComposer({ chatId }) {
+function MessageComposer({ chatId, theme }) {
+  const styles = getStyles(theme);
   const { control, handleSubmit } = useForm();
   const dispatch = useDispatch();
   const onSubmit = (data) => {
@@ -43,30 +44,38 @@ export default function MessageComposer({ chatId }) {
   );
 }
 
-const styles = StyleSheet.create({
-  messageComposer: {
-    flex: 1,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
-    width: "100%",
-    height: 44,
-    borderRadius: 10,
-  },
-  textInputStyle: {
-    fontFamily: "rubik-medium",
-    fontSize: 12,
-  },
-  customInput: {
-    flex: 1,
-  },
-  sendButton: {
-    height: 34,
-    width: 34,
-    backgroundColor: Colors.primaryColor,
-    borderRadius: 6,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    messageComposer: {
+      flex: 1,
+      paddingHorizontal: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "white",
+      width: "100%",
+      height: 44,
+      borderRadius: 10,
+    },
+    textInputStyle: {
+      fontFamily: "rubik-medium",
+      fontSize: 12,
+    },
+    customInput: {
+      flex: 1,
+    },
+    sendButton: {
+      height: 34,
+      width: 34,
+      backgroundColor: getThemeColor("primary", theme),
+      borderRadius: 6,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(MessageComposer);

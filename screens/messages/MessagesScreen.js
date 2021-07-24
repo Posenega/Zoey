@@ -1,13 +1,24 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
+import React, { useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import SharedStyles from "../../constants/SharedStyles";
 import { useHeaderHeight } from "@react-navigation/elements";
 import MessageInfoContainer from "../../components/MessageInfoContainer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChats } from "../../store/actions/chats";
 
 export default function MessagesScreen(props) {
   const headerHeight = useHeaderHeight();
   const chats = useSelector((state) => state.chats.myChats);
+  const isLoading = useSelector((state) => state.chats.isLoading);
+  const dispatch = useDispatch();
+
   const renderChat = (itemData) => {
     return (
       <MessageInfoContainer
@@ -20,11 +31,15 @@ export default function MessagesScreen(props) {
   console.log(chats);
   return (
     <View style={{ ...SharedStyles.screen, paddingTop: headerHeight }}>
-      <FlatList
-        data={chats}
-        renderItem={renderChat}
-        keyExtractor={(item) => item._id}
-      />
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          data={chats}
+          renderItem={renderChat}
+          keyExtractor={(item) => item._id}
+        />
+      )}
     </View>
   );
 }

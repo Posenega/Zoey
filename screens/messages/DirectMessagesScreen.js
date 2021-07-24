@@ -9,12 +9,14 @@ import {
   Platform,
   KeyboardAvoidingView,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DirectMessageHeader from "../../components/DirectMessageHeader";
 import MessageComposer from "../../components/MessageComposer";
 import SentMessage from "../../components/messages/SentMessage";
 import ReceivedMessage from "../../components/messages/ReceivedMessage";
+import { fetchChatMessages } from "../../store/actions/chats";
 
 export default function DirectMessagesScreen(props) {
   // const [keyboardOffset, setKeyboardOffset] = useState(0);
@@ -30,12 +32,26 @@ export default function DirectMessagesScreen(props) {
   // const _keyboardDidHide = () => {
   //   setKeyboardOffset(0);
   // };
-  const chatId = props.route.params.chatId;
+  const dispatch = useDispatch();
+
+  const { userId, chatId } = props.route.params;
   const chat = useSelector((state) =>
-    state.chats.myChats.find((chat) => chat._id === chatId)
+    state.chats.myChats.find((chat) => {
+      if (userId) {
+        return chat.userId === userId;
+      } else {
+        return chat._id === chatId;
+      }
+    })
   );
+
+  const cId = chat.id;
+
+  useEffect(() => {
+    dispatch(fetchChatMessages(cId));
+  }, [dispatch, cId]);
+
   const renderMessage = (itemData) => {
-    console.log(itemData.item.isMine);
     if (itemData.item.isMine) {
       return <SentMessage messageText={itemData.item.text} />;
     } else {
@@ -45,28 +61,34 @@ export default function DirectMessagesScreen(props) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
-        <DirectMessageHeader
-          navigation={props.navigation}
-          username={chat.username}
-        />
-        <View
-          style={{
-            flex: 9,
-            paddingHorizontal: 18,
-            marginBottom: 1,
-          }}
-        >
-          <View style={styles.messageList}>
-            <FlatList
-              data={chat.messages}
-              renderItem={renderMessage}
-              keyExtractor={(item) => item._id}
+        {chat.isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <DirectMessageHeader
+              navigation={props.navigation}
+              username={chat.username}
             />
-          </View>
-          <View style={styles.composerContainer}>
-            <MessageComposer chatId={chatId} />
-          </View>
-        </View>
+            <View
+              style={{
+                flex: 9,
+                paddingHorizontal: 18,
+                marginBottom: 1,
+              }}
+            >
+              <View style={styles.messageList}>
+                <FlatList
+                  data={chat.messages}
+                  renderItem={renderMessage}
+                  keyExtractor={(item) => item._id}
+                />
+              </View>
+              <View style={styles.composerContainer}>
+                <MessageComposer chatId={chatId} />
+              </View>
+            </View>
+          </>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

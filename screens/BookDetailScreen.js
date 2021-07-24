@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useSelector, useDispatch, connect } from "react-redux";
@@ -16,7 +16,7 @@ import {
 import DeleteButton from "../components/Icons/DeleteButton";
 import EditButton from "../components/Icons/EditButton";
 import { modalSetEditMode } from "../store/actions/addBookModal";
-import { addChat } from "../store/actions/chats";
+import { addChat, requestAddChat } from "../store/actions/chats";
 
 function BookDetailScreen(props) {
   const styles = getStyles(props.theme);
@@ -27,10 +27,28 @@ function BookDetailScreen(props) {
     state.books.books.find((book) => book?._id === id)
   );
   const userId = useSelector((state) => state.auth.userId);
+  const isChatting = useSelector((state) => {
+    return (
+      state.chats.myChats.findIndex((chat) => {
+        return chat.userId === displayedBook.creator;
+      }) >= 0
+    );
+  });
+
+  const initialIsChatting = useRef(isChatting);
+
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
   }, []);
 
+  useEffect(() => {
+    if (isChatting && !initialIsChatting.current) {
+      props.navigation.navigate("Messages", {
+        screen: "chatRoom",
+        params: { userId: displayedBook.creator },
+      });
+    }
+  }, [isChatting]);
   const isFavorite = useSelector((state) =>
     state.books.favoriteBooks.some((book) => book?._id === displayedBook._id)
   );
@@ -148,27 +166,25 @@ function BookDetailScreen(props) {
               <Text>{displayedBook.price + " L.L"}</Text>
             </View>
           )}
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(
-                addChat(
-                  displayedBook.author,
-                  Math.random().toString(),
-                  displayedBook.author
-                )
-              );
-              props.navigation.navigate(
-                "Messages",
-                {},
-                NavigatedActions.navigate()
-              );
-            }}
-          >
-            <View style={styles.messageContainer}>
-              <MessageButton size={20} color="white" />
-              <Text style={styles.message}>Messages</Text>
-            </View>
-          </TouchableOpacity>
+          {displayedBook.creator !== userId && (
+            <TouchableOpacity
+              onPress={() => {
+                if (isChatting) {
+                  props.navigation.navigate("Messages", {
+                    screen: "chatRoom",
+                    params: { userId: displayedBook.creator },
+                  });
+                } else {
+                  dispatch(requestAddChat(displayedBook.creator));
+                }
+              }}
+            >
+              <View style={styles.messageContainer}>
+                <MessageButton size={20} color="white" />
+                <Text style={styles.message}>Messages</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

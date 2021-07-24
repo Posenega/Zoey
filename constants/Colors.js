@@ -38,7 +38,7 @@ const themes = {
 
 export default themes;
 
-export const getThemeColor = (color, theme = "default") => {
+export const getThemeColor = (color, theme = "light") => {
   const themeColor = themes[theme][color];
   const fallbackColor = themes.light[color];
   return themeColor || fallbackColor;
