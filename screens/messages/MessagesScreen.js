@@ -28,7 +28,7 @@ export default function MessagesScreen(props) {
       />
     );
   };
-  console.log(chats);
+
   return (
     <View style={{ ...SharedStyles.screen, paddingTop: headerHeight }}>
       {isLoading ? (

@@ -4,35 +4,46 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
-  Text,
-  ScrollView,
-  Platform,
-  KeyboardAvoidingView,
   FlatList,
   ActivityIndicator,
 } from "react-native";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import DirectMessageHeader from "../../components/DirectMessageHeader";
 import MessageComposer from "../../components/MessageComposer";
 import SentMessage from "../../components/messages/SentMessage";
 import ReceivedMessage from "../../components/messages/ReceivedMessage";
-import { fetchChatMessages } from "../../store/actions/chats";
+import { addMessage, fetchChatMessages } from "../../store/actions/chats";
+import io from "socket.io-client";
+
+let socket;
 
 export default function DirectMessagesScreen(props) {
-  // const [keyboardOffset, setKeyboardOffset] = useState(0);
-
-  // useEffect(() => {
-  //   Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-  //   Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-  // }, []);
-
-  // const _keyboardDidShow = (event) => {
-  //   setKeyboardOffset(event.endCoordinates.height);
-  // };
-  // const _keyboardDidHide = () => {
-  //   setKeyboardOffset(0);
-  // };
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    socket = io(axios.defaults.baseURL, {
+      extraHeaders: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return () => {
+      socket?.off();
+    };
+  }, [token]);
+
+  useEffect(() => {
+    socket?.emit("joinRoom", { roomId: cId });
+
+    socket?.on("message", ({ text, messageId }) => {
+      console.log(text);
+      dispatch(addMessage(cId, text, false, messageId));
+    });
+    return () => {
+      socket?.emit("leaveRoom", { roomId: cId });
+    };
+  }, [socket, cId]);
 
   const { userId, chatId } = props.route.params;
   const chat = useSelector((state) =>
@@ -45,7 +56,7 @@ export default function DirectMessagesScreen(props) {
     })
   );
 
-  const cId = chat.id;
+  const cId = chat._id;
 
   useEffect(() => {
     dispatch(fetchChatMessages(cId));
@@ -58,36 +69,39 @@ export default function DirectMessagesScreen(props) {
       return <ReceivedMessage messageText={itemData.item.text} />;
     }
   };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
+        <DirectMessageHeader
+          navigation={props.navigation}
+          username={chat.username}
+        />
         {chat.isLoading ? (
-          <ActivityIndicator />
+          <View style={styles.center}>
+            <ActivityIndicator size="large" color="#2b2b2b" />
+          </View>
         ) : (
-          <>
-            <DirectMessageHeader
-              navigation={props.navigation}
-              username={chat.username}
-            />
-            <View
-              style={{
-                flex: 9,
-                paddingHorizontal: 18,
-                marginBottom: 1,
-              }}
-            >
-              <View style={styles.messageList}>
-                <FlatList
-                  data={chat.messages}
-                  renderItem={renderMessage}
-                  keyExtractor={(item) => item._id}
-                />
-              </View>
-              <View style={styles.composerContainer}>
-                <MessageComposer chatId={chatId} />
-              </View>
+          <View
+            style={{
+              flex: 9,
+              paddingHorizontal: 18,
+              marginBottom: 1,
+            }}
+          >
+            <View style={styles.messageList}>
+              <FlatList
+                inverted
+                style={{ width: "100%" }}
+                data={chat.messages}
+                renderItem={renderMessage}
+                keyExtractor={(item) => item._id}
+              />
             </View>
-          </>
+            <View style={styles.composerContainer}>
+              <MessageComposer chatId={chatId} socket={socket} />
+            </View>
+          </View>
         )}
       </View>
     </TouchableWithoutFeedback>
@@ -100,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EDEDED",
   },
   messageList: {
+    width: "100%",
     flex: 10,
     height: "100%",
     borderRadius: 10,
@@ -108,6 +123,13 @@ const styles = StyleSheet.create({
   composerContainer: {
     flex: 0.9,
     marginBottom: 20,
+  },
+  center: {
+    flex: 9,
+    paddingHorizontal: 18,
+    marginBottom: 1,
+    textAlign: "center",
+    justifyContent: "center",
   },
 });
 

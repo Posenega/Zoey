@@ -6,7 +6,7 @@ import Colors, { getThemeColor } from "../../constants/Colors";
 function SentMessage({ messageText, theme }) {
   const styles = getStyles(theme);
   return (
-    <View style={styles.rmmc}>
+    <View onStartShouldSetResponder={() => true} style={styles.rmmc}>
       <View
         style={{
           ...styles.messageContainer,

@@ -3,17 +3,15 @@ import { Controller, useForm } from "react-hook-form";
 import { View, TextInput, StyleSheet } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import SendButton from "../components/Icons/SendButton";
-import Colors, { getThemeColor } from "../constants/Colors";
-import { addMessage } from "../store/actions/chats";
+import { getThemeColor } from "../constants/Colors";
+import { addMessageRequest } from "../store/actions/chats";
 
-function MessageComposer({ chatId, theme }) {
+function MessageComposer({ chatId, theme, socket }) {
   const styles = getStyles(theme);
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const onSubmit = (data) => {
-    dispatch(
-      addMessage(chatId, data.messageText, true, Math.random().toString())
-    );
+    dispatch(addMessageRequest(chatId, data.messageText, socket)).then(reset);
   };
   return (
     <View style={styles.messageComposer}>

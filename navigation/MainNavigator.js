@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { tryAutoLogin } from "../store/actions/auth";
 
@@ -12,11 +12,6 @@ const MainNavigator = () => {
   const isAuth = useSelector((state) => !!state.auth.token);
   const isTryAutoLogin = useSelector((state) => state.auth.tryAutoLogin);
   const isVerify = useSelector((state) => state.auth.isVerify);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(tryAutoLogin());
-  }, []);
 
   return (
     <NavigationContainer>

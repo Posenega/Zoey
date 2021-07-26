@@ -4,7 +4,7 @@ import Colors from "../../constants/Colors";
 
 export default function ReceivedMessage({ messageText }) {
   return (
-    <View style={styles.smmc}>
+    <View onStartShouldSetResponder={() => true} style={styles.smmc}>
       <View
         style={{
           ...styles.messageContainer,

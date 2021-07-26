@@ -6,12 +6,12 @@ export const ADD_CHAT_MESSAGES_START = "ADD_CHAT_MESSAGES_START";
 export const ADD_CHAT_MESSAGES_SUCCESS = "ADD_CHAT_MESSAGES_SUCCESS";
 export const ADD_CHAT_MESSAGES_FAIL = "ADD_CHAT_MESSAGES_FAIL";
 export const SET_CHATS = "SET_CHATS";
-export const SET_LOADING = "SET_LOADING";
-export const STOP_LOADING = "STOP_LOADING";
+export const CHATS_SET_LOADING = "CHATS_SET_LOADING";
+export const CHATS_STOP_LOADING = "CHATS_STOP_LOADING";
 
 export const fetchChats = (query = "") => {
   return (dispatch, getState) => {
-    dispatch(setLoading());
+    dispatch(chatsSetLoading());
     const token = getState().auth.token;
     axios
       .get("/api/chats", {
@@ -31,19 +31,38 @@ export const fetchChats = (query = "") => {
           )
         );
       })
-      .catch((e) => dispatch(stopLoading()));
+      .catch((e) => dispatch(chatsStopLoading()));
   };
 };
 
 export const fetchChatMessages = (chatId) => {
-  return (dispatch, getState) => {
-    axios
-      .get(`/api/chats?_id=${chatId}`)
-      .then((res) => {
-        const messages = res.data.chat.messages;
-        dispatch(addChatMessagesSuccess(messages));
-      })
-      .catch((e) => console.log(e.response.message));
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+
+    dispatch(addChatMessagesStart(chatId));
+
+    try {
+      const res = await axios.get(`/api/chats?_id=${chatId}`, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      const messages = res.data.chat.messages;
+
+      dispatch(addChatMessagesSuccess(chatId, messages));
+
+      return Promise.resolve();
+    } catch (e) {
+      return console.log(e);
+    }
+  };
+};
+
+export const addMessageRequest = (chatId, text, socket) => {
+  return async (dispatch, getState) => {
+    socket?.emit("sendMessage", { roomId: chatId, text }, (message) => {
+      dispatch(addMessage(chatId, message.text, true, message._id));
+    });
+
+    return Promise.resolve();
   };
 };
 
@@ -71,6 +90,7 @@ export const requestAddChat = (secondUserId) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         const dbChat = res.data.chat;
         dispatch(
           addChat(
@@ -96,10 +116,10 @@ export const setChats = (chats) => {
   return { type: SET_CHATS, chats };
 };
 
-export const setLoading = () => {
-  return { type: SET_LOADING };
+export const chatsSetLoading = () => {
+  return { type: CHATS_SET_LOADING };
 };
 
-export const stopLoading = () => {
-  return { type: STOP_LOADING };
+export const chatsStopLoading = () => {
+  return { type: CHATS_STOP_LOADING };
 };

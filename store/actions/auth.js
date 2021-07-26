@@ -2,12 +2,12 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 export const SIGNUP_USER = "SIGNUP_USER";
-export const SET_LOADING = "SET_LOADING";
-export const STOP_LOADING = "STOP_LOADING";
+export const AUTH_SET_LOADING = "AUTH_SET_LOADING";
+export const AUTH_STOP_LOADING = "AUTH_STOP_LOADING";
 
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const LOGIN_USER = "LOGIN_USER";
-export const TRY_AUTO_LOGIN = "TRY_AUTO_LOGIN";
+export const TRY_AUTO_LOGIN_START = "TRY_AUTO_LOGIN_START";
 export const TRY_AUTO_LOGIN_FAIL = "TRY_AUTO_LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const UPDATE_USER_START = "UPDATE_USER_START";
@@ -24,7 +24,7 @@ const authUser = (
   password,
   setError
 ) => {
-  dispatch(setLoading());
+  dispatch(authSetLoading());
   axios
     .post(`/api/users/${authMode === "SIGN_UP" ? "signup" : "login"}`, {
       firstName,
@@ -59,7 +59,7 @@ const authUser = (
         });
     })
     .catch((e) => {
-      dispatch(stopLoading());
+      dispatch(authStopLoading());
       if (setError) {
         setError(authMode === "SIGN_UP" ? "number" : "password", {
           type: "server",
@@ -69,15 +69,15 @@ const authUser = (
     });
 };
 
-export const setLoading = () => {
+export const authSetLoading = () => {
   return {
-    type: SET_LOADING,
+    type: AUTH_SET_LOADING,
   };
 };
 
-export const stopLoading = () => {
+export const authStopLoading = () => {
   return {
-    type: STOP_LOADING,
+    type: AUTH_STOP_LOADING,
   };
 };
 
@@ -115,6 +115,7 @@ export const loginUser = (email, password, setError) => {
 
 export const tryAutoLogin = () => {
   return async (dispatch, getState) => {
+    dispatch(tryAutoLoginStart());
     const userData = await SecureStore.getItemAsync("userData");
     if (userData) {
       const { token, email, firstName, lastName, userId, imageUrl } =
@@ -144,13 +145,17 @@ export const logout = () => {
   };
 };
 
+const tryAutoLoginStart = () => {
+  return { type: TRY_AUTO_LOGIN_START };
+};
+
 const tryAutoLoginFail = () => {
   return { type: TRY_AUTO_LOGIN_FAIL };
 };
 
 export const updateUser = (data, setError, goBack) => {
   return (dispatch, getState) => {
-    dispatch(setLoading());
+    dispatch(authSetLoading());
     const token = getState().auth.token;
 
     dispatch({ type: UPDATE_USER_START });
@@ -181,7 +186,7 @@ export const updateUser = (data, setError, goBack) => {
         goBack();
       })
       .catch((e) => {
-        dispatch(stopLoading);
+        dispatch(authStopLoading());
         setError("oldPassword", {
           type: "server",
           message: e.response.data?.message || "Unknown error has occured.",
@@ -201,7 +206,7 @@ export const updateUserSuccess = (firstName, lastName, imageUrl) => {
 
 export const verifyUser = (confirmationCode, setError) => {
   return (dispatch, getState) => {
-    dispatch(setLoading());
+    dispatch(authSetLoading());
     const userId = getState().auth.userId;
     axios({
       method: "POST",
@@ -242,7 +247,7 @@ export const verifyUser = (confirmationCode, setError) => {
         });
       })
       .catch((e) => {
-        dispatch(stopLoading());
+        dispatch(authStopLoading());
         setError("code", {
           type: "server",
           message: e.response?.data?.message || "Unknown error has occured.",

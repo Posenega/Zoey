@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNetInfo, NetInfoStateType } from "@react-native-community/netinfo";
+import Constants from "expo-constants";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 import axios from "axios";
@@ -13,13 +14,16 @@ import AddBookModal from "./components/AddBookModal";
 import thunk from "redux-thunk";
 import authReducer from "./store/reducers/auth";
 import checkTokenExpirationMiddleware from "./store/middlewares/checkTokenExpiration";
-import { Alert, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import chatsReducer from "./store/reducers/chats";
 import themesReducer from "./store/reducers/theme";
 import { setTheme } from "./store/actions/theme";
 import * as SecureStore from "expo-secure-store";
+import { tryAutoLogin } from "./store/actions/auth";
 
-axios.defaults.baseURL = "http://192.168.1.114:5000";
+axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
+  .split(":")
+  .shift()}:5000`;
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -32,7 +36,7 @@ const fetchFonts = () => {
 const fetchTheme = async () => {
   const theme = await SecureStore.getItemAsync("theme");
   const parsedTheme = JSON.parse(theme);
-  return parsedTheme.theme;
+  return parsedTheme?.theme;
 };
 
 export default function App() {
@@ -57,6 +61,17 @@ export default function App() {
   //   }
   // }, [fontsLoaded, showNetworkAlert]);
 
+  useEffect(() => {
+    if (fontsLoaded) {
+      store.dispatch(tryAutoLogin());
+      fetchTheme().then((theme) => {
+        if (theme === "light" || theme === "dark") {
+          store.dispatch(setTheme(theme));
+        }
+      });
+    }
+  }, [fontsLoaded]);
+
   fetchFonts().then(() => setFontsLoaded(true));
 
   if (!fontsLoaded) {
@@ -78,11 +93,6 @@ export default function App() {
     applyMiddleware(thunk, checkTokenExpirationMiddleware)
   );
 
-  fetchTheme().then((theme) => {
-    if (theme === "light" || theme === "dark") {
-      store.dispatch(setTheme(theme));
-    }
-  });
   const statusBarTheme =
     store.getState().themes.theme === "dark" ? "dark-content" : "light-content";
   return (

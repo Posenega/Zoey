@@ -4,8 +4,8 @@ import {
   ADD_CHAT_MESSAGES_SUCCESS,
   ADD_MESSAGE,
   SET_CHATS,
-  SET_LOADING,
-  STOP_LOADING,
+  CHATS_SET_LOADING,
+  CHATS_STOP_LOADING,
 } from "../actions/chats";
 
 const initialState = {
@@ -15,9 +15,9 @@ const initialState = {
 
 export default chatsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_LOADING:
+    case CHATS_SET_LOADING:
       return { ...state, isLoading: true };
-    case STOP_LOADING:
+    case CHATS_STOP_LOADING:
       return { ...state, isLoading: false };
     case ADD_CHAT:
       if (
@@ -45,8 +45,10 @@ export default chatsReducer = (state = initialState, action) => {
       if (chatIndex <= -1) {
         return state;
       }
+
+      const chat = state.myChats[chatIndex];
       const fetchedChat = {
-        ...state.myChats[chatIndex],
+        ...chat,
         isLoading: true,
       };
       state.myChats.splice(chatIndex, 1);
@@ -56,6 +58,7 @@ export default chatsReducer = (state = initialState, action) => {
       const cIndex = state.myChats.findIndex(
         (chat) => chat._id === action.chatId
       );
+
       if (cIndex <= -1) {
         return state;
       }
@@ -81,7 +84,7 @@ export default chatsReducer = (state = initialState, action) => {
       };
       const targetedChat = {
         ...state.myChats[targetedChatIndex],
-        messages: [...state.myChats[targetedChatIndex].messages, message],
+        messages: [message, ...state.myChats[targetedChatIndex].messages],
       };
       const updatedChats = state.myChats
         .filter((chat) => chat._id !== targetedChat._id)
