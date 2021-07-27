@@ -1,43 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
 
-import Option from './Option';
+import Option from "./Option";
 
-export default function Options({ items, onChange, value, watch }) {
-  const [selectedOption, setSelectedOption] = useState(value || '');
-
-  useEffect(() => {
-    onChange(selectedOption);
-  }, [selectedOption]);
+export default function Options({
+  items,
+  onChange,
+  value,
+  multipleAllowed,
+  style,
+}) {
   return (
-    <View
-      style={{
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        marginTop: 10,
-      }}>
-      <ScrollView
-        style={{
-          marginBottom: -10,
-          // backgroundColor: 'red',
-          paddingLeft: 18,
-        }}
-        horizontal
-        showsHorizontalScrollIndicator={false}>
-        {items.map((item) => {
-          return (
-            <Option
-              preventDefault
-              key={item.value}
-              value={item.value === watch('grade')}
-              onPress={() => {
-                setSelectedOption(item.value);
-              }}>
-              {item.label}
-            </Option>
-          );
-        })}
-      </ScrollView>
-    </View>
+    <ScrollView
+      style={{ ...styles.options, ...style }}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ justifyContent: "center" }}
+    >
+      {items.map((item) => {
+        return (
+          <Option
+            key={item.value}
+            value={
+              !multipleAllowed
+                ? item.value === value
+                : value.includes(item.value)
+            }
+            onChange={() => {
+              if (!multipleAllowed) {
+                if (item.value === value) {
+                  onChange("");
+                }
+                onChange(item.value);
+              } else {
+                if (!Array.isArray(value)) {
+                  const oldValue = value;
+                  value = [oldValue];
+                }
+                const index = value.indexOf(item.value);
+                if (index >= 0) {
+                  value.splice(index, 1);
+                } else {
+                  value.push(item.value);
+                }
+
+                onChange([...value]);
+              }
+            }}
+          >
+            {item.label}
+          </Option>
+        );
+      })}
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  options: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    marginTop: 10,
+    paddingLeft: 18,
+  },
+});
