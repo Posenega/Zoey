@@ -22,6 +22,7 @@ const authUser = (
   lastName,
   email,
   password,
+  city,
   setError
 ) => {
   dispatch(authSetLoading());
@@ -31,6 +32,7 @@ const authUser = (
       lastName,
       email,
       password,
+      city,
     })
     .then((res) => {
       const { token, email, firstName, lastName, userId, imageUrl } = res.data;
@@ -93,7 +95,14 @@ const authSuccess = (token, email, firstName, lastName, userId, imageUrl) => {
   };
 };
 
-export const signupUser = (firstName, lastName, email, password, setError) => {
+export const signupUser = (
+  firstName,
+  lastName,
+  email,
+  password,
+  city,
+  setError
+) => {
   return (dispatch, getState) => {
     authUser(
       "SIGN_UP",
@@ -102,6 +111,7 @@ export const signupUser = (firstName, lastName, email, password, setError) => {
       lastName,
       email,
       password,
+      city,
       setError
     );
   };

@@ -1,19 +1,15 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import CustomButton from '../../components/CustomButton';
-import CustomTextInput from '../../components/CustomTextInput';
-import { useForm, Controller } from 'react-hook-form';
-import { logout, verifyUser } from '../../store/actions/auth';
-import Colors from '../../constants/Colors';
-import BackButton from '../../components/Icons/BackButton';
+import React from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { useSelector, useDispatch, connect } from "react-redux";
+import CustomButton from "../../components/CustomButton";
+import CustomTextInput from "../../components/CustomTextInput";
+import { useForm, Controller } from "react-hook-form";
+import { logout, verifyUser } from "../../store/actions/auth";
+import Colors, { getThemeColor } from "../../constants/Colors";
+import BackButton from "../../components/Icons/BackButton";
 
-export default function VerificationScreen() {
+function VerificationScreen(props) {
+  const styles = getStyles(props.theme);
   const email = useSelector((state) => state.auth.email);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const {
@@ -31,72 +27,83 @@ export default function VerificationScreen() {
       <View style={styles.backButton}>
         <BackButton
           size={40}
-          color='#2b2b2b'
+          color={getThemeColor("text", props.theme)}
           onPress={() => {
             dispatch(logout());
           }}
         />
       </View>
 
-      <Text style={{ textAlign: 'center', paddingHorizontal: 18 }}>
+      <Text
+        style={{
+          textAlign: "center",
+          paddingHorizontal: 18,
+          color: getThemeColor("text", props.theme),
+        }}
+      >
         A verification code has been sent to {email}
       </Text>
       <Controller
         control={control}
-        name='code'
-        defaultValue=''
+        name="code"
+        defaultValue=""
         rules={{
           minLength: {
             value: 4,
-            message: 'Please code should be 4 characters',
+            message: "Please code should be 4 characters",
           },
           maxLength: {
             value: 4,
-            message: 'Please code should be 4 characters',
+            message: "Please code should be 4 characters",
           },
         }}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
-              placeholder='Enter code...'
+              placeholder="Enter code..."
               style={styles.input}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
               error={errors.code?.message}
-              keyboardType='number-pad'
+              keyboardType="number-pad"
             />
           );
         }}
       />
       <CustomButton onPress={handleSubmit(onSubmit)}>
         {isLoading ? (
-          <ActivityIndicator
-            size='small'
-            color={Colors.accentColor}
-          />
+          <ActivityIndicator size="small" color={Colors.accentColor} />
         ) : (
-          'Proceed'
+          "Proceed"
         )}
       </CustomButton>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  verificationScreen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F9F9F9',
-  },
-  input: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 25,
-    top: 75,
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    verificationScreen: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: getThemeColor("background", theme),
+    },
+    input: {
+      marginHorizontal: 20,
+      marginVertical: 10,
+    },
+    backButton: {
+      position: "absolute",
+      left: 25,
+      top: 75,
+    },
+  });
+
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(VerificationScreen);

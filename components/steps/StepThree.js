@@ -1,23 +1,29 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import CustomTextInput from '../CustomTextInput';
-import { Controller } from 'react-hook-form';
+import React from "react";
+import { View, Text } from "react-native";
+import CustomTextInput from "../CustomTextInput";
+import { Controller } from "react-hook-form";
+import DropDownMenu from "../DropDownMenu";
 
 export default function StepThree({ control, errors }) {
   return (
-    <View>
+    <View style={{ width: "100%" }}>
       <Controller
-        name='number'
-        initialValue=''
+        name="city"
+        initialValue=""
         control={control}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
-            <CustomTextInput
+            <DropDownMenu
+              text="Select a type"
+              items={[
+                { label: "Beirut", value: "Beirut" },
+                { label: "Mansourieh", value: "Mansourieh" },
+                { label: "Zouk Mikael", value: "Zouk Mikael" },
+              ]}
               onBlur={onBlur}
-              onChangeText={onChange}
               value={value}
-              placeholder='+961 1 234 567'
-              error={errors.number?.message}
+              onChange={onChange}
+              error={errors.type?.city}
             />
           );
         }}

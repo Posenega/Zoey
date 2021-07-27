@@ -23,7 +23,6 @@ import { signupUser } from "../../store/actions/auth";
 function CreateAccount(props) {
   const styles = getStyles(props.theme);
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
   const isLoading = useSelector((state) => state.auth.isLoading);
   const {
     control,
@@ -38,13 +37,14 @@ function CreateAccount(props) {
     if (isLoading) {
       return;
     }
-    if (step < 2) {
+    if (step < 3) {
       setStep(step + 1);
     }
-    if (step === 2) {
-      const { firstName, lastName, email, password } = data;
-      setEmail(email);
-      dispatch(signupUser(firstName, lastName, email, password, setError));
+    if (step === 3) {
+      const { firstName, lastName, email, password, city } = data;
+      dispatch(
+        signupUser(firstName, lastName, email, password, city, setError)
+      );
     }
   };
   const handleStepbackward = () => {
@@ -80,12 +80,12 @@ function CreateAccount(props) {
         {backButton}
         <View style={styles.header}>
           <Text style={styles.headerText}>Sign Up</Text>
-          <Text style={styles.headerText}>Step: {step}/2</Text>
+          <Text style={styles.headerText}>Step: {step}/3</Text>
         </View>
         <View style={styles.progressBar}>
           <Progress.Bar
             color={getThemeColor("primary", props.theme)}
-            progress={step / 2}
+            progress={step / 3}
             width={null}
             borderWidth={0}
           />
