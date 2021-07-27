@@ -23,6 +23,8 @@ export default function StepTwo({ control, errors, watch }) {
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
+              keyboardType='email-address'
+              autoCapitalize='none'
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}

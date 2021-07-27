@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,15 +6,21 @@ import {
   Keyboard,
   FlatList,
   ActivityIndicator,
-} from "react-native";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import DirectMessageHeader from "../../components/DirectMessageHeader";
-import MessageComposer from "../../components/MessageComposer";
-import SentMessage from "../../components/messages/SentMessage";
-import ReceivedMessage from "../../components/messages/ReceivedMessage";
-import { addMessage, fetchChatMessages } from "../../store/actions/chats";
-import io from "socket.io-client";
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import DirectMessageHeader from '../../components/DirectMessageHeader';
+import MessageComposer from '../../components/MessageComposer';
+import SentMessage from '../../components/messages/SentMessage';
+import ReceivedMessage from '../../components/messages/ReceivedMessage';
+import {
+  addMessage,
+  fetchChatMessages,
+} from '../../store/actions/chats';
+import io from 'socket.io-client';
 
 let socket;
 
@@ -25,25 +31,22 @@ export default function DirectMessagesScreen(props) {
   useEffect(() => {
     socket = io(axios.defaults.baseURL, {
       extraHeaders: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
-    return () => {
-      socket?.off();
-    };
-  }, [token]);
-
-  useEffect(() => {
-    socket?.emit("joinRoom", { roomId: cId });
-
-    socket?.on("message", ({ text, messageId }) => {
-      console.log(text);
+    socket?.emit('joinRoom', { roomId: cId });
+    socket?.on('message', ({ text, messageId }) => {
+      console.log('sentMessage');
       dispatch(addMessage(cId, text, false, messageId));
     });
+
     return () => {
-      socket?.emit("leaveRoom", { roomId: cId });
+      socket?.emit('leaveRoom', { roomId: cId });
+      socket?.disconnect();
     };
-  }, [socket, cId]);
+  }, []);
+
+  useEffect(() => {}, [socket, cId]);
 
   const { userId, chatId } = props.route.params;
   const chat = useSelector((state) =>
@@ -79,7 +82,7 @@ export default function DirectMessagesScreen(props) {
         />
         {chat.isLoading ? (
           <View style={styles.center}>
-            <ActivityIndicator size="large" color="#2b2b2b" />
+            <ActivityIndicator size='large' color='#2b2b2b' />
           </View>
         ) : (
           <View
@@ -87,20 +90,24 @@ export default function DirectMessagesScreen(props) {
               flex: 9,
               paddingHorizontal: 18,
               marginBottom: 1,
-            }}
-          >
+            }}>
             <View style={styles.messageList}>
               <FlatList
                 inverted
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 data={chat.messages}
                 renderItem={renderMessage}
                 keyExtractor={(item) => item._id}
               />
             </View>
-            <View style={styles.composerContainer}>
-              <MessageComposer chatId={chatId} socket={socket} />
-            </View>
+            <KeyboardAvoidingView
+              keyboardVerticalOffset={120}
+              behavior={Platform.OS === 'ios' ? 'padding' : null}
+              style={styles.composerContainer}>
+              <View>
+                <MessageComposer chatId={chatId} socket={socket} />
+              </View>
+            </KeyboardAvoidingView>
           </View>
         )}
       </View>
@@ -111,14 +118,15 @@ export default function DirectMessagesScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#EDEDED",
+    backgroundColor: '#EDEDED',
   },
+
   messageList: {
-    width: "100%",
+    width: '100%',
     flex: 10,
-    height: "100%",
+    height: '100%',
     borderRadius: 10,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   composerContainer: {
     flex: 0.9,
@@ -128,12 +136,12 @@ const styles = StyleSheet.create({
     flex: 9,
     paddingHorizontal: 18,
     marginBottom: 1,
-    textAlign: "center",
-    justifyContent: "center",
+    textAlign: 'center',
+    justifyContent: 'center',
   },
 });
 
 export const directMessagesOptions = {
-  headerTitle: "Explore",
+  headerTitle: 'Explore',
   headerShown: false,
 };

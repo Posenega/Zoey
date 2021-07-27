@@ -1,12 +1,12 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import AccountScreen, {
   accountOptions as accountScreenOptions,
-} from "../screens/AccountScreen";
+} from '../screens/AccountScreen';
 import SettingsScreen, {
   screenOptions as settingsScreenOptions,
-} from "../screens/SettingsScreen";
-import Colors from "../constants/Colors";
+} from '../screens/SettingsScreen';
+import Colors from '../constants/Colors';
 
 const Stack = createStackNavigator();
 
@@ -15,22 +15,22 @@ const defaultNavOptions = {
   headerTransparent: true,
 
   headerTitleStyle: {
-    fontFamily: "rubik-bold",
+    fontFamily: 'rubik-bold',
     fontSize: 18,
-    color: getThemeColor("text", props.theme),
+    color: getThemeColor('text', props.theme),
   },
-  headerTitleAlign: "left",
+  headerTitleAlign: 'left',
 };
 
 const SettingsNavigator = () => (
   <Stack.Navigator screenOptions={defaultNavOptions}>
     <Stack.Screen
-      name="settings"
+      name='settings'
       component={SettingsScreen}
       options={settingsScreenOptions}
     />
     <Stack.Screen
-      name="account"
+      name='account'
       component={AccountScreen}
       options={accountScreenOptions}
     />

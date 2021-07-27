@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   TextInput,
   StyleSheet,
   TouchableWithoutFeedback,
   Text,
-} from "react-native";
-import ShowValueInput from "../components/Icons/ShowValueInput";
-import { connect } from "react-redux";
-import { getThemeColor } from "../constants/Colors";
+} from 'react-native';
+import ShowValueInput from '../components/Icons/ShowValueInput';
+import { connect } from 'react-redux';
+import { getThemeColor } from '../constants/Colors';
 function CustomTextInput(props) {
   const styles = StyleSheet.create({
     inputContainer: {
       height: 44,
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     passwordContainer: {
-      backgroundColor: getThemeColor("formBackground", props.theme),
+      backgroundColor: getThemeColor('formBackground', props.theme),
       borderRadius: 10,
-      width: "100%",
+      width: '100%',
     },
     input: {
-      color: getThemeColor("text", props.theme),
+      color: getThemeColor('text', props.theme),
       fontSize: 12,
-      backgroundColor: getThemeColor("formBackground", props.theme),
+      backgroundColor: getThemeColor('formBackground', props.theme),
       paddingHorizontal: 12,
-      height: "100%",
-      width: "100%",
+      height: '100%',
+      width: '100%',
       borderRadius: 10,
     },
     inputPassword: {
-      color: getThemeColor("text", props.theme),
+      color: getThemeColor('text', props.theme),
       fontSize: 12,
       paddingHorizontal: 12,
       height: 43,
@@ -39,9 +39,9 @@ function CustomTextInput(props) {
       borderRadius: 10,
     },
     inputFocus: {
-      borderColor: getThemeColor("inputBorder", props.theme),
+      borderColor: getThemeColor('inputBorder', props.theme),
       borderWidth: 2,
-      backgroundColor: getThemeColor("background", props.theme),
+      backgroundColor: getThemeColor('background', props.theme),
     },
     // borderHack: {
     //   borderWidth: 2,
@@ -53,12 +53,12 @@ function CustomTextInput(props) {
       fontSize: 10,
       marginLeft: 10,
       marginTop: 0.5,
-      color: getThemeColor("placeholder", props.theme),
+      color: getThemeColor('placeholder', props.theme),
     },
     errorInput: {
       // backgroundColor: "#FFDCDC",
       borderWidth: 2,
-      borderColor: "#E24949",
+      borderColor: '#E24949',
     },
   });
 
@@ -103,8 +103,7 @@ function CustomTextInput(props) {
                   ...focusPasswordStyle,
                 }
             : { ...styles.inputContainer, ...props.style }
-        }
-      >
+        }>
         <TextInput
           secureTextEntry={!passwordShown && props.isPassword}
           passwordRules={true}
@@ -118,23 +117,24 @@ function CustomTextInput(props) {
             setFocus(false);
           }}
           style={inputStyle}
-          placeholderTextColor={props.error ? "#E24949" : "#999999"}
+          placeholderTextColor={props.error ? '#E24949' : '#999999'}
         />
 
         {props.isPassword ? (
           <TouchableWithoutFeedback
-            onPress={() => setPasswordShown(!passwordShown)}
-          >
+            onPress={() => setPasswordShown(!passwordShown)}>
             <View style={{ marginRight: 6 }}>
               <ShowValueInput
                 size={14}
-                color={passwordShown ? "#2b2b2b" : "#999999"}
+                color={passwordShown ? '#2b2b2b' : '#999999'}
               />
             </View>
           </TouchableWithoutFeedback>
         ) : null}
       </View>
-      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
+      {props.error && (
+        <Text style={styles.errorText}>{props.error}</Text>
+      )}
     </>
   );
 }

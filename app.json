@@ -15,7 +15,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "package": "com.cnq.bookapp",
@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "favicon": "./assets/favicon.png"

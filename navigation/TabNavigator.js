@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import BooksNavigator from "./BooksNavigator";
-import Colors, { getThemeColor } from "../constants/Colors";
-import CategoryButton from "../components/Icons/CategoryButton";
-import FavoriteButton from "../components/Icons/FavoriteButton";
-import MessageButton from "../components/Icons/MessageButton";
-import ProfileButton from "../components/Icons/ProfileButton";
-import AddButton from "../components/Icons/AddButton";
-import FavoritesNavigator from "./FavoritesNavigator";
-import MessageNavigator from "./MessageNavigator";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import ProfileNavigator from "./ProfileNavigator";
-import { connect, useDispatch } from "react-redux";
-import { fetchChats } from "../store/actions/chats";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import BooksNavigator from './BooksNavigator';
+import Colors, { getThemeColor } from '../constants/Colors';
+import CategoryButton from '../components/Icons/CategoryButton';
+import FavoriteButton from '../components/Icons/FavoriteButton';
+import MessageButton from '../components/Icons/MessageButton';
+import ProfileButton from '../components/Icons/ProfileButton';
+import AddButton from '../components/Icons/AddButton';
+import FavoritesNavigator from './FavoritesNavigator';
+import MessageNavigator from './MessageNavigator';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import ProfileNavigator from './ProfileNavigator';
+import { connect, useDispatch } from 'react-redux';
+import { fetchChats } from '../store/actions/chats';
+import { Platform } from 'react-native';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -26,13 +27,12 @@ const TabNavigator = (props) => {
     <BottomTab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: getThemeColor("primary", props.theme),
-        tabBarInactiveTintColor: getThemeColor("idle", props.theme),
+        tabBarActiveTintColor: getThemeColor('primary', props.theme),
+        tabBarInactiveTintColor: getThemeColor('idle', props.theme),
         tabBarShowLabel: false,
-      }}
-    >
+      }}>
       <BottomTab.Screen
-        name="Explore"
+        name='Explore'
         component={BooksNavigator}
         options={({ route }) => ({
           tabBarIcon: ({ color, size }) => (
@@ -40,20 +40,20 @@ const TabNavigator = (props) => {
           ),
           tabBarStyle: (() => {
             const routeName = getFocusedRouteNameFromRoute(route);
-            if (routeName === "detail") {
-              return { display: "none" };
+            if (routeName === 'detail') {
+              return { display: 'none' };
             }
             return {
               elevation: 0,
               borderTopWidth: 0,
-              height: 55,
-              backgroundColor: getThemeColor("main", props.theme),
+              height: Platform.OS === 'android' ? '7%' : '10%',
+              backgroundColor: getThemeColor('main', props.theme),
             };
           })(),
         })}
       />
       <BottomTab.Screen
-        name="Favorites"
+        name='Favorites'
         component={FavoritesNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -62,13 +62,13 @@ const TabNavigator = (props) => {
           tabBarStyle: {
             elevation: 0,
             borderTopWidth: 0,
-            height: 55,
-            backgroundColor: getThemeColor("main", props.theme),
+            height: Platform.OS === 'android' ? '7%' : '10%',
+            backgroundColor: getThemeColor('main', props.theme),
           },
         }}
       />
       <BottomTab.Screen
-        name="Add"
+        name='Add'
         component={BooksNavigator}
         listeners={{ tabPress: (e) => e.preventDefault() }}
         options={{
@@ -76,7 +76,7 @@ const TabNavigator = (props) => {
         }}
       />
       <BottomTab.Screen
-        name="Messages"
+        name='Messages'
         component={MessageNavigator}
         options={({ route }) => ({
           tabBarIcon: ({ color, size }) => (
@@ -84,20 +84,20 @@ const TabNavigator = (props) => {
           ),
           tabBarStyle: (() => {
             const routeName = getFocusedRouteNameFromRoute(route);
-            if (routeName === "chatRoom") {
-              return { display: "none" };
+            if (routeName === 'chatRoom') {
+              return { display: 'none' };
             }
             return {
               elevation: 0,
               borderTopWidth: 0,
-              height: 55,
-              backgroundColor: getThemeColor("main", props.theme),
+              height: Platform.OS === 'android' ? '7%' : '10%',
+              backgroundColor: getThemeColor('main', props.theme),
             };
           })(),
         })}
       />
       <BottomTab.Screen
-        name="Profile"
+        name='Profile'
         component={ProfileNavigator}
         options={({ route }) => {
           return {
@@ -106,20 +106,20 @@ const TabNavigator = (props) => {
             ),
             tabBarStyle: (() => {
               const routeName = getFocusedRouteNameFromRoute(route);
-              if (routeName === "settings") {
-                return { display: "none" };
+              if (routeName === 'settings') {
+                return { display: 'none' };
               }
-              if (routeName === "account") {
-                return { display: "none" };
+              if (routeName === 'account') {
+                return { display: 'none' };
               }
-              if (routeName === "detail") {
-                return { display: "none" };
+              if (routeName === 'detail') {
+                return { display: 'none' };
               }
               return {
                 elevation: 0,
                 borderTopWidth: 0,
-                height: 55,
-                backgroundColor: getThemeColor("main", props.theme),
+                height: Platform.OS === 'android' ? '7%' : '10%',
+                backgroundColor: getThemeColor('main', props.theme),
               };
             })(),
           };
