@@ -1,34 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
 
-export const FETCH_USER_BOOKS_START = 'FETCH_USER_BOOKS_START';
-export const FETCH_USER_BOOKS_SUCCESS = 'FETCH_USER_BOOKS_SUCCESS';
-export const FETCH_USER_BOOKS_FAILURE = 'FETCH_USER_BOOKS_FAILURE';
-export const FETCH_BOOKS_START = 'FETCH_BOOKS_START';
-export const FETCH_BOOKS_SUCCESS = 'FETCH_BOOKS_SUCCESS';
-export const FETCH_BOOKS_FAILURE = 'FETCH_BOOKS_FAILURE';
-export const FETCH_FAVORITES_BOOKS_START =
-  'FETCH_FAVORITES_BOOKS_START';
-export const FETCH_FAVORITES_BOOKS_SUCCESS =
-  'FETCH_FAVORITES_BOOKS_SUCCESS';
-export const FETCH_FAVORITES_BOOKS_FAILURE =
-  'FETCH_FAVORITES_BOOKS_FAILURE';
-export const FAVORITE_BOOK_START = 'FAVORITE_BOOK_START';
-export const ADD_FAVORITE_BOOK_SUCCESS = 'ADD_FAVORITE_BOOK_SUCCESS';
-export const REMOVE_FAVORITE_BOOK_SUCCESS =
-  'REMOVE_FAVORITE_BOOK_SUCCESS';
-export const FILTER_BOOKS = 'FILTER_BOOKS';
-export const ADD_BOOK_START = 'ADD_BOOK_START';
-export const ADD_BOOK_SUCCESS = 'ADD_BOOK_SUCCESS';
-export const ADD_BOOK_FINISH = 'ADD_BOOK_FINISH';
-export const DELETE_BOOK_SUCCESS = 'DELETE_BOOK_SUCCESS';
+export const FETCH_USER_BOOKS_START = "FETCH_USER_BOOKS_START";
+export const FETCH_USER_BOOKS_SUCCESS = "FETCH_USER_BOOKS_SUCCESS";
+export const FETCH_USER_BOOKS_FAILURE = "FETCH_USER_BOOKS_FAILURE";
+export const FETCH_BOOKS_START = "FETCH_BOOKS_START";
+export const FETCH_BOOKS_SUCCESS = "FETCH_BOOKS_SUCCESS";
+export const FETCH_BOOKS_FAILURE = "FETCH_BOOKS_FAILURE";
+export const FETCH_FAVORITES_BOOKS_START = "FETCH_FAVORITES_BOOKS_START";
+export const FETCH_FAVORITES_BOOKS_SUCCESS = "FETCH_FAVORITES_BOOKS_SUCCESS";
+export const FETCH_FAVORITES_BOOKS_FAILURE = "FETCH_FAVORITES_BOOKS_FAILURE";
+export const FAVORITE_BOOK_START = "FAVORITE_BOOK_START";
+export const ADD_FAVORITE_BOOK_SUCCESS = "ADD_FAVORITE_BOOK_SUCCESS";
+export const REMOVE_FAVORITE_BOOK_SUCCESS = "REMOVE_FAVORITE_BOOK_SUCCESS";
+export const FILTER_BOOKS = "FILTER_BOOKS";
+export const ADD_BOOK_START = "ADD_BOOK_START";
+export const ADD_BOOK_SUCCESS = "ADD_BOOK_SUCCESS";
+export const ADD_BOOK_FINISH = "ADD_BOOK_FINISH";
+export const DELETE_BOOK_SUCCESS = "DELETE_BOOK_SUCCESS";
 
 export const fetchBooks = () => {
   return (dispatch, getState) => {
     const token = getState().auth.token;
     dispatch({ type: FETCH_BOOKS_START });
     axios
-      .get('/api/books/browse', {
-        headers: { Authorization: 'Bearer ' + token },
+      .get("/api/books/browse", {
+        headers: { Authorization: "Bearer " + token },
       })
       .then(function (response) {
         dispatch({
@@ -49,7 +45,7 @@ export const fetchFavoriteBooks = () => {
     dispatch({ type: FETCH_FAVORITES_BOOKS_START });
     axios
       .get(`/api/books/favorites/${userId}`, {
-        headers: { Authorization: 'Bearer ' + token },
+        headers: { Authorization: "Bearer " + token },
       })
       .then(function (response) {
         dispatch({
@@ -72,12 +68,12 @@ export const requestAddBook = (data) => {
     const token = getState().auth.token;
 
     axios({
-      method: 'post',
-      url: '/api/books',
+      method: "post",
+      url: "/api/books",
       data: data,
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + token,
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + token,
       },
     })
       .then((response) => {
@@ -154,10 +150,10 @@ export const requestAddFavoriteBook = (bookId) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     axios({
-      method: 'post',
+      method: "post",
       url: `/api/books/favorites/${bookId}`,
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: "Bearer " + token,
       },
       data: { userId },
     }).catch((e) => dispatch(removeFavoriteBookSuccess(bookId)));
@@ -170,10 +166,10 @@ export const requestRemoveFavoriteBook = (bookId) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     axios({
-      method: 'delete',
+      method: "delete",
       url: `/api/books/favorites/${bookId}`,
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: "Bearer " + token,
       },
       data: { userId },
     }).catch((e) => dispatch(addFavoriteBookSuccess(bookId)));
@@ -192,10 +188,11 @@ export const removeFavoriteBookSuccess = (bookId) => {
   return { type: REMOVE_FAVORITE_BOOK_SUCCESS, bookId };
 };
 
-export const filterBooks = (searchTerm) => {
+export const filterBooks = ({ searchTerm, filters }) => {
   return {
     type: FILTER_BOOKS,
     searchTerm,
+    filters,
   };
 };
 
@@ -207,7 +204,7 @@ export const fetchUserBooks = () => {
     axios
       .get(`/api/books/user/${userId}`, {
         headers: {
-          Authorization: 'Bearer ' + token,
+          Authorization: "Bearer " + token,
         },
       })
       .then(function (response) {
@@ -227,7 +224,7 @@ export const deleteBook = (bookId, goBack) => {
     const token = getState().auth.token;
     axios
       .delete(`/api/books/${bookId}`, {
-        headers: { Authorization: 'Bearer ' + token },
+        headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
         goBack();

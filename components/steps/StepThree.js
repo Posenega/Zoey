@@ -14,7 +14,7 @@ export default function StepThree({ control, errors }) {
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <DropDownMenu
-              text="Select a type"
+              text="Select your city"
               items={[
                 { label: "Beirut", value: "Beirut" },
                 { label: "Mansourieh", value: "Mansourieh" },
