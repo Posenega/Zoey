@@ -143,7 +143,16 @@ function BookDetailScreen(props) {
         <Text numberOfLines={1} style={styles.author}>
           {displayedBook.author}
         </Text>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", marginBottom: 10 }}>
+          {displayedBook.isPackage && (
+            <Badge
+              style={styles.badge}
+              color={getThemeColor("primary", props.theme)}
+              backgroundColor="#FFF0C1"
+            >
+              Package
+            </Badge>
+          )}
           <Badge
             style={styles.badge}
             color={getThemeColor("primary", props.theme)}
@@ -159,6 +168,9 @@ function BookDetailScreen(props) {
             {displayedBook.condition}
           </Badge>
         </View>
+        {displayedBook.categories.length > 1 && (
+          <Text>Categories: {displayedBook.categories.join(", ")}</Text>
+        )}
         <Text style={styles.description}>{displayedBook.description}</Text>
         <View style={styles.footerContainer}>
           {displayedBook.type === "sell" && displayedBook.price && (

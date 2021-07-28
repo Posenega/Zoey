@@ -12,6 +12,7 @@ import Badge from "./Badge";
 
 function Book(props) {
   const styles = getStyles(props.theme);
+
   return (
     <TouchableWithoutFeedback
       onPress={() =>

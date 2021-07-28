@@ -9,6 +9,7 @@ export default function StepThree({ control, errors }) {
     <View style={{ width: "100%" }}>
       <Controller
         name="city"
+        rules={{ required: true }}
         initialValue=""
         control={control}
         render={({ field: { onChange, onBlur, value } }) => {

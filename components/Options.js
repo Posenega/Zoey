@@ -10,6 +10,7 @@ export default function Options({
   multipleAllowed,
   style,
 }) {
+  console.log(value);
   return (
     <ScrollView
       style={{ ...styles.options, ...style }}
@@ -35,6 +36,9 @@ export default function Options({
               } else {
                 if (!Array.isArray(value)) {
                   const oldValue = value;
+                  if (!oldValue) {
+                    value = [];
+                  }
                   value = [oldValue];
                 }
                 const index = value.indexOf(item.value);

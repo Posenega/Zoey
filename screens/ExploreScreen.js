@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   View,
@@ -6,8 +6,6 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
-  Button,
-  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
