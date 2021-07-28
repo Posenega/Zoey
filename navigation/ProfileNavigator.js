@@ -1,20 +1,23 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import Colors, { getThemeColor } from "../constants/Colors";
+import Colors, { getThemeColor } from '../constants/Colors';
 import ProfileScreen, {
   screenOptions as profileScreenOptions,
-} from "../screens/ProfileScreen";
+} from '../screens/ProfileScreen';
 import SettingsScreen, {
   screenOptions as settingsScreenOptions,
-} from "../screens/SettingsScreen";
+} from '../screens/SettingsScreen';
 import BookDetailScreen, {
   screenOptions as bookDetailScreenOptions,
-} from "../screens/BookDetailScreen";
+} from '../screens/BookDetailScreen';
 import AccountScreen, {
   accountOptions as accountScreenOptions,
-} from "../screens/AccountScreen";
-import { connect } from "react-redux";
+} from '../screens/AccountScreen';
+import { connect } from 'react-redux';
+import PricingScreen, {
+  pricingOptions as pricingScreenOptions,
+} from '../screens/PricingScreen';
 
 const Stack = createStackNavigator();
 
@@ -24,35 +27,39 @@ const ProfileNavigator = (props) => (
       headerShown: false,
       headerTransparent: true,
       headerTitleStyle: {
-        fontFamily: "rubik-bold",
+        fontFamily: 'rubik-bold',
         fontSize: 18,
-        color: getThemeColor("text", props.theme),
+        color: getThemeColor('text', props.theme),
       },
       cardStyle: {
-        backgroundColor: getThemeColor("background", props.theme),
+        backgroundColor: getThemeColor('background', props.theme),
       },
-      headerTitleAlign: "left",
-    }}
-  >
+      headerTitleAlign: 'left',
+    }}>
     <Stack.Screen
-      name="profile"
+      name='profile'
       component={ProfileScreen}
       options={profileScreenOptions}
     />
     <Stack.Screen
-      name="settings"
+      name='settings'
       component={SettingsScreen}
       options={settingsScreenOptions}
     />
     <Stack.Screen
-      name="detail"
+      name='detail'
       component={BookDetailScreen}
       options={bookDetailScreenOptions}
     />
     <Stack.Screen
-      name="account"
+      name='account'
       component={AccountScreen}
       options={accountScreenOptions}
+    />
+    <Stack.Screen
+      name='pricing'
+      component={PricingScreen}
+      options={pricingScreenOptions}
     />
   </Stack.Navigator>
 );

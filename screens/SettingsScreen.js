@@ -129,15 +129,20 @@ function SettingsScreen(props) {
           }>
           Notifications
         </SettingContainer>
-        <SettingContainer
-          icon={
-            <LockIcon
-              size={20}
-              color={getThemeColor('text', props.theme)}
-            />
-          }>
-          Pricing
-        </SettingContainer>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('pricing');
+          }}>
+          <SettingContainer
+            icon={
+              <LockIcon
+                size={20}
+                color={getThemeColor('text', props.theme)}
+              />
+            }>
+            Pricing
+          </SettingContainer>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.textFooter}>© BookApp 2021</Text>

@@ -115,6 +115,9 @@ const TabNavigator = (props) => {
               if (routeName === 'detail') {
                 return { display: 'none' };
               }
+              if (routeName === 'detail') {
+                return { display: 'none' };
+              }
               return {
                 elevation: 0,
                 borderTopWidth: 0,

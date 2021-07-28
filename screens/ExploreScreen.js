@@ -64,8 +64,33 @@ function ExploreScreen(props) {
           </View>
         </View>
         {filtering && (
-          <View style={styles.option}>
-            <Option />
+          <View>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              style={styles.option}>
+              <Option>Action and Adventure </Option>
+              <Option>Classics</Option>
+              <Option>Comic Book or Graphic Novel </Option>
+              <Option>Detective and Mystery</Option>
+              <Option>Fantasy </Option>
+              <Option>Historical Fiction</Option>
+              <Option>Horror</Option>
+              <Option>Literary Fiction </Option>
+              <Option>Romance </Option>
+              <Option>Science Fiction (Sci-Fi) </Option>
+              <Option>Short Stories</Option>
+              <Option>Suspense and Thrillers</Option>
+              <Option>Women's Fiction </Option>
+              <Option>Biographies and Autobiographies</Option>
+              <Option>Cookbooks</Option>
+              <Option>Essays</Option>
+              <Option>History</Option>
+              <Option>Memoir</Option>
+              <Option>Poetry</Option>
+              <Option>Self-Help </Option>
+              <Option>True Crime </Option>
+            </ScrollView>
           </View>
         )}
 
@@ -149,6 +174,7 @@ const getStyles = (theme) =>
       color: getThemeColor('text', theme),
     },
     option: {
+      flexDirection: 'row',
       marginTop: 15,
       paddingLeft: '4.8%',
     },
