@@ -1,17 +1,29 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Colors from "../constants/Colors";
+import { connect } from "react-redux";
+import Colors, { getThemeColor } from "../constants/Colors";
 
-const Badge = ({ category, color, backgroundColor, style, children }) => {
+const Badge = ({
+  category,
+  color,
+  backgroundColor,
+  style,
+  children,
+  theme,
+}) => {
+  const styles = getStyles(theme);
   let catColor;
   let catBackgroundColor;
 
   if (category === "Technology") {
-    catColor = Colors.techTextColors;
-    catBackgroundColor = Colors.techBackgroundColor;
+    catColor = getThemeColor("primary", theme);
+    catBackgroundColor = "#FFF0C1";
   } else if (category === "Science") {
-    catColor = Colors.scienceTextColor;
-    catBackgroundColor = Colors.scienceBackgroundColor;
+    catColor = getThemeColor("primary", theme);
+    catBackgroundColor = "#FFF0C1";
+  } else {
+    catColor = "white";
+    catBackgroundColor = "red";
   }
 
   return (
@@ -35,17 +47,23 @@ const Badge = ({ category, color, backgroundColor, style, children }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  categoryText: {
-    fontSize: 9,
-  },
-  category: {
-    width: "40%",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    alignItems: "center",
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    categoryText: {
+      fontSize: 9,
+    },
+    category: {
+      width: "40%",
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 5,
+      alignItems: "center",
+    },
+  });
 
-export default Badge;
+export default connect(
+  (state) => ({
+    theme: state.themes.theme,
+  }),
+  {}
+)(Badge);

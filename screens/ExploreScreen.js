@@ -75,7 +75,7 @@ function ExploreScreen(props) {
             render={({ field: { onChange, value } }) => {
               return (
                 <Options
-                  style={{ marginBottom: -220 }}
+                  style={{ marginBottom: -340 }}
                   multipleAllowed
                   onChange={(val) => {
                     onChange(val);

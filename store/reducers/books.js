@@ -56,6 +56,8 @@ const booksReducer = (state = initialState, action) => {
         type: action.bookType,
         price: action.price,
         condition: action.condition,
+        isForSchool: action.isForSchool,
+        grade: action.grade,
       };
 
       return {
@@ -101,7 +103,7 @@ const booksReducer = (state = initialState, action) => {
       // }
       return {
         ...state,
-        filteredBooks: filteredBooks.books.filter(({ title, categories }) => {
+        filteredBooks: state.books.filter(({ title, categories }) => {
           if (action.searchTerm) {
             return title
               .toLowerCase()

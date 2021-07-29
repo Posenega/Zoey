@@ -18,6 +18,7 @@ export default function Books({ books, navigation, isHorizontal }) {
         image={`${axios.defaults.baseURL}/${book.imageUrl}`}
         author={book.author}
         navigation={navigation}
+        grade={book.grade}
       />
     );
     if (isHorizontal) {

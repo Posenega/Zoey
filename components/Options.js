@@ -10,7 +10,6 @@ export default function Options({
   multipleAllowed,
   style,
 }) {
-  console.log(value);
   return (
     <ScrollView
       style={{ ...styles.options, ...style }}

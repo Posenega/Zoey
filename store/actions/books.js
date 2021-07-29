@@ -88,6 +88,8 @@ export const requestAddBook = (data) => {
           creator,
           price,
           condition,
+          isForSchool,
+          grade,
         } = response.data.book;
 
         dispatch(
@@ -101,7 +103,9 @@ export const requestAddBook = (data) => {
             creator,
             price,
             id,
-            condition
+            condition,
+            isForSchool,
+            grade
           )
         );
       })
@@ -123,7 +127,9 @@ export const addBookSuccess = (
   creator,
   price,
   id,
-  condition
+  condition,
+  isForSchool,
+  grade
 ) => {
   return {
     type: ADD_BOOK_SUCCESS,
@@ -137,6 +143,8 @@ export const addBookSuccess = (
     price,
     id,
     condition,
+    isForSchool,
+    grade,
   };
 };
 

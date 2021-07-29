@@ -10,7 +10,7 @@ import AppLoading from "expo-app-loading";
 import { setCustomText } from "react-native-global-props";
 import booksReducer from "./store/reducers/books";
 import addBookModalReducer from "./store/reducers/addBookModal";
-import AddBookModal from "./components/AddBookModal";
+import AddModal from "./components/AddModal";
 import thunk from "redux-thunk";
 import authReducer from "./store/reducers/auth";
 import checkTokenExpirationMiddleware from "./store/middlewares/checkTokenExpiration";
@@ -21,11 +21,11 @@ import { setTheme } from "./store/actions/theme";
 import * as SecureStore from "expo-secure-store";
 import { tryAutoLogin } from "./store/actions/auth";
 
-// axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
-//   .split(':')
-//   .shift()}:5000`;
+axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
+  .split(":")
+  .shift()}:5000`;
 
-axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
+// axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -105,7 +105,7 @@ export default function App() {
         barStyle={statusBarTheme}
       />
       <MainNavigator />
-      <AddBookModal />
+      <AddModal />
     </Provider>
   );
 }

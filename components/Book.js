@@ -30,7 +30,7 @@ function Book(props) {
             {props.title}
           </Text>
           <Text numberOfLines={1} style={styles.bookAuthor}>
-            {props.author}
+            {props.grade ? props.grade : props.author}
           </Text>
           <Badge
             category={props.category}
