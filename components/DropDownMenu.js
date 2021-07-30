@@ -11,49 +11,14 @@ import Colors, { getThemeColor } from "../constants/Colors";
 import { connect } from "react-redux";
 
 function DropDownMenu(props) {
-  const styles = StyleSheet.create({
-    typeContainer: {
-      width: "100%",
-      borderWidth: props.error ? 2 : null,
-      borderColor: props.error ? "#E24949" : null,
-      backgroundColor: getThemeColor("formBackground", props.theme),
-      marginTop: 10,
-      borderRadius: 10,
-      overflow: "hidden",
-      paddingHorizontal: 12,
-    },
-    header: {
-      height: 44,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    item: {
-      height: 25,
-      justifyContent: "center",
-    },
-    typeText: {
-      fontSize: 12,
-      color: props.error ? "#E24949" : "#999999",
-    },
-    itemText: {
-      fontSize: 12,
-      fontFamily: "rubik-medium",
-      color: getThemeColor("text", props.theme),
-    },
-    errorText: {
-      fontSize: 10,
-      marginLeft: 10,
-      marginTop: 0.5,
-      color: "#999999",
-    },
-  });
   const [currentValue, setCurrentValue] = useState(props.value || "");
   const [currentLabel, setCurrentLabel] = useState(
     props.value
       ? props.items.find((item) => item.value === props.value).label
       : ""
   );
+
+  const styles = getStyles({ theme: props.theme, error: props.error });
 
   useEffect(() => {
     props.onChange(currentValue);
@@ -118,7 +83,7 @@ function DropDownMenu(props) {
           })}
         </Animated.View>
       </TouchableWithoutFeedback>
-      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
+      {!!props.error && <Text style={styles.errorText}>{props.error}</Text>}
     </View>
   );
 }
@@ -129,3 +94,42 @@ export default connect(
   }),
   {}
 )(DropDownMenu);
+
+const getStyles = ({ theme, error }) =>
+  StyleSheet.create({
+    typeContainer: {
+      width: "100%",
+      borderWidth: error ? 2 : null,
+      borderColor: error ? "#E24949" : null,
+      backgroundColor: getThemeColor("formBackground", theme),
+      marginTop: 10,
+      borderRadius: 10,
+      overflow: "hidden",
+      paddingHorizontal: 12,
+    },
+    header: {
+      height: 44,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    item: {
+      height: 25,
+      justifyContent: "center",
+    },
+    typeText: {
+      fontSize: 12,
+      color: error ? "#E24949" : "#999999",
+    },
+    itemText: {
+      fontSize: 12,
+      fontFamily: "rubik-medium",
+      color: getThemeColor("text", theme),
+    },
+    errorText: {
+      fontSize: 10,
+      marginLeft: 10,
+      marginTop: 0.5,
+      color: "#999999",
+    },
+  });

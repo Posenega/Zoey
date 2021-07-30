@@ -3,11 +3,13 @@ import {
   MODAL_CLOSE,
   MODAL_OPEN,
   MODAL_SET_EDIT_MODE,
+  MODAL_SET_STATE,
 } from "../actions/addBookModal";
 
 const initialState = {
   ref: null,
   modalOpen: false,
+  modalState: null,
   editedBook: null,
 };
 
@@ -21,6 +23,8 @@ const addBookModalReducer = (state = initialState, action) => {
       return { ...state, modalOpen: false, editedBook: null };
     case MODAL_SET_EDIT_MODE:
       return { ...state, editedBook: action.book };
+    case MODAL_SET_STATE:
+      return { ...state, modalState: action.modalState };
     default:
       return state;
   }

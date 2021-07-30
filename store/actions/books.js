@@ -196,11 +196,11 @@ export const removeFavoriteBookSuccess = (bookId) => {
   return { type: REMOVE_FAVORITE_BOOK_SUCCESS, bookId };
 };
 
-export const filterBooks = ({ searchTerm, filters }) => {
+export const filterBooks = ({ searchTerm, categories }) => {
   return {
     type: FILTER_BOOKS,
     searchTerm,
-    filters,
+    categories,
   };
 };
 

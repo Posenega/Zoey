@@ -24,7 +24,7 @@ export default function StepThree({ control, errors }) {
               onBlur={onBlur}
               value={value}
               onChange={onChange}
-              error={errors.type?.city}
+              error={errors.city?.message}
             />
           );
         }}

@@ -44,8 +44,7 @@ const authReducer = (state = initialState, action) => {
         isVerify: false,
         isLoading: false,
       };
-    case LOGOUT:
-      return { ...initialState, tryAutoLogin: false };
+
     case TRY_AUTO_LOGIN_FAIL:
       return { ...state, tryAutoLogin: false };
 

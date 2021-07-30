@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState, useEffect, useRef } from "react";
+
 import {
   View,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Books from "../components/Books";
@@ -17,16 +18,15 @@ import Colors, { getThemeColor } from "../constants/Colors";
 import FilterButton from "../components/Icons/FilterButton";
 import { fetchBooks, filterBooks } from "../store/actions/books";
 import Options from "../components/Options";
+import Categories from "../constants/Categories";
 function ExploreScreen(props) {
-  const { control, handleSubmit } = useForm();
+  const [categories, setCategories] = useState([]);
   const styles = getStyles(props.theme);
   useEffect(() => {
     dispatch(fetchBooks());
   }, []);
   const headerHeight = useHeaderHeight();
-  const allBooks = useSelector((state) => {
-    return state.books.books;
-  });
+
   const filteredBooks = useSelector((state) => {
     return state.books.filteredBooks;
   });
@@ -34,7 +34,15 @@ function ExploreScreen(props) {
     return state.books.isFiltering;
   });
   const dispatch = useDispatch();
-  const [filtering, setFiltering] = useState(false);
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const openFilters = () => {
+    Animated.timing(fadeAnim, {
+      toValue: fadeAnim._value === 1 ? 0 : 1,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -58,7 +66,7 @@ function ExploreScreen(props) {
               />
             </View>
             <TouchableOpacity
-              onPress={() => setFiltering(!filtering)}
+              onPress={openFilters}
               style={styles.filterContainer}
             >
               <View style={styles.filterBox}>
@@ -67,73 +75,26 @@ function ExploreScreen(props) {
             </TouchableOpacity>
           </View>
         </View>
-        {filtering && (
-          <Controller
-            control={control}
-            name="filters"
-            defaultValue={[]}
-            render={({ field: { onChange, value } }) => {
-              return (
-                <Options
-                  style={{ marginBottom: -340 }}
-                  multipleAllowed
-                  onChange={(val) => {
-                    onChange(val);
-                    dispatch(filterBooks({ filters: val }));
-                  }}
-                  value={value}
-                  items={[
-                    { label: "Action and Adventure", value: "action" },
-                    { label: "Classics", value: "classics" },
-                    { label: "Comic Book or Graphic Novel", value: "comic" },
-                    { label: "Detective and Mystery", value: "detective" },
-                    { label: "Fantasy", value: "fantasy" },
-                    { label: "Historical Fiction", value: "hFiction" },
-                    { label: "Horror", value: "horror" },
-                    { label: "Literary Fiction", value: "lFiction" },
-                    { label: "Romance", value: "romance" },
-                    { label: "Science Fiction (Sci-Fi)", value: "sci-fi" },
-                    { label: "Short Stories", value: "s-stories" },
-                    { label: "Suspense and Thrillers", value: "thrillers" },
-                    { label: "Women's Fiction", value: "wFiction" },
-                    {
-                      label: "Biographies and Autobiographies",
-                      value: "biographies",
-                    },
-                    { label: "Cookbooks", value: "cookbooks" },
-                    { label: "Essays", value: "essays" },
-                    { label: "History", value: "history" },
-                    { label: "Memoir", value: "memoir" },
-                    { label: "Poetry", value: "poetry" },
-                    { label: "Self-Help", value: "self-help" },
-                    { label: "True Crime", value: "true-crime" },
-                  ]}
-                />
-              );
+
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+            height: fadeAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 40],
+            }),
+          }}
+        >
+          <Options
+            multipleAllowed
+            onChange={(categories) => {
+              setCategories(categories);
+              dispatch(filterBooks({ categories }));
             }}
-            // <Option>Action and Adventure </Option>
-            // <Option>Classics</Option>
-            // <Option>Comic Book or Graphic Novel </Option>
-            // <Option>Detective and Mystery</Option>
-            // <Option>Fantasy </Option>
-            // <Option>Historical Fiction</Option>
-            // <Option>Horror</Option>
-            // <Option>Literary Fiction </Option>
-            // <Option>Romance </Option>
-            // <Option>Science Fiction (Sci-Fi) </Option>
-            // <Option>Short Stories</Option>
-            // <Option>Suspense and Thrillers</Option>
-            // <Option>Women's Fiction </Option>
-            // <Option>Biographies and Autobiographies</Option>
-            // <Option>Cookbooks</Option>
-            // <Option>Essays</Option>
-            // <Option>History</Option>
-            // <Option>Memoir</Option>
-            // <Option>Poetry</Option>
-            // <Option>Self-Help </Option>
-            // <Option>True Crime </Option>
+            value={categories}
+            items={Categories}
           />
-        )}
+        </Animated.View>
 
         {!isSearching && (
           <View style={styles.trendingNow}>
@@ -141,17 +102,13 @@ function ExploreScreen(props) {
             <Books
               isHorizontal
               navigation={props.navigation}
-              books={allBooks}
+              books={filteredBooks}
             />
           </View>
         )}
-
         <View style={styles.forYou}>
           {!isSearching && <Text style={styles.forYouText}>For You</Text>}
-          <Books
-            navigation={props.navigation}
-            books={isSearching ? filteredBooks : allBooks}
-          />
+          <Books navigation={props.navigation} books={filteredBooks} />
         </View>
       </View>
     </TouchableWithoutFeedback>

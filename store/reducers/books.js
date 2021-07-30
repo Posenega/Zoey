@@ -103,15 +103,24 @@ const booksReducer = (state = initialState, action) => {
       // }
       return {
         ...state,
-        filteredBooks: state.books.filter(({ title, categories }) => {
-          if (action.searchTerm) {
-            return title
+        filteredBooks: state.books.filter((book) => {
+          if (
+            action.searchTerm &&
+            !book.title
               .toLowerCase()
-              .startsWith(action.searchTerm.toLowerCase());
+              .startsWith(action.searchTerm.toLowerCase())
+          ) {
+            return false;
           }
-          if (action.filters && action.filters.length > 0) {
-            return action.filters.includes(categories);
+
+          if (
+            action.categories &&
+            action.categories.length > 0 &&
+            !action.categories.includes(book.categories[0])
+          ) {
+            return false;
           }
+
           return true;
         }),
         isFiltering: !!action.searchTerm,

@@ -11,10 +11,12 @@ import AddButton from "../components/Icons/AddButton";
 import FavoritesNavigator from "./FavoritesNavigator";
 import MessageNavigator from "./MessageNavigator";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import ProfileNavigator from "./ProfileNavigator";
+
 import { connect, useDispatch } from "react-redux";
 import { fetchChats } from "../store/actions/chats";
 import { Platform } from "react-native";
+import ProfileScreen from "../screens/ProfileScreen";
+import ProfileNavigator from "./ProfileNavigator";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -30,28 +32,22 @@ const TabNavigator = (props) => {
         tabBarActiveTintColor: getThemeColor("primary", props.theme),
         tabBarInactiveTintColor: getThemeColor("idle", props.theme),
         tabBarShowLabel: false,
+        tabBarStyle: {
+          elevation: 0,
+          borderTopWidth: 0,
+          height: Platform.OS === "android" ? "7%" : "10%",
+          backgroundColor: getThemeColor("main", props.theme),
+        },
       }}
     >
       <BottomTab.Screen
         name="Explore"
         component={BooksNavigator}
-        options={({ route }) => ({
+        options={{
           tabBarIcon: ({ color, size }) => (
             <CategoryButton color={color} size={size} />
           ),
-          tabBarStyle: (() => {
-            const routeName = getFocusedRouteNameFromRoute(route);
-            if (routeName === "detail") {
-              return { display: "none" };
-            }
-            return {
-              elevation: 0,
-              borderTopWidth: 0,
-              height: Platform.OS === "android" ? "7%" : "10%",
-              backgroundColor: getThemeColor("main", props.theme),
-            };
-          })(),
-        })}
+        }}
       />
       <BottomTab.Screen
         name="Favorites"
@@ -60,12 +56,6 @@ const TabNavigator = (props) => {
           tabBarIcon: ({ color, size }) => (
             <FavoriteButton color={color} size={size} />
           ),
-          tabBarStyle: {
-            elevation: 0,
-            borderTopWidth: 0,
-            height: Platform.OS === "android" ? "7%" : "10%",
-            backgroundColor: getThemeColor("main", props.theme),
-          },
         }}
       />
       <BottomTab.Screen
@@ -79,54 +69,41 @@ const TabNavigator = (props) => {
       <BottomTab.Screen
         name="Messages"
         component={MessageNavigator}
-        options={({ route }) => ({
+        options={{
           tabBarIcon: ({ color, size }) => (
             <MessageButton color={color} size={size} />
           ),
-          tabBarStyle: (() => {
-            const routeName = getFocusedRouteNameFromRoute(route);
-            if (routeName === "chatRoom") {
-              return { display: "none" };
-            }
-            return {
-              elevation: 0,
-              borderTopWidth: 0,
-              height: Platform.OS === "android" ? "7%" : "10%",
-              backgroundColor: getThemeColor("main", props.theme),
-            };
-          })(),
-        })}
+          // tabBarStyle: (() => {
+          //   const routeName = getFocusedRouteNameFromRoute(route);
+          //   if (routeName === "chatRoom") {
+          //     return { display: "none" };
+          //   }
+          // })(),
+        }}
       />
       <BottomTab.Screen
         name="Profile"
         component={ProfileNavigator}
-        options={({ route }) => {
-          return {
-            tabBarIcon: ({ color, size }) => (
-              <ProfileButton color={color} size={size} />
-            ),
-            tabBarStyle: (() => {
-              const routeName = getFocusedRouteNameFromRoute(route);
-              if (routeName === "settings") {
-                return { display: "none" };
-              }
-              if (routeName === "account") {
-                return { display: "none" };
-              }
-              if (routeName === "detail") {
-                return { display: "none" };
-              }
-              if (routeName === "detail") {
-                return { display: "none" };
-              }
-              return {
-                elevation: 0,
-                borderTopWidth: 0,
-                height: Platform.OS === "android" ? "7%" : "10%",
-                backgroundColor: getThemeColor("main", props.theme),
-              };
-            })(),
-          };
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <ProfileButton color={color} size={size} />
+          ),
+
+          // tabBarStyle: (() => {
+          //   const routeName = getFocusedRouteNameFromRoute(route);
+          //   if (routeName === "settings") {
+          //     return { display: "none" };
+          //   }
+          //   if (routeName === "account") {
+          //     return { display: "none" };
+          //   }
+          //   if (routeName === "detail") {
+          //     return { display: "none" };
+          //   }
+          //   if (routeName === "detail") {
+          //     return { display: "none" };
+          //   }
+          // })(),
         }}
       />
     </BottomTab.Navigator>

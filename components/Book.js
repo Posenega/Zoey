@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
+import Categories from "../constants/Categories";
 import { getThemeColor } from "../constants/Colors";
 import Badge from "./Badge";
 
@@ -37,7 +38,10 @@ function Book(props) {
             color={props.color}
             backgroundColor={props.backgroundColor}
           >
-            {props.category}
+            {
+              Categories.find((category) => category.value == props.category)
+                .label
+            }
           </Badge>
         </View>
       </View>

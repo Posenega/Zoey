@@ -17,6 +17,14 @@ function ProfileScreen(props) {
 
   useEffect(() => {
     dispatch(fetchUserBooks());
+    props.navigation.setOptions({
+      headerRight: () => (
+        <SettingsButton
+          color={getThemeColor("text", props.theme)}
+          onPress={() => props.navigation.navigate("settings")}
+        />
+      ),
+    });
     // dispatch(getUser(userId));
   }, []);
 
@@ -30,13 +38,6 @@ function ProfileScreen(props) {
   return (
     <View style={SharedStyles.screen}>
       <View style={styles.header}>
-        <View style={styles.topHeader}>
-          <Text style={styles.headerText}>Profile</Text>
-          <SettingsButton
-            color={getThemeColor("text", props.theme)}
-            onPress={() => props.navigation.navigate("settings")}
-          />
-        </View>
         <View style={styles.userInfo}>
           {imageUrl ? (
             <Image
@@ -72,6 +73,11 @@ function ProfileScreen(props) {
     </View>
   );
 }
+
+export const profileScreenOptions = {
+  headerTitle: "Profile",
+};
+
 const getStyles = (theme) =>
   StyleSheet.create({
     header: {

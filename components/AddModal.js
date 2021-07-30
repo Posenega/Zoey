@@ -1,18 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Modalize } from "react-native-modalize";
 import { getThemeColor } from "../constants/Colors";
 import { useForm } from "react-hook-form";
 import { addBookFinish } from "../store/actions/books";
-import { addRef, modalOpen, modalClose } from "../store/actions/addBookModal";
+import {
+  addRef,
+  modalOpen,
+  modalClose,
+  modalSetState,
+} from "../store/actions/addBookModal";
 import AddBook from "./Modal/AddBook";
 import CustomButton from "./CustomButton";
 import AddPackage from "./Modal/AddPackage";
 
 function AddModal(props) {
   const addBookStatus = useSelector((state) => state.books.addBookStatus);
-  const [modalState, setModalState] = useState("");
+  const modalState = useSelector((state) => state.addBookModal.modalState);
+
   const { reset } = useForm();
   const modalizeRef = useRef(null);
   const dispatch = useDispatch();
@@ -28,20 +34,15 @@ function AddModal(props) {
       dispatch(addBookFinish());
     }
   }, [addBookStatus]);
-  let currentState;
-  if (modalState === "book") {
-    currentState = <AddBook />;
-  } else if (modalState === "package") {
-    currentState = <AddPackage />;
-  }
+
   return (
     <Modalize
       modalHeight={600}
       alwaysOpen={addBookStatus === "LOADING"}
       onOpened={() => dispatch(modalOpen())}
       onClosed={() => {
-        reset();
-        setModalState("");
+        // reset();
+        dispatch(modalSetState(null));
         dispatch(modalClose());
       }}
       handlePosition="inside"
@@ -53,25 +54,23 @@ function AddModal(props) {
       }}
       ref={modalizeRef}
     >
-      <View style={modalState === "" ? styles.mainContainer : null}>
+      {modalState === "book" ? (
+        <AddBook />
+      ) : modalState === "package" ? (
+        <AddPackage />
+      ) : (
         <View style={styles.selector}>
-          {modalState !== "" ? (
-            currentState
-          ) : (
-            <>
-              <CustomButton
-                containerStyle={{ marginRight: 15 }}
-                onPress={() => setModalState("book")}
-              >
-                Book
-              </CustomButton>
-              <CustomButton onPress={() => setModalState("package")}>
-                Package
-              </CustomButton>
-            </>
-          )}
+          <CustomButton
+            containerStyle={{ marginRight: 15 }}
+            onPress={() => dispatch(modalSetState("book"))}
+          >
+            Book
+          </CustomButton>
+          <CustomButton onPress={() => dispatch(modalSetState("package"))}>
+            Package
+          </CustomButton>
         </View>
-      </View>
+      )}
     </Modalize>
   );
 }
@@ -84,14 +83,11 @@ export default connect(
 )(AddModal);
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    height: 600,
-  },
   selector: {
+    height: 600,
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
-    width: "100%",
+    flex: 1,
     flexDirection: "row",
   },
 });

@@ -11,51 +11,48 @@ export default function Options({
   style,
 }) {
   return (
-    <ScrollView
-      style={{ ...styles.options, ...style }}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ justifyContent: "center" }}
-    >
-      {items.map((item) => {
-        return (
-          <Option
-            key={item.value}
-            value={
-              !multipleAllowed
-                ? item.value === value
-                : value.includes(item.value)
-            }
-            onChange={() => {
-              if (!multipleAllowed) {
-                if (item.value === value) {
-                  onChange("");
-                }
-                onChange(item.value);
-              } else {
-                if (!Array.isArray(value)) {
-                  const oldValue = value;
-                  if (!oldValue) {
-                    value = [];
-                  }
-                  value = [oldValue];
-                }
-                const index = value.indexOf(item.value);
-                if (index >= 0) {
-                  value.splice(index, 1);
-                } else {
-                  value.push(item.value);
-                }
-
-                onChange([...value]);
+    <View style={{ ...styles.options, ...style }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {items.map((item) => {
+          return (
+            <Option
+              key={item.value}
+              value={
+                !multipleAllowed
+                  ? item.value === value
+                  : value.includes(item.value)
               }
-            }}
-          >
-            {item.label}
-          </Option>
-        );
-      })}
-    </ScrollView>
+              onChange={() => {
+                if (!multipleAllowed) {
+                  if (item.value === value) {
+                    onChange("");
+                  }
+                  onChange(item.value);
+                } else {
+                  if (!Array.isArray(value)) {
+                    const oldValue = value;
+                    if (!oldValue) {
+                      value = [];
+                    }
+                    value = [oldValue];
+                  }
+                  const index = value.indexOf(item.value);
+                  if (index >= 0) {
+                    value.splice(index, 1);
+                  } else {
+                    value.push(item.value);
+                  }
+
+                  onChange([...value].filter(Boolean));
+                }
+              }}
+            >
+              {item.label}
+            </Option>
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 }
 

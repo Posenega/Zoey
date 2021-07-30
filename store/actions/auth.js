@@ -36,6 +36,7 @@ const authUser = (
     })
     .then((res) => {
       const { token, email, firstName, lastName, userId, imageUrl } = res.data;
+
       SecureStore.setItemAsync(
         "userData",
         JSON.stringify({
@@ -63,9 +64,10 @@ const authUser = (
     .catch((e) => {
       dispatch(authStopLoading());
       if (setError) {
-        setError(authMode === "SIGN_UP" ? "number" : "password", {
+        console.log(setError);
+        setError(authMode === "SIGN_UP" ? "city" : "password", {
           type: "server",
-          message: e.response.data?.message || "Unknown error has occured.",
+          message: e.response?.data?.message || "Unknown error has occured.",
         });
       }
     });
@@ -119,7 +121,7 @@ export const signupUser = (
 
 export const loginUser = (email, password, setError) => {
   return (dispatch, getState) => {
-    authUser("LOG_IN", dispatch, null, null, email, password, setError);
+    authUser("LOG_IN", dispatch, null, null, email, password, null, setError);
   };
 };
 

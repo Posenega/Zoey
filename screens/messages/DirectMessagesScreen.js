@@ -43,8 +43,6 @@ export default function DirectMessagesScreen(props) {
     };
   }, []);
 
-  useEffect(() => {}, [socket, cId]);
-
   const { userId, chatId } = props.route.params;
   const chat = useSelector((state) =>
     state.chats.myChats.find((chat) => {
@@ -104,7 +102,7 @@ export default function DirectMessagesScreen(props) {
               style={styles.composerContainer}
             >
               <View>
-                <MessageComposer chatId={chatId} socket={socket} />
+                <MessageComposer chatId={cId} socket={socket} />
               </View>
             </KeyboardAvoidingView>
           </View>

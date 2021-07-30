@@ -82,13 +82,21 @@ export default function App() {
 
   setCustomText({ style: { fontFamily: "rubik" } });
 
-  const rootReducer = combineReducers({
+  const appReducer = combineReducers({
     books: booksReducer,
     addBookModal: addBookModalReducer,
     auth: authReducer,
     chats: chatsReducer,
     themes: themesReducer,
   });
+
+  const rootReducer = (state, action) => {
+    if (action.type === "LOGOUT") {
+      const { themes } = state;
+      state = { themes };
+    }
+    return appReducer(state, action);
+  };
 
   const store = createStore(
     rootReducer,

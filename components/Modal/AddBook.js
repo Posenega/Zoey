@@ -16,6 +16,7 @@ import { requestAddBook } from "../../store/actions/books";
 import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
+import Categories from "../../constants/Categories";
 
 function AddBook(props) {
   const styles = getStyles(props.theme);
@@ -325,10 +326,7 @@ function AddBook(props) {
             render={({ field: { onChange, onBlur, value } }) => (
               <DropDownMenu
                 text="Select a category"
-                items={[
-                  { label: "Technology", value: "Technology" },
-                  { label: "Science", value: "Science" },
-                ]}
+                items={Categories}
                 onBlur={onBlur}
                 value={value}
                 onChange={onChange}

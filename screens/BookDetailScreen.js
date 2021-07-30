@@ -43,9 +43,8 @@ function BookDetailScreen(props) {
 
   useEffect(() => {
     if (isChatting && !initialIsChatting.current) {
-      props.navigation.navigate("Messages", {
-        screen: "chatRoom",
-        params: { userId: displayedBook.creator },
+      props.navigation.navigate("chatRoom", {
+        userId: displayedBook.creator,
       });
     }
   }, [isChatting]);
@@ -182,9 +181,8 @@ function BookDetailScreen(props) {
             <TouchableOpacity
               onPress={() => {
                 if (isChatting) {
-                  props.navigation.navigate("Messages", {
-                    screen: "chatRoom",
-                    params: { userId: displayedBook.creator },
+                  props.navigation.navigate("chatRoom", {
+                    userId: displayedBook.creator,
                   });
                 } else {
                   dispatch(requestAddChat(displayedBook.creator));
