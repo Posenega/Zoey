@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Categories from "../constants/Categories";
+import Grades from "../constants/Grades";
 import { getThemeColor } from "../constants/Colors";
 import Badge from "./Badge";
 
@@ -33,15 +34,12 @@ function Book(props) {
           <Text numberOfLines={1} style={styles.bookAuthor}>
             {props.grade ? props.grade : props.author}
           </Text>
-          <Badge
-            category={props.category}
-            color={props.color}
-            backgroundColor={props.backgroundColor}
-          >
-            {
-              Categories.find((category) => category.value == props.category)
-                .label
-            }
+
+          <Badge color="white" backgroundColor="red">
+            {!props.isPackage
+              ? Categories.find((category) => category.value == props.category)
+                  .label
+              : "Package"}
           </Badge>
         </View>
       </View>

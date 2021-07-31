@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -22,12 +23,12 @@ const MessageInfoContainer = (props) => {
         <View style={styles.profileMessageContainer}>
           <View style={styles.profilePictureContainer}>
             <View style={styles.profilePicture}>
-              {props.imageUrl ? (
+              {props.userImage ? (
                 <Image
                   resizeMode="cover"
                   style={{ flex: 1 }}
                   source={{
-                    uri: props.imageUrl,
+                    uri: `${axios.defaults.baseURL}/${props.userImage}`,
                   }}
                 />
               ) : (
@@ -38,8 +39,7 @@ const MessageInfoContainer = (props) => {
           <View style={styles.discussionInfo}>
             <Text style={styles.userName}>{props.name}</Text>
             <Text numberOfLines={2} style={styles.lastMessage}>
-              Is your book still available? Is your book still available? Is
-              your book still available?
+              {props.lastMessageText || ""}
             </Text>
           </View>
           <View style={styles.recentInfo}>

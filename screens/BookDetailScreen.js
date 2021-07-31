@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useSelector, useDispatch, connect } from "react-redux";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+
+import { useSelector, useDispatch, connect, useStore } from "react-redux";
 import Badge from "../components/Badge";
 import MessageButton from "../components/Icons/MessageButton";
 import Colors, { getThemeColor } from "../constants/Colors";
@@ -21,24 +29,41 @@ import { addChat, requestAddChat } from "../store/actions/chats";
 function BookDetailScreen(props) {
   const styles = getStyles(props.theme);
   const id = props.route.params.id;
-  const addBookModalRef = useSelector((state) => state.addBookModal.ref);
-  const dispatch = useDispatch();
-  const displayedBook = useSelector((state) =>
-    state.books.books.find((book) => book?._id === id)
-  );
-  const userId = useSelector((state) => state.auth.userId);
-  const isChatting = useSelector((state) => {
-    return (
-      state.chats.myChats.findIndex((chat) => {
-        return chat.userId === displayedBook.creator;
-      }) >= 0
-    );
-  });
+  const { getState, subscribe } = useStore();
 
-  const initialIsChatting = useRef(isChatting);
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state) => state.auth.userId);
+  const [displayedBook, setDisplayedBook] = useState();
+  const [isFavorite, setIsFavorite] = useState();
+  const [isChatting, setIsChatting] = useState(null);
+
+  const initialIsChatting = useRef();
 
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
+  }, []);
+
+  const unsubscribe = useRef();
+
+  useEffect(() => {
+    unsubscribe.current = subscribe(() => {
+      const state = getState();
+
+      const book = state.books.books.find((book) => book?._id === id);
+      setDisplayedBook(book);
+      setIsFavorite(state.books.favoriteBooks.some((b) => b?._id === book._id));
+      const chatting =
+        state.chats.myChats.findIndex((chat) => {
+          return chat.userId === book.creator;
+        }) >= 0;
+
+      if (initialIsChatting.current === undefined) {
+        initialIsChatting.current = chatting;
+      }
+      setIsChatting(chatting);
+    });
+    return unsubscribe.current;
   }, []);
 
   useEffect(() => {
@@ -48,9 +73,6 @@ function BookDetailScreen(props) {
       });
     }
   }, [isChatting]);
-  const isFavorite = useSelector((state) =>
-    state.books.favoriteBooks.some((book) => book?._id === displayedBook._id)
-  );
 
   const bookType = () => {
     if (displayedBook.type === "sell") {
@@ -62,73 +84,79 @@ function BookDetailScreen(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.imageContainer}>
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            position: "absolute",
-            zIndex: 1,
-            left: 10,
-            top: 50,
-          }}
-        >
-          <BackButton
-            onPress={() => props.navigation.goBack()}
-            size={40}
-            color="white"
-          />
-        </View>
-        <Image
-          style={styles.bluredImage}
-          resizeMode="cover"
-          blurRadius={8}
-          source={{
-            uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
-          }}
-        />
-        <View style={styles.image}>
-          <Image
-            style={{ flex: 1 }}
-            source={{
-              uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
-            }}
-          />
-        </View>
-      </View>
-      <View style={styles.detailsContainer}>
-        <View style={styles.headerContainer}>
-          <View style={{ flex: 6 }}>
-            <Text numberOfLines={2} style={styles.title}>
-              {displayedBook.title}
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(
-                isFavorite
-                  ? requestRemoveFavoriteBook(id)
-                  : requestAddFavoriteBook(id)
-              );
-            }}
-          >
-            <FavoriteButton
-              size={20}
-              color={isFavorite ? "red" : getThemeColor("idle", props.theme)}
+      {displayedBook && isFavorite !== null ? (
+        <>
+          <View style={styles.imageContainer}>
+            <View
+              style={{
+                width: 40,
+                height: 40,
+                position: "absolute",
+                zIndex: 1,
+                left: 10,
+                top: 50,
+              }}
+            >
+              <BackButton
+                onPress={() => props.navigation.goBack()}
+                size={40}
+                color="white"
+              />
+            </View>
+            <Image
+              style={styles.bluredImage}
+              resizeMode="cover"
+              blurRadius={8}
+              source={{
+                uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
+              }}
             />
-          </TouchableOpacity>
-          {userId === displayedBook.creator ? (
-            <View style={{ marginLeft: 15, flexDirection: "row" }}>
+            <View style={styles.image}>
+              <Image
+                style={{ flex: 1 }}
+                source={{
+                  uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.detailsContainer}>
+            <View style={styles.headerContainer}>
+              <View style={{ flex: 6 }}>
+                <Text numberOfLines={2} style={styles.title}>
+                  {displayedBook.title}
+                </Text>
+              </View>
               <TouchableOpacity
                 onPress={() => {
                   dispatch(
-                    deleteBook(displayedBook._id, props.navigation.goBack)
+                    isFavorite
+                      ? requestRemoveFavoriteBook(id)
+                      : requestAddFavoriteBook(id)
                   );
                 }}
               >
-                <DeleteButton color={getThemeColor("idle", props.theme)} />
+                <FavoriteButton
+                  size={20}
+                  color={
+                    isFavorite ? "red" : getThemeColor("idle", props.theme)
+                  }
+                />
               </TouchableOpacity>
-              {/* <TouchableOpacity
+              {userId === displayedBook.creator ? (
+                <View style={{ marginLeft: 15, flexDirection: "row" }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      unsubscribe.current();
+
+                      dispatch(deleteBook(displayedBook._id)).then(() =>
+                        props.navigation.goBack()
+                      );
+                    }}
+                  >
+                    <DeleteButton color={getThemeColor("idle", props.theme)} />
+                  </TouchableOpacity>
+                  {/* <TouchableOpacity
                 onPress={() => {
                   dispatch(modalSetEditMode(displayedBook));
                   addBookModalRef?.current?.open();
@@ -136,67 +164,82 @@ function BookDetailScreen(props) {
                 style={{ marginLeft: 15 }}>
                 <EditButton />
               </TouchableOpacity> */}
+                </View>
+              ) : null}
             </View>
-          ) : null}
-        </View>
-        <Text numberOfLines={1} style={styles.author}>
-          {displayedBook.author}
-        </Text>
-        <View style={{ flexDirection: "row", marginBottom: 10 }}>
-          {displayedBook.isPackage && (
-            <Badge
-              style={styles.badge}
-              color={getThemeColor("primary", props.theme)}
-              backgroundColor="#FFF0C1"
-            >
-              Package
-            </Badge>
-          )}
-          <Badge
-            style={styles.badge}
-            color={getThemeColor("primary", props.theme)}
-            backgroundColor="#FFF0C1"
-          >
-            {bookType()}
-          </Badge>
-          <Badge
-            style={styles.badge}
-            color={getThemeColor("primary", props.theme)}
-            backgroundColor="#FFF0C1"
-          >
-            {displayedBook.condition}
-          </Badge>
-        </View>
-        {displayedBook.categories.length > 1 && (
-          <Text>Categories: {displayedBook.categories.join(", ")}</Text>
-        )}
-        <Text style={styles.description}>{displayedBook.description}</Text>
-        <View style={styles.footerContainer}>
-          {displayedBook.type === "sell" && displayedBook.price && (
-            <View style={styles.price}>
-              <Text>{displayedBook.price + " L.L"}</Text>
+            <Text numberOfLines={1} style={styles.author}>
+              {displayedBook.author}
+            </Text>
+            <View style={{ flexDirection: "row", marginBottom: 10 }}>
+              {displayedBook.isPackage && (
+                <Badge
+                  style={styles.badge}
+                  color={getThemeColor("primary", props.theme)}
+                  backgroundColor="#FFF0C1"
+                >
+                  Package
+                </Badge>
+              )}
+              {displayedBook.isForSchool && (
+                <Badge
+                  style={styles.badge}
+                  color={getThemeColor("primary", props.theme)}
+                  backgroundColor="#FFF0C1"
+                >
+                  For School
+                </Badge>
+              )}
+              <Badge
+                style={styles.badge}
+                color={getThemeColor("primary", props.theme)}
+                backgroundColor="#FFF0C1"
+              >
+                {bookType()}
+              </Badge>
+              <Badge
+                style={styles.badge}
+                color={getThemeColor("primary", props.theme)}
+                backgroundColor="#FFF0C1"
+              >
+                {displayedBook.condition}
+              </Badge>
             </View>
-          )}
-          {displayedBook.creator !== userId && (
-            <TouchableOpacity
-              onPress={() => {
-                if (isChatting) {
-                  props.navigation.navigate("chatRoom", {
-                    userId: displayedBook.creator,
-                  });
-                } else {
-                  dispatch(requestAddChat(displayedBook.creator));
-                }
-              }}
-            >
-              <View style={styles.messageContainer}>
-                <MessageButton size={20} color="white" />
-                <Text style={styles.message}>Messages</Text>
-              </View>
-            </TouchableOpacity>
-          )}
+            {displayedBook.categories.length > 1 && (
+              <Text>Categories: {displayedBook.categories.join(", ")}</Text>
+            )}
+            <Text style={styles.description}>{displayedBook.description}</Text>
+            <View style={styles.footerContainer}>
+              {displayedBook.type === "sell" && displayedBook.price && (
+                <View style={styles.price}>
+                  <Text>{displayedBook.price + " L.L"}</Text>
+                </View>
+              )}
+              {displayedBook.creator !== userId && (
+                <TouchableOpacity
+                  onPress={() => {
+                    if (isChatting) {
+                      props.navigation.navigate("chatRoom", {
+                        userId: displayedBook.creator,
+                      });
+                    } else {
+                      dispatch(requestAddChat(displayedBook.creator));
+                    }
+                  }}
+                >
+                  <View style={styles.messageContainer}>
+                    <MessageButton size={20} color="white" />
+                    <Text style={styles.message}>Messages</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </>
+      ) : (
+        <View style={styles.center}>
+          <ActivityIndicator />
         </View>
-      </View>
+      )}
     </View>
   );
 }
@@ -212,6 +255,11 @@ const getStyles = (theme) =>
       justifyContent: "center",
       alignItems: "center",
       marginBottom: -20,
+    },
+    center: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
     },
     detailsContainer: {
       flex: 1.3,

@@ -58,12 +58,14 @@ const booksReducer = (state = initialState, action) => {
         condition: action.condition,
         isForSchool: action.isForSchool,
         grade: action.grade,
+        isPackage: action.isPackage,
       };
 
       return {
         ...state,
         books: [toBeAddedBook, ...state.books],
         userBooks: [toBeAddedBook, ...state.userBooks],
+        filteredBooks: [toBeAddedBook, ...state.filteredBooks],
         addBookStatus: "SUCCESS",
       };
     case ADD_BOOK_FINISH:
@@ -120,10 +122,25 @@ const booksReducer = (state = initialState, action) => {
           ) {
             return false;
           }
+          if (action.otherFilters.includes("Package") && !book.isPackage) {
+            return false;
+          }
+          if (action.otherFilters.includes("For School") && !book.isForSchool) {
+            return false;
+          }
+          if (action.otherFilters.includes("New") && book.condition !== "new") {
+            return false;
+          }
+          if (
+            action.otherFilters.includes("Used") &&
+            book.condition !== "used"
+          ) {
+            return false;
+          }
 
           return true;
         }),
-        isFiltering: !!action.searchTerm,
+        isSearching: !!action.searchTerm,
       };
 
     case FETCH_USER_BOOKS_START:
@@ -137,13 +154,15 @@ const booksReducer = (state = initialState, action) => {
     case FETCH_USER_BOOKS_FAILURE:
       return { ...state, isLoading: false, error: action.payload };
     case DELETE_BOOK_SUCCESS:
+      const removeByActionBookId = (books) =>
+        books.filter((book) => book._id !== action.bookId);
+
       return {
         ...state,
-        books: state.books.filter((book) => book._id !== action.bookId),
-        favoriteBooks: state.favoriteBooks.filter(
-          (book) => book._id !== action.bookId
-        ),
-        userBooks: state.userBooks.filter((book) => book._id !== action.bookId),
+        books: removeByActionBookId(state.books),
+        favoriteBooks: removeByActionBookId(state.favoriteBooks),
+        filteredBooks: removeByActionBookId(state.filteredBooks),
+        userBooks: removeByActionBookId(state.userBooks),
       };
     default:
       return state;

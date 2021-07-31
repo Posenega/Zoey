@@ -74,6 +74,7 @@ export default function DirectMessagesScreen(props) {
         <DirectMessageHeader
           navigation={props.navigation}
           username={chat.username}
+          userImage={chat.userImage}
         />
         {chat.isLoading ? (
           <View style={styles.center}>

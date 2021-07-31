@@ -62,21 +62,64 @@ export const fetchFavoriteBooks = () => {
   };
 };
 
-export const requestAddBook = (data) => {
-  return (dispatch, getState) => {
-    dispatch(addBookStart());
-    const token = getState().auth.token;
+export const requestAddBook = ({
+  title,
+  description,
+  author,
+  localImageUrl,
+  type,
+  categories,
+  price,
+  condition,
+  isForSchool,
+  grade,
+  numberOfBooks,
+  isPackage,
+}) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(addBookStart());
+      const token = getState().auth.token;
 
-    axios({
-      method: "post",
-      url: "/api/books",
-      data: data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => {
+      let formData = new FormData();
+
+      let filename = localImageUrl.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let fileType = match ? `image/${match[1]}` : `image`;
+
+      formData.append("title", title);
+      formData.append("description", description);
+
+      formData.append("imageUrl", {
+        uri: localImageUrl,
+        name: filename,
+        type: fileType,
+      });
+      formData.append("type", type);
+      formData.append(
+        "categories",
+        JSON.stringify(Array.isArray(categories) ? categories : [categories])
+      );
+
+      formData.append("condition", condition);
+      formData.append("isForSchool", isForSchool);
+      formData.append("isPackage", isPackage);
+      isPackage && formData.append("numberOfBooks", numberOfBooks);
+      isForSchool && formData.append("grade", grade);
+      type === "sell" && formData.append("price", price);
+      !isForSchool && formData.append("author", author);
+
+      const response = await axios({
+        method: "post",
+        url: "/api/books",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      const onResponse = (response) => {
         const {
           title,
           description,
@@ -90,6 +133,7 @@ export const requestAddBook = (data) => {
           condition,
           isForSchool,
           grade,
+          isPackage,
         } = response.data.book;
 
         dispatch(
@@ -105,11 +149,15 @@ export const requestAddBook = (data) => {
             id,
             condition,
             isForSchool,
-            grade
+            grade,
+            isPackage
           )
         );
-      })
-      .catch((e) => console.log(e));
+      };
+      onResponse(response);
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
 
@@ -129,7 +177,8 @@ export const addBookSuccess = (
   id,
   condition,
   isForSchool,
-  grade
+  grade,
+  isPackage
 ) => {
   return {
     type: ADD_BOOK_SUCCESS,
@@ -145,6 +194,7 @@ export const addBookSuccess = (
     condition,
     isForSchool,
     grade,
+    isPackage,
   };
 };
 
@@ -196,11 +246,12 @@ export const removeFavoriteBookSuccess = (bookId) => {
   return { type: REMOVE_FAVORITE_BOOK_SUCCESS, bookId };
 };
 
-export const filterBooks = ({ searchTerm, categories }) => {
+export const filterBooks = ({ searchTerm, categories, otherFilters }) => {
   return {
     type: FILTER_BOOKS,
     searchTerm,
     categories,
+    otherFilters,
   };
 };
 
@@ -227,17 +278,14 @@ export const fetchUserBooks = () => {
   };
 };
 
-export const deleteBook = (bookId, goBack) => {
-  return (dispatch, getState) => {
+export const deleteBook = (bookId) => {
+  return async (dispatch, getState) => {
     const token = getState().auth.token;
-    axios
-      .delete(`/api/books/${bookId}`, {
-        headers: { Authorization: "Bearer " + token },
-      })
-      .then((response) => {
-        goBack();
-        setTimeout(() => dispatch(deleteBookSuccess(bookId)), 1000);
-      });
+    await axios.delete(`/api/books/${bookId}`, {
+      headers: { Authorization: "Bearer " + token },
+    });
+    dispatch(deleteBookSuccess(bookId));
+    return Promise.resolve();
   };
 };
 

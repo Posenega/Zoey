@@ -32,6 +32,7 @@ export default chatsReducer = (state = initialState, action) => {
             _id: action.chatId,
             userId: action.userId,
             username: action.username,
+            userImage: action.userImage,
             messages: [],
             isLoading: false,
           },

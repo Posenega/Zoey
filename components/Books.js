@@ -19,6 +19,8 @@ export default function Books({ books, navigation, isHorizontal }) {
         author={book.author}
         navigation={navigation}
         grade={book.grade}
+        isPackage={book.isPackage}
+        isForSchool={book.isForSchool}
       />
     );
     if (isHorizontal) {

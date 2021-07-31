@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import * as Progress from "react-native-progress";
 import CustomTextInput from "../../components/CustomTextInput";
@@ -92,7 +93,7 @@ function CreateAccount(props) {
         </View>
         {currentStep}
         {step === 4 ? null : (
-          <TouchableWithoutFeedback onPress={handleSubmit(onSubmit)}>
+          <TouchableOpacity onPress={handleSubmit(onSubmit)}>
             <View style={styles.signInButton}>
               {isLoading ? (
                 <ActivityIndicator size="small" color="white" />
@@ -103,7 +104,7 @@ function CreateAccount(props) {
                 </>
               )}
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         )}
       </View>
     </TouchableWithoutFeedback>

@@ -9,7 +9,7 @@ export const SET_CHATS = "SET_CHATS";
 export const CHATS_SET_LOADING = "CHATS_SET_LOADING";
 export const CHATS_STOP_LOADING = "CHATS_STOP_LOADING";
 
-export const fetchChats = (query = "") => {
+export const fetchChats = () => {
   return (dispatch, getState) => {
     dispatch(chatsSetLoading());
     const token = getState().auth.token;
@@ -25,6 +25,7 @@ export const fetchChats = (query = "") => {
                 _id: chat._id,
                 userId: chat.user._id,
                 username: chat.user.firstName + " " + chat.user.lastName,
+                userImage: chat.user.imageUrl,
                 messages: chat.messages,
               };
             })
@@ -90,13 +91,13 @@ export const requestAddChat = (secondUserId) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         const dbChat = res.data.chat;
         dispatch(
           addChat(
             dbChat._id,
             dbChat.user._id,
-            dbChat.user.firstName + " " + dbChat.user.lastName
+            dbChat.user.firstName + " " + dbChat.user.lastName,
+            dbChat.user.imageUrl
           )
         );
       })
@@ -104,8 +105,8 @@ export const requestAddChat = (secondUserId) => {
   };
 };
 
-export const addChat = (chatId, userId, username) => {
-  return { type: ADD_CHAT, chatId, userId, username };
+export const addChat = (chatId, userId, username, userImage) => {
+  return { type: ADD_CHAT, chatId, userId, username, userImage };
 };
 
 export const addMessage = (chatId, messageText, isMine, messageId) => {

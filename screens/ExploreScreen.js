@@ -16,11 +16,11 @@ import SharedStyles from "../constants/SharedStyles";
 import CustomTextInput from "../components/CustomTextInput";
 import Colors, { getThemeColor } from "../constants/Colors";
 import FilterButton from "../components/Icons/FilterButton";
-import { fetchBooks, filterBooks } from "../store/actions/books";
+import { fetchBooks } from "../store/actions/books";
 import Options from "../components/Options";
-import Categories from "../constants/Categories";
+
+import BookFilters from "../components/BookFilters";
 function ExploreScreen(props) {
-  const [categories, setCategories] = useState([]);
   const styles = getStyles(props.theme);
   useEffect(() => {
     dispatch(fetchBooks());
@@ -31,7 +31,7 @@ function ExploreScreen(props) {
     return state.books.filteredBooks;
   });
   const isSearching = useSelector((state) => {
-    return state.books.isFiltering;
+    return state.books.isSearching;
   });
   const dispatch = useDispatch();
 
@@ -75,26 +75,7 @@ function ExploreScreen(props) {
             </TouchableOpacity>
           </View>
         </View>
-
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-            height: fadeAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 40],
-            }),
-          }}
-        >
-          <Options
-            multipleAllowed
-            onChange={(categories) => {
-              setCategories(categories);
-              dispatch(filterBooks({ categories }));
-            }}
-            value={categories}
-            items={Categories}
-          />
-        </Animated.View>
+        <BookFilters fadeAnim={fadeAnim} />
 
         {!isSearching && (
           <View style={styles.trendingNow}>

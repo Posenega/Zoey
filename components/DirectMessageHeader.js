@@ -1,12 +1,13 @@
 import React from "react";
+import axios from "axios";
 import { View, Text, Image, StyleSheet } from "react-native";
-import Colors from "../constants/Colors";
+
 import ArrowButton from "./Icons/ArrowButton";
 import MenuButton from "./Icons/MenuButton";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
 
-function DirectMessageHeader({ username, navigation, theme }) {
+function DirectMessageHeader({ username, navigation, theme, userImage }) {
   const styles = getStyles(theme);
   return (
     <View style={styles.header}>
@@ -20,12 +21,17 @@ function DirectMessageHeader({ username, navigation, theme }) {
       </View>
       <View style={styles.imageContainer}>
         <View style={styles.image}>
-          <Image
-            style={{ flex: 1 }}
-            source={{
-              uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Images.app.jb.jpg/230px-Images.app.jb.jpg",
-            }}
-          />
+          {userImage ? (
+            <Image
+              resizeMode="cover"
+              style={{ flex: 1 }}
+              source={{
+                uri: `${axios.defaults.baseURL}/${userImage}`,
+              }}
+            />
+          ) : (
+            <IconPlaceholder />
+          )}
         </View>
       </View>
       <View style={styles.reveiverInfo}>

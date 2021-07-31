@@ -43,11 +43,11 @@ export default function Options({
                     value.push(item.value);
                   }
 
-                  onChange([...value].filter(Boolean));
+                  onChange([...value].filter(Boolean), item.value);
                 }
               }}
             >
-              {item.label}
+              {item.label || item.value}
             </Option>
           );
         })}
