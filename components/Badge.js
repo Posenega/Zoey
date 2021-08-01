@@ -17,10 +17,10 @@ const Badge = ({
 
   if (category === "Technology") {
     catColor = getThemeColor("primary", theme);
-    catBackgroundColor = "#FFF0C1";
+    catBackgroundColor = getThemeColor("badgeBackground", theme);
   } else if (category === "Science") {
     catColor = getThemeColor("primary", theme);
-    catBackgroundColor = "#FFF0C1";
+    catBackgroundColor = getThemeColor("badgeBackground", theme);
   } else {
     catColor = "white";
     catBackgroundColor = "red";

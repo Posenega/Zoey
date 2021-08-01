@@ -1,4 +1,3 @@
-import { BOOKS } from "../../data/dummy_data";
 import {
   FETCH_BOOKS_START,
   FETCH_BOOKS_SUCCESS,
@@ -122,20 +121,28 @@ const booksReducer = (state = initialState, action) => {
           ) {
             return false;
           }
-          if (action.otherFilters.includes("Package") && !book.isPackage) {
-            return false;
-          }
-          if (action.otherFilters.includes("For School") && !book.isForSchool) {
-            return false;
-          }
-          if (action.otherFilters.includes("New") && book.condition !== "new") {
-            return false;
-          }
-          if (
-            action.otherFilters.includes("Used") &&
-            book.condition !== "used"
-          ) {
-            return false;
+          if (action.otherFilters) {
+            if (action.otherFilters.includes("Package") && !book.isPackage) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("For School") &&
+              !book.isForSchool
+            ) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("New") &&
+              book.condition !== "New"
+            ) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("Used") &&
+              book.condition !== "Used"
+            ) {
+              return false;
+            }
           }
 
           return true;

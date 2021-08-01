@@ -10,6 +10,7 @@ import {
 import { connect } from "react-redux";
 import Colors, { getThemeColor } from "../constants/Colors";
 import IconPlaceholder from "./IconPlaceholder";
+import Divider from "./Divider";
 
 const MessageInfoContainer = (props) => {
   const styles = getStyles(props.theme);
@@ -17,15 +18,14 @@ const MessageInfoContainer = (props) => {
     <TouchableWithoutFeedback
       onPress={() =>
         props.navigation.navigate("chatRoom", { chatId: props.chatId })
-      }
-    >
+      }>
       <View style={styles.bigContainer}>
         <View style={styles.profileMessageContainer}>
           <View style={styles.profilePictureContainer}>
             <View style={styles.profilePicture}>
               {props.userImage ? (
                 <Image
-                  resizeMode="cover"
+                  resizeMode='cover'
                   style={{ flex: 1 }}
                   source={{
                     uri: `${axios.defaults.baseURL}/${props.userImage}`,
@@ -49,10 +49,7 @@ const MessageInfoContainer = (props) => {
             </View>
           </View>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={styles.ghostDivider} />
-          <View style={styles.divider} />
-        </View>
+        <Divider />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -121,17 +118,6 @@ const getStyles = (theme) =>
     unreadCount: {
       color: "white",
       fontSize: 16,
-    },
-    ghostDivider: {
-      flex: 1,
-    },
-    divider: {
-      marginTop: 5,
-      marginBottom: 15,
-      height: 1,
-      backgroundColor: "#D9D9D9",
-      flex: 5,
-      flexDirection: "row",
     },
   });
 

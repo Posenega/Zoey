@@ -7,7 +7,9 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
+import Divider from "../components/Divider";
 
 import { useSelector, useDispatch, connect, useStore } from "react-redux";
 import Badge from "../components/Badge";
@@ -75,9 +77,9 @@ function BookDetailScreen(props) {
   }, [isChatting]);
 
   const bookType = () => {
-    if (displayedBook.type === "sell") {
+    if (displayedBook.type === "Sell") {
       return "For sale";
-    } else if (displayedBook.type === "exchange") {
+    } else if (displayedBook.type === "Exchange") {
       return "Exchange";
     }
   };
@@ -168,14 +170,19 @@ function BookDetailScreen(props) {
               ) : null}
             </View>
             <Text numberOfLines={1} style={styles.author}>
-              {displayedBook.author}
+              {displayedBook.author
+                ? displayedBook.author
+                : displayedBook.grade}
             </Text>
             <View style={{ flexDirection: "row", marginBottom: 10 }}>
               {displayedBook.isPackage && (
                 <Badge
                   style={styles.badge}
                   color={getThemeColor("primary", props.theme)}
-                  backgroundColor="#FFF0C1"
+                  backgroundColor={getThemeColor(
+                    "badgeBackground",
+                    props.theme
+                  )}
                 >
                   Package
                 </Badge>
@@ -184,7 +191,10 @@ function BookDetailScreen(props) {
                 <Badge
                   style={styles.badge}
                   color={getThemeColor("primary", props.theme)}
-                  backgroundColor="#FFF0C1"
+                  backgroundColor={getThemeColor(
+                    "badgeBackground",
+                    props.theme
+                  )}
                 >
                   For School
                 </Badge>
@@ -192,20 +202,37 @@ function BookDetailScreen(props) {
               <Badge
                 style={styles.badge}
                 color={getThemeColor("primary", props.theme)}
-                backgroundColor="#FFF0C1"
+                backgroundColor={getThemeColor("badgeBackground", props.theme)}
               >
                 {bookType()}
               </Badge>
               <Badge
                 style={styles.badge}
                 color={getThemeColor("primary", props.theme)}
-                backgroundColor="#FFF0C1"
+                backgroundColor={getThemeColor("badgeBackground", props.theme)}
               >
                 {displayedBook.condition}
               </Badge>
             </View>
             {displayedBook.categories.length > 1 && (
-              <Text>Categories: {displayedBook.categories.join(", ")}</Text>
+              <View>
+                <Text style={styles.categoriText}>
+                  Books Available in This Package:
+                </Text>
+                <Text style={styles.categories}>
+                  {displayedBook.categories
+                    .map((category) => {
+                      return Categories.find((cat) => cat.value === category)
+                        .label;
+                    })
+                    .join(" , ")}
+                </Text>
+
+                <Divider
+                  fullDivider
+                  style={{ marginBottom: 10, marginTop: 10 }}
+                />
+              </View>
             )}
             <Text style={styles.description}>{displayedBook.description}</Text>
             <View style={styles.footerContainer}>

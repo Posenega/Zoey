@@ -1,12 +1,3 @@
-// export default {
-//   primaryColor: '#FFC300',
-//   accentColor: '#2b2b2b',
-//   techTextColors: '#65AEFF',
-//   techBackgroundColor: '#D8EAFF',
-//   scienceTextColor: '#52C55B',
-//   scienceBackgroundColor: '#D4FFD7',
-// };
-
 export const lightColors = {
   primary: "#FFC300",
   text: "#2B2B2B",
@@ -17,6 +8,7 @@ export const lightColors = {
   main: "#FFFFFF",
   inputBorder: "#2B2B2B",
   horizontalLine: "#D9D9D9",
+  badgeBackground: "#FFF0C1",
 };
 
 export const darkColors = {
@@ -29,6 +21,7 @@ export const darkColors = {
   main: "#131313",
   inputBorder: "#3D3D3D",
   horizontalLine: "#404040",
+  badgeBackground: "#473600",
 };
 
 const themes = {

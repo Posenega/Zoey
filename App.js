@@ -20,6 +20,7 @@ import themesReducer from "./store/reducers/theme";
 import { setTheme } from "./store/actions/theme";
 import * as SecureStore from "expo-secure-store";
 import { tryAutoLogin } from "./store/actions/auth";
+import packagesReducer from "./store/reducers/packages";
 
 axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
   .split(":")
@@ -88,6 +89,7 @@ export default function App() {
     auth: authReducer,
     chats: chatsReducer,
     themes: themesReducer,
+    packages: packagesReducer,
   });
 
   const rootReducer = (state, action) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { View, Text, Image, StyleSheet } from "react-native";
-
+import IconPlaceholder from "./IconPlaceholder";
 import ArrowButton from "./Icons/ArrowButton";
 import MenuButton from "./Icons/MenuButton";
 import { connect } from "react-redux";

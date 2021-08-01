@@ -89,6 +89,7 @@ function CreateAccount(props) {
             progress={step / 3}
             width={null}
             borderWidth={0}
+            unfilledColor={getThemeColor("formBackground", props.theme)}
           />
         </View>
         {currentStep}
@@ -138,10 +139,9 @@ const getStyles = (theme) =>
       backgroundColor: getThemeColor("primary", theme),
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 25,
+      marginTop: 20,
       borderRadius: 10,
       flexDirection: "row",
-      justifyContent: "center",
     },
     textSignIn: {
       color: "white",

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -7,17 +7,17 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
-} from 'react-native';
-import SharedStyles from '../constants/SharedStyles';
-import Colors, { getThemeColor } from '../constants/Colors';
-import { useForm, Controller } from 'react-hook-form';
-import ArrowButton from '../components/Icons/ArrowButton';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../store/actions/auth';
-import ImagePicker from '../components/ImagePicker';
-import CustomTextInput from '../components/CustomTextInput';
-import Option from '../components/Option';
-import DropDownMenu from '../components/DropDownMenu';
+} from "react-native";
+import SharedStyles from "../constants/SharedStyles";
+import Colors, { getThemeColor } from "../constants/Colors";
+import { useForm, Controller } from "react-hook-form";
+import ArrowButton from "../components/Icons/ArrowButton";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../store/actions/auth";
+import ImagePicker from "../components/ImagePicker";
+import CustomTextInput from "../components/CustomTextInput";
+import Option from "../components/Option";
+import DropDownMenu from "../components/DropDownMenu";
 
 function AccountScreen(props) {
   const styles = getStyles(props.theme);
@@ -28,7 +28,7 @@ function AccountScreen(props) {
     setError,
     formState: { errors },
   } = useForm();
-  const [localUrl, setLocalUrl] = useState('');
+  const [localUrl, setLocalUrl] = useState("");
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
   const firstName = useSelector((state) => state.auth.firstName);
@@ -41,26 +41,26 @@ function AccountScreen(props) {
     }
     let formData = new FormData();
 
-    let filename = localUrl.split('/').pop();
+    let filename = localUrl.split("/").pop();
     let match = /\.(\w+)$/.exec(filename);
     let fileType = match ? `image/${match[1]}` : `image`;
 
-    localUrl === ''
+    localUrl === ""
       ? null
-      : formData.append('imageUrl', {
+      : formData.append("imageUrl", {
           uri: localUrl,
           name: filename,
           type: fileType,
         });
-    formData.append('id', userId);
-    formData.append('firstName', data.firstName);
-    formData.append('lastName', data.lastName);
+    formData.append("id", userId);
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
     data.oldPassword === undefined
       ? null
-      : formData.append('old_password', data.oldPassword);
+      : formData.append("old_password", data.oldPassword);
     data.newPassword === undefined
       ? null
-      : formData.append('new_password', data.newPassword);
+      : formData.append("new_password", data.newPassword);
 
     dispatch(updateUser(formData, setError, props.navigation.goBack));
     // props.navigation.goBack();
@@ -78,7 +78,7 @@ function AccountScreen(props) {
                 }}
                 back
                 size={24}
-                color={getThemeColor('text', props.theme)}
+                color={getThemeColor("text", props.theme)}
               />
             </View>
             <Text style={styles.topHeaderText}>Account</Text>
@@ -86,12 +86,12 @@ function AccountScreen(props) {
           <View>
             <Controller
               control={control}
-              name='firstName'
+              name="firstName"
               defaultValue={firstName}
-              rules={{ required: 'Please provide a first name.' }}
+              rules={{ required: "Please provide a first name." }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomTextInput
-                  placeholder='First Name'
+                  placeholder="First Name"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -102,12 +102,12 @@ function AccountScreen(props) {
             <View style={{ marginTop: 10 }}>
               <Controller
                 control={control}
-                name='lastName'
+                name="lastName"
                 defaultValue={lastName}
-                rules={{ required: 'Please provide a last name.' }}
+                rules={{ required: "Please provide a last name." }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <CustomTextInput
-                    placeholder='Last Name'
+                    placeholder="Last Name"
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -118,14 +118,14 @@ function AccountScreen(props) {
             </View>
             <Controller
               control={control}
-              name='imageUrl'
+              name="imageUrl"
               defaultValue={null}
               rules={{ required: false }}
               render={({ field: { onChange, value } }) => (
                 <ImagePicker
                   onChange={onChange}
                   value={value}
-                  text='Update profile picture'
+                  text="Update profile picture"
                   aspect={[1, 1]}
                   sendData={useCallback((result) => {
                     setLocalUrl(result);
@@ -133,7 +133,7 @@ function AccountScreen(props) {
                 />
               )}
             />
-            <View
+            {/* <View
               style={{
                 marginTop: 20,
                 marginBottom: -10,
@@ -151,28 +151,28 @@ function AccountScreen(props) {
                   );
                 }}
               />
-            </View>
-            {watch('isStudent') && (
+            </View> */}
+            {watch("isStudent") && (
               <Controller
-                name='grade'
-                initialValue=''
+                name="grade"
+                initialValue=""
                 control={control}
                 render={({ field: { onChange, value } }) => {
                   return (
                     <DropDownMenu
-                      text='Choose Your Grade'
+                      text="Choose Your Grade"
                       onChange={onChange}
                       value={value}
-                      items={[{ label: 'Grade 1', value: 'grade1' }]}
+                      items={[{ label: "Grade 1", value: "grade1" }]}
                     />
                   );
                 }}
               />
             )}
-            <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: 10 }}>
               <Controller
-                name='oldPassword'
-                initialValue=''
+                name="oldPassword"
+                initialValue=""
                 control={control}
                 rules={{
                   required: false,
@@ -183,7 +183,7 @@ function AccountScreen(props) {
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
-                      placeholder='Old Password'
+                      placeholder="Old Password"
                       isPassword
                       error={errors.oldPassword?.message}
                     />
@@ -193,14 +193,14 @@ function AccountScreen(props) {
             </View>
             <View style={{ marginTop: 10 }}>
               <Controller
-                name='newPassword'
-                initialValue=''
+                name="newPassword"
+                initialValue=""
                 control={control}
                 rules={{
                   required: false,
                   minLength: {
                     value: 6,
-                    message: 'Password must be 6 characters long.',
+                    message: "Password must be 6 characters long.",
                   },
                 }}
                 render={({ field: { onChange, onBlur, value } }) => {
@@ -209,7 +209,7 @@ function AccountScreen(props) {
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
-                      placeholder='New Password'
+                      placeholder="New Password"
                       isPassword
                       error={errors.newPassword?.message}
                     />
@@ -219,15 +219,14 @@ function AccountScreen(props) {
             </View>
 
             <TouchableOpacity
-              style={{ width: '100%' }}
-              onPress={handleSubmit(onSubmit)}>
+              style={{ width: "100%" }}
+              onPress={handleSubmit(onSubmit)}
+            >
               <View style={styles.signInButton}>
                 {isLoading ? (
-                  <ActivityIndicator size='small' color='white' />
+                  <ActivityIndicator size="small" color="white" />
                 ) : (
-                  <Text style={styles.textSignIn}>
-                    Update Profile
-                  </Text>
+                  <Text style={styles.textSignIn}>Update Profile</Text>
                 )}
               </View>
             </TouchableOpacity>
@@ -239,38 +238,38 @@ function AccountScreen(props) {
 }
 
 export const accountOptions = {
-  headerTitle: 'Account',
+  headerTitle: "Account",
 };
 
 const getStyles = (theme) =>
   StyleSheet.create({
     header: {
-      paddingTop: '10%',
+      paddingTop: "10%",
       flex: 1,
-      width: '100%',
+      width: "100%",
     },
     topHeader: {
-      flexDirection: 'row',
+      flexDirection: "row",
       height: 55,
-      width: '100%',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
+      width: "100%",
+      justifyContent: "flex-start",
+      alignItems: "center",
     },
     topHeaderText: {
-      fontFamily: 'rubik-bold',
+      fontFamily: "rubik-bold",
       fontSize: 18,
-      color: getThemeColor('text', theme),
+      color: getThemeColor("text", theme),
     },
     headerContent: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       borderTopWidth: 1,
       borderBottomWidth: 1,
-      borderColor: '#d9d9d9',
-      flexDirection: 'row',
+      borderColor: "#d9d9d9",
+      flexDirection: "row",
     },
     imageContainer: {
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     image: {
       height: 60,
@@ -278,25 +277,25 @@ const getStyles = (theme) =>
       borderRadius: 60,
     },
     userInfo: {
-      flexDirection: 'column',
+      flexDirection: "column",
       padding: 10,
       flex: 6,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     welcome: {
-      color: '#999999',
+      color: "#999999",
       fontSize: 12,
     },
     userName: {
       fontSize: 16,
-      fontFamily: 'rubik-medium',
-      color: '#2b2b2b',
+      fontFamily: "rubik-medium",
+      color: "#2b2b2b",
     },
     SignOut: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'flex-end',
-      width: '100%',
+      justifyContent: "center",
+      alignItems: "flex-end",
+      width: "100%",
     },
     body: {
       flex: 3.5,
@@ -307,27 +306,27 @@ const getStyles = (theme) =>
     footer: {
       flex: 0.6,
       borderTopWidth: 1,
-      borderColor: '#d9d9d9',
-      justifyContent: 'center',
-      alignItems: 'center',
+      borderColor: "#d9d9d9",
+      justifyContent: "center",
+      alignItems: "center",
     },
     textFooter: {
-      color: '#999999',
+      color: "#999999",
       fontSize: 10,
       marginVertical: 4,
     },
     signInButton: {
       height: 44,
-      width: '100%',
-      backgroundColor: getThemeColor('primary', theme),
-      justifyContent: 'center',
-      alignItems: 'center',
+      width: "100%",
+      backgroundColor: getThemeColor("primary", theme),
+      justifyContent: "center",
+      alignItems: "center",
       marginTop: 20,
       borderRadius: 10,
-      flexDirection: 'row',
+      flexDirection: "row",
     },
     textSignIn: {
-      color: 'white',
+      color: "white",
       fontSize: 14,
     },
   });

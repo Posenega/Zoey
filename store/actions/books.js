@@ -62,57 +62,16 @@ export const fetchFavoriteBooks = () => {
   };
 };
 
-export const requestAddBook = ({
-  title,
-  description,
-  author,
-  localImageUrl,
-  type,
-  categories,
-  price,
-  condition,
-  isForSchool,
-  grade,
-  numberOfBooks,
-  isPackage,
-}) => {
+export const requestAddBook = (data) => {
   return async (dispatch, getState) => {
     try {
       dispatch(addBookStart());
       const token = getState().auth.token;
 
-      let formData = new FormData();
-
-      let filename = localImageUrl.split("/").pop();
-      let match = /\.(\w+)$/.exec(filename);
-      let fileType = match ? `image/${match[1]}` : `image`;
-
-      formData.append("title", title);
-      formData.append("description", description);
-
-      formData.append("imageUrl", {
-        uri: localImageUrl,
-        name: filename,
-        type: fileType,
-      });
-      formData.append("type", type);
-      formData.append(
-        "categories",
-        JSON.stringify(Array.isArray(categories) ? categories : [categories])
-      );
-
-      formData.append("condition", condition);
-      formData.append("isForSchool", isForSchool);
-      formData.append("isPackage", isPackage);
-      isPackage && formData.append("numberOfBooks", numberOfBooks);
-      isForSchool && formData.append("grade", grade);
-      type === "sell" && formData.append("price", price);
-      !isForSchool && formData.append("author", author);
-
       const response = await axios({
         method: "post",
         url: "/api/books",
-        data: formData,
+        data,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,

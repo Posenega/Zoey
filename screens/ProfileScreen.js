@@ -20,6 +20,7 @@ function ProfileScreen(props) {
     props.navigation.setOptions({
       headerRight: () => (
         <SettingsButton
+          style={{ marginRight: 18 }}
           color={getThemeColor("text", props.theme)}
           onPress={() => props.navigation.navigate("settings")}
         />

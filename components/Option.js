@@ -20,7 +20,7 @@ function Option({ onChange, children, value, theme }) {
           isEnabled
             ? {
                 ...styles.editableContainer,
-                backgroundColor: "#FFF0C1",
+                backgroundColor: getThemeColor("badgeBackground", theme),
               }
             : styles.editableContainer
         }

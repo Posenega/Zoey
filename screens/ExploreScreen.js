@@ -18,20 +18,24 @@ import Colors, { getThemeColor } from "../constants/Colors";
 import FilterButton from "../components/Icons/FilterButton";
 import { fetchBooks } from "../store/actions/books";
 import Options from "../components/Options";
-
 import BookFilters from "../components/BookFilters";
+import { fetchPackages } from "../store/actions/packages";
 function ExploreScreen(props) {
   const styles = getStyles(props.theme);
   useEffect(() => {
+    dispatch(fetchPackages());
     dispatch(fetchBooks());
   }, []);
   const headerHeight = useHeaderHeight();
-
+  const [packageIsSelected, setPackageIsSelected] = useState(false);
   const filteredBooks = useSelector((state) => {
     return state.books.filteredBooks;
   });
   const isSearching = useSelector((state) => {
     return state.books.isSearching;
+  });
+  const packages = useSelector((state) => {
+    return state.packages.packages;
   });
   const dispatch = useDispatch();
 
@@ -62,7 +66,7 @@ function ExploreScreen(props) {
                   dispatch(filterBooks({ searchTerm: text }))
                 }
                 placeholderTextColor="#999999"
-                placeholder="Search a title ..."
+                placeholder="Search a title..."
               />
             </View>
             <TouchableOpacity
@@ -80,16 +84,70 @@ function ExploreScreen(props) {
         {!isSearching && (
           <View style={styles.trendingNow}>
             <Text style={styles.trendingNowText}>Trending Now</Text>
-            <Books
-              isHorizontal
-              navigation={props.navigation}
-              books={filteredBooks}
-            />
+            {filteredBooks.length > 0 ? (
+              <Books
+                isHorizontal
+                navigation={props.navigation}
+                books={filteredBooks}
+              />
+            ) : (
+              <View style={styles.noBooks}>
+                <Text style={styles.noBooksMessages}>
+                  There is no Books Yet
+                </Text>
+                <Text style={styles.noBooksMessages}>
+                  Be the First to add Some!
+                </Text>
+              </View>
+            )}
           </View>
         )}
         <View style={styles.forYou}>
-          {!isSearching && <Text style={styles.forYouText}>For You</Text>}
-          <Books navigation={props.navigation} books={filteredBooks} />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-end",
+            }}
+          >
+            {!isSearching && (
+              <TouchableOpacity onPress={() => setPackageIsSelected(false)}>
+                <Text
+                  style={
+                    packageIsSelected
+                      ? styles.forYouText
+                      : { ...styles.forYouTextSelected, marginRight: 20 }
+                  }
+                >
+                  For You
+                </Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              onPress={() => {
+                setPackageIsSelected(true);
+              }}
+            >
+              <Text
+                style={
+                  packageIsSelected
+                    ? { ...styles.forYouTextSelected, marginRight: 20 }
+                    : styles.forYouText
+                }
+              >
+                Packages
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {filteredBooks.length > 0 ? (
+            <Books navigation={props.navigation} books={filteredBooks} />
+          ) : (
+            <View style={styles.noBooks}>
+              <Text style={styles.noBooksMessages}>There is no Books Yet</Text>
+              <Text style={styles.noBooksMessages}>
+                Be the First to add Some!
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -145,6 +203,13 @@ const getStyles = (theme) =>
       marginTop: 20,
     },
     forYouText: {
+      marginRight: 20,
+      marginBottom: 10,
+      fontFamily: "rubik-bold",
+      fontSize: 14,
+      color: "grey",
+    },
+    forYouTextSelected: {
       marginBottom: 10,
       fontFamily: "rubik-bold",
       fontSize: 16,
@@ -154,6 +219,17 @@ const getStyles = (theme) =>
       flexDirection: "row",
       marginTop: 15,
       paddingLeft: "4.8%",
+    },
+    noBooks: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    noBooksMessages: {
+      color: "#939393",
+      fontSize: 15,
+      letterSpacing: 1,
+      marginBottom: 5,
     },
   });
 

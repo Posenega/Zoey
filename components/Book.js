@@ -35,11 +35,16 @@ function Book(props) {
             {props.grade ? props.grade : props.author}
           </Text>
 
-          <Badge color="white" backgroundColor="red">
-            {!props.isPackage
+          <Badge
+            category={props.category}
+            color={props.color}
+            backgroundColor={props.backgroundColor}
+          >
+            {props.category}
+            {/* {!props.isPackage
               ? Categories.find((category) => category.value == props.category)
                   .label
-              : "Package"}
+              : "Package"} */}
           </Badge>
         </View>
       </View>

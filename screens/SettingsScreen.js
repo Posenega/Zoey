@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -7,21 +7,22 @@ import {
   Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
-} from 'react-native';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import SharedStyles from '../constants/SharedStyles';
-import SettingsButton from '../components/Icons/SettingsButton';
-import ArrowButton from '../components/Icons/ArrowButton';
-import Logout from '../components/Icons/LogoutButton';
-import SettingContainer from '../components/SettingContainer';
-import ProfileButton from '../components/Icons/ProfileButton';
-import ShowValueInput from '../components/Icons/ShowValueInput';
-import LockIcon from '../components/Icons/LockIcon';
-import NotificationIcon from '../components/Icons/NotificationIcon';
-import { logout } from '../store/actions/auth';
-import IconPlaceholder from '../components/IconPlaceholder';
-import { setTheme } from '../store/actions/theme';
-import themes, { getThemeColor } from '../constants/Colors';
+} from "react-native";
+import { connect, useDispatch, useSelector } from "react-redux";
+import SharedStyles from "../constants/SharedStyles";
+import SettingsButton from "../components/Icons/SettingsButton";
+import ArrowButton from "../components/Icons/ArrowButton";
+import Logout from "../components/Icons/LogoutButton";
+import SettingContainer from "../components/SettingContainer";
+import ProfileButton from "../components/Icons/ProfileButton";
+import ShowValueInput from "../components/Icons/ShowValueInput";
+import LockIcon from "../components/Icons/LockIcon";
+import NotificationIcon from "../components/Icons/NotificationIcon";
+import { logout } from "../store/actions/auth";
+import IconPlaceholder from "../components/IconPlaceholder";
+import { setTheme } from "../store/actions/theme";
+import themes, { getThemeColor } from "../constants/Colors";
+import ListIcon from "../components/Icons/ListIcon";
 
 function SettingsScreen(props) {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function SettingsScreen(props) {
               }}
               back
               size={24}
-              color={getThemeColor('text', props.theme)}
+              color={getThemeColor("text", props.theme)}
             />
           </View>
           <Text style={styles.topHeaderText}>Settings</Text>
@@ -71,10 +72,9 @@ function SettingsScreen(props) {
               {firstName} {lastName}
             </Text>
           </View>
-          <TouchableWithoutFeedback
-            onPress={() => dispatch(logout())}>
+          <TouchableWithoutFeedback onPress={() => dispatch(logout())}>
             <View style={styles.SignOut}>
-              <Logout color={getThemeColor('text', props.theme)} />
+              <Logout color={getThemeColor("text", props.theme)} />
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -82,20 +82,35 @@ function SettingsScreen(props) {
       <View style={styles.body}>
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate('account');
-          }}>
+            props.navigation.navigate("account");
+          }}
+        >
           <SettingContainer
             style={styles.firstContainer}
             icon={
               <ProfileButton
                 size={20}
-                color={getThemeColor('text', props.theme)}
+                color={getThemeColor("text", props.theme)}
               />
-            }>
+            }
+          >
             Account
           </SettingContainer>
         </TouchableOpacity>
-        <SettingContainer
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate("pricing");
+          }}
+        >
+          <SettingContainer
+            icon={
+              <ListIcon size={20} color={getThemeColor("text", props.theme)} />
+            }
+          >
+            Pricing
+          </SettingContainer>
+        </TouchableOpacity>
+        {/* <SettingContainer
           icon={
             <LockIcon
               size={20}
@@ -103,20 +118,22 @@ function SettingsScreen(props) {
             />
           }>
           Privacy
-        </SettingContainer>
+        </SettingContainer> */}
         <TouchableOpacity
           onPress={() => {
-            currentTheme === 'dark'
-              ? dispatch(setTheme('light'))
-              : dispatch(setTheme('dark'));
-          }}>
+            currentTheme === "dark"
+              ? dispatch(setTheme("light"))
+              : dispatch(setTheme("dark"));
+          }}
+        >
           <SettingContainer
             icon={
               <ShowValueInput
                 size={20}
-                color={getThemeColor('text', props.theme)}
+                color={getThemeColor("text", props.theme)}
               />
-            }>
+            }
+          >
             Appearance
           </SettingContainer>
         </TouchableOpacity>
@@ -124,25 +141,12 @@ function SettingsScreen(props) {
           icon={
             <NotificationIcon
               size={20}
-              color={getThemeColor('text', props.theme)}
+              color={getThemeColor("text", props.theme)}
             />
-          }>
+          }
+        >
           Notifications
         </SettingContainer>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate('pricing');
-          }}>
-          <SettingContainer
-            icon={
-              <LockIcon
-                size={20}
-                color={getThemeColor('text', props.theme)}
-              />
-            }>
-            Pricing
-          </SettingContainer>
-        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.textFooter}>© BookApp 2021</Text>
@@ -155,32 +159,32 @@ function SettingsScreen(props) {
 const getStyles = (theme) =>
   StyleSheet.create({
     header: {
-      paddingTop: '10%',
+      paddingTop: "10%",
       flex: 1,
-      width: '100%',
+      width: "100%",
     },
     topHeader: {
-      flexDirection: 'row',
+      flexDirection: "row",
       height: 55,
-      width: '100%',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
+      width: "100%",
+      justifyContent: "flex-start",
+      alignItems: "center",
     },
     topHeaderText: {
-      fontFamily: 'rubik-bold',
+      fontFamily: "rubik-bold",
       fontSize: 18,
-      color: getThemeColor('text', theme),
+      color: getThemeColor("text", theme),
     },
     headerContent: {
       flex: 1,
-      width: '100%',
+      width: "100%",
       borderTopWidth: 1,
       borderBottomWidth: 1,
-      borderColor: getThemeColor('horizontalLine', theme),
-      flexDirection: 'row',
+      borderColor: getThemeColor("horizontalLine", theme),
+      flexDirection: "row",
     },
     imageContainer: {
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     image: {
       height: 60,
@@ -188,25 +192,25 @@ const getStyles = (theme) =>
       borderRadius: 60,
     },
     userInfo: {
-      flexDirection: 'column',
+      flexDirection: "column",
       padding: 10,
       flex: 6,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     welcome: {
-      color: '#999999',
+      color: "#999999",
       fontSize: 12,
     },
     userName: {
       fontSize: 16,
-      fontFamily: 'rubik-medium',
-      color: getThemeColor('text', theme),
+      fontFamily: "rubik-medium",
+      color: getThemeColor("text", theme),
     },
     SignOut: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'flex-end',
-      width: '100%',
+      justifyContent: "center",
+      alignItems: "flex-end",
+      width: "100%",
     },
     body: {
       flex: 3.5,
@@ -217,12 +221,12 @@ const getStyles = (theme) =>
     footer: {
       flex: 0.6,
       borderTopWidth: 1,
-      borderColor: getThemeColor('horizontalLine', theme),
-      justifyContent: 'center',
-      alignItems: 'center',
+      borderColor: getThemeColor("horizontalLine", theme),
+      justifyContent: "center",
+      alignItems: "center",
     },
     textFooter: {
-      color: '#999999',
+      color: "#999999",
       fontSize: 10,
       marginVertical: 4,
     },
