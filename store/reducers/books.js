@@ -122,20 +122,28 @@ const booksReducer = (state = initialState, action) => {
           ) {
             return false;
           }
-          if (action.otherFilters.includes("Package") && !book.isPackage) {
-            return false;
-          }
-          if (action.otherFilters.includes("For School") && !book.isForSchool) {
-            return false;
-          }
-          if (action.otherFilters.includes("New") && book.condition !== "new") {
-            return false;
-          }
-          if (
-            action.otherFilters.includes("Used") &&
-            book.condition !== "used"
-          ) {
-            return false;
+          if (action.otherFilters) {
+            if (action.otherFilters.includes("Package") && !book.isPackage) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("For School") &&
+              !book.isForSchool
+            ) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("New") &&
+              book.condition !== "new"
+            ) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("Used") &&
+              book.condition !== "used"
+            ) {
+              return false;
+            }
           }
 
           return true;

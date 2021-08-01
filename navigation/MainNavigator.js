@@ -23,8 +23,9 @@ const MainNavigator = (props) => {
 
   return (
     <NavigationContainer
-      theme={{ colors: { background: props.theme === "dark" ? "#000" : null } }}
-    >
+      theme={{
+        colors: { background: props.theme === "dark" ? "#2b2b2b" : null },
+      }}>
       {isTryAutoLogin ? (
         <SplashScreen />
       ) : isVerify ? (
@@ -36,21 +37,20 @@ const MainNavigator = (props) => {
             cardStyle: {
               backgroundColor: getThemeColor("background", props.theme),
             },
-          }}
-        >
-          <Stack.Screen name="tab" component={TabNavigator} />
+          }}>
+          <Stack.Screen name='tab' component={TabNavigator} />
           <Stack.Screen
             options={directMessagesScreenOptions}
-            name="chatRoom"
+            name='chatRoom'
             component={DirectMessagesScreen}
           />
           <Stack.Screen
-            name="detail"
+            name='detail'
             component={BookDetailScreen}
             options={bookDetailScreenOptions}
           />
           <Stack.Screen
-            name="settings"
+            name='settings'
             component={SettingsNavigator}
             options={{ headerTitle: "settings" }}
           />

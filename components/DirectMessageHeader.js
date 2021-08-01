@@ -6,6 +6,7 @@ import ArrowButton from "./Icons/ArrowButton";
 import MenuButton from "./Icons/MenuButton";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
+import IconPlaceholder from "../components/IconPlaceholder";
 
 function DirectMessageHeader({ username, navigation, theme, userImage }) {
   const styles = getStyles(theme);
@@ -23,7 +24,7 @@ function DirectMessageHeader({ username, navigation, theme, userImage }) {
         <View style={styles.image}>
           {userImage ? (
             <Image
-              resizeMode="cover"
+              resizeMode='cover'
               style={{ flex: 1 }}
               source={{
                 uri: `${axios.defaults.baseURL}/${userImage}`,

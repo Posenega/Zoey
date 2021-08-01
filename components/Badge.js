@@ -33,14 +33,13 @@ const Badge = ({
         backgroundColor:
           category == null ? backgroundColor : catBackgroundColor,
         ...style,
-      }}
-    >
+      }}>
       <Text
+        numberOfLines={1}
         style={{
           ...styles.categoryText,
           color: category == null ? color : catColor,
-        }}
-      >
+        }}>
         {children}
       </Text>
     </View>
