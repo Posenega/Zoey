@@ -21,11 +21,11 @@ import { setTheme } from "./store/actions/theme";
 import * as SecureStore from "expo-secure-store";
 import { tryAutoLogin } from "./store/actions/auth";
 
-axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
-  .split(":")
-  .shift()}:5000`;
+// axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
+//   .split(":")
+//   .shift()}:5000`;
 
-// axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
+axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -109,7 +109,7 @@ export default function App() {
     <Provider store={store}>
       <StatusBar
         translucent
-        backgroundColor="transparent"
+        backgroundColor='transparent'
         barStyle={statusBarTheme}
       />
       <MainNavigator />
