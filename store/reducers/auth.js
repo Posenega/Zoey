@@ -9,6 +9,7 @@ import {
   AUTH_SET_LOADING,
   AUTH_STOP_LOADING,
   TRY_AUTO_LOGIN_START,
+  SET_SOCKET,
 } from "../actions/auth";
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   imageUrl: "",
   isVerify: false,
   isLoading: false,
+  socket,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -50,6 +52,8 @@ const authReducer = (state = initialState, action) => {
 
     case UPDATE_USER_SUCCESS:
       return { ...state, ...action.updatedState, isLoading: false };
+    case SET_SOCKET:
+      return { ...state, socket };
     case SET_VERIFY_USER:
       return {
         ...initialState,

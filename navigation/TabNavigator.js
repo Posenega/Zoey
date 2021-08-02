@@ -17,14 +17,35 @@ import { fetchChats } from "../store/actions/chats";
 import { Platform } from "react-native";
 import ProfileScreen from "../screens/ProfileScreen";
 import ProfileNavigator from "./ProfileNavigator";
+import { setSocket } from "../store/actions/auth";
 
 const BottomTab = createBottomTabNavigator();
 
+let socket;
+
 const TabNavigator = (props) => {
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.auth.userId);
+  const tocket = useSelector((state) => state.auth.token);
+
   useEffect(() => {
-    dispatch(fetchChats());
-  }, [dispatch]);
+    dispatch(fetchChats()).then(() => {
+      socket = io(axios.defaults.baseURL, {
+        extraHeaders: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      dispatch(setSocket(socket));
+      socket.join(userId);
+      socket.on("roomAdded", ({ roomId, userId, userImageUrl, username }) => {
+        dispatch(addChat(roomId, userId, username, userImageUrl));
+      });
+    });
+    return () => {
+      socket.disconnect();
+      dispatch(setSocket(null));
+    };
+  }, [dispatch, userId, token]);
   return (
     <BottomTab.Navigator
       screenOptions={{

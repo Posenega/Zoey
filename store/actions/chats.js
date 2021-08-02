@@ -10,29 +10,31 @@ export const CHATS_SET_LOADING = "CHATS_SET_LOADING";
 export const CHATS_STOP_LOADING = "CHATS_STOP_LOADING";
 
 export const fetchChats = () => {
-  return (dispatch, getState) => {
-    dispatch(chatsSetLoading());
-    const token = getState().auth.token;
-    axios
-      .get("/api/chats", {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(chatsSetLoading());
+      const token = getState().auth.token;
+      const res = await axios.get("/api/chats", {
         headers: { Authorization: "Bearer " + token },
-      })
-      .then((res) => {
-        dispatch(
-          setChats(
-            res.data.chats.map((chat) => {
-              return {
-                _id: chat._id,
-                userId: chat.user._id,
-                username: chat.user.firstName + " " + chat.user.lastName,
-                userImage: chat.user.imageUrl,
-                messages: chat.messages,
-              };
-            })
-          )
-        );
-      })
-      .catch((e) => dispatch(chatsStopLoading()));
+      });
+
+      dispatch(
+        setChats(
+          res.data.chats.map((chat) => {
+            return {
+              _id: chat._id,
+              userId: chat.user._id,
+              username: chat.user.firstName + " " + chat.user.lastName,
+              userImage: chat.user.imageUrl,
+              messages: chat.messages,
+            };
+          })
+        )
+      );
+      return Promise.resolve();
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
 
@@ -57,13 +59,13 @@ export const fetchChatMessages = (chatId) => {
   };
 };
 
-export const addMessageRequest = (chatId, text, socket) => {
+export const addMessageRequest = (chatId, text) => {
   return async (dispatch, getState) => {
+    const socket = getState().auth.socket;
     socket?.emit("sendMessage", { roomId: chatId, text }, (message) => {
       dispatch(addMessage(chatId, message.text, true, message._id));
+      return Promise.resolve();
     });
-
-    return Promise.resolve();
   };
 };
 
@@ -81,27 +83,17 @@ export const addChatMessagesFail = (chatId) => {
 
 export const requestAddChat = (secondUserId) => {
   return (dispatch, getState) => {
-    const token = getState().auth.token;
-    axios
-      .post(
-        "/api/chats",
-        { secondUserId },
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      )
-      .then((res) => {
-        const dbChat = res.data.chat;
-        dispatch(
-          addChat(
-            dbChat._id,
-            dbChat.user._id,
-            dbChat.user.firstName + " " + dbChat.user.lastName,
-            dbChat.user.imageUrl
-          )
-        );
-      })
-      .catch((e) => console.log(e));
+    const socket = getState().auth.socket;
+    socket?.emit(addRoom, { secondUserId }, ({ chat }) => {
+      dispatch(
+        addChat(
+          chat._id,
+          chat.user._id,
+          chat.user.firstName + " " + dbChat.user.lastName,
+          chat.user.imageUrl
+        )
+      );
+    });
   };
 };
 

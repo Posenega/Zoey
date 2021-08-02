@@ -6,12 +6,12 @@ import SendButton from "../components/Icons/SendButton";
 import { getThemeColor } from "../constants/Colors";
 import { addMessageRequest } from "../store/actions/chats";
 
-function MessageComposer({ chatId, theme, socket }) {
+function MessageComposer({ chatId, theme }) {
   const styles = getStyles(theme);
   const { control, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const onSubmit = (data) => {
-    dispatch(addMessageRequest(chatId, data.messageText, socket)).then(reset);
+    dispatch(addMessageRequest(chatId, data.messageText)).then(reset);
   };
   return (
     <View style={styles.messageComposer}>

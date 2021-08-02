@@ -21,6 +21,7 @@ import { setTheme } from "./store/actions/theme";
 import * as SecureStore from "expo-secure-store";
 import { tryAutoLogin } from "./store/actions/auth";
 import packagesReducer from "./store/reducers/packages";
+import { addChat } from "./store/actions/chats";
 
 axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
   .split(":")
@@ -107,6 +108,7 @@ export default function App() {
 
   const statusBarTheme =
     store.getState().themes.theme === "dark" ? "dark-content" : "light-content";
+
   return (
     <Provider store={store}>
       <StatusBar

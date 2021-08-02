@@ -14,6 +14,7 @@ export const UPDATE_USER_START = "UPDATE_USER_START";
 export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
 export const GET_USER = "GET_USER";
 export const SET_VERIFY_USER = "SET_VERIFY_USER";
+export const SET_SOCKET = "SET_SOCKET";
 
 const authUser = (
   authMode,
@@ -266,4 +267,8 @@ export const verifyUser = (confirmationCode, setError) => {
         });
       });
   };
+};
+
+export const setSocket = (socket) => {
+  return { type: SET_SOCKET, socket };
 };

@@ -19,21 +19,14 @@ import ReceivedMessage from "../../components/messages/ReceivedMessage";
 import { addMessage, fetchChatMessages } from "../../store/actions/chats";
 import io from "socket.io-client";
 
-let socket;
-
 export default function DirectMessagesScreen(props) {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.auth.token);
+
+  const socket = useSelector((state) => state.auth.socket);
 
   useEffect(() => {
-    socket = io(axios.defaults.baseURL, {
-      extraHeaders: {
-        Authorization: "Bearer " + token,
-      },
-    });
     socket?.emit("joinRoom", { roomId: cId });
     socket?.on("message", ({ text, messageId }) => {
-      console.log("sentMessage");
       dispatch(addMessage(cId, text, false, messageId));
     });
 
@@ -41,7 +34,7 @@ export default function DirectMessagesScreen(props) {
       socket?.emit("leaveRoom", { roomId: cId });
       socket?.disconnect();
     };
-  }, []);
+  }, [socket]);
 
   const { userId, chatId } = props.route.params;
   const chat = useSelector((state) =>
@@ -103,7 +96,7 @@ export default function DirectMessagesScreen(props) {
               style={styles.composerContainer}
             >
               <View>
-                <MessageComposer chatId={cId} socket={socket} />
+                <MessageComposer chatId={cId} />
               </View>
             </KeyboardAvoidingView>
           </View>
