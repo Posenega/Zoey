@@ -133,13 +133,13 @@ const booksReducer = (state = initialState, action) => {
             }
             if (
               action.otherFilters.includes("New") &&
-              book.condition !== "new"
+              book.condition !== "New"
             ) {
               return false;
             }
             if (
               action.otherFilters.includes("Used") &&
-              book.condition !== "used"
+              book.condition !== "Used"
             ) {
               return false;
             }
