@@ -94,14 +94,16 @@ function CreateAccount(props) {
         </View>
         {currentStep}
         {step === 4 ? null : (
-          <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+          <TouchableOpacity
+            style={{ width: "100%" }}
+            onPress={handleSubmit(onSubmit)}>
             <View style={styles.signInButton}>
               {isLoading ? (
-                <ActivityIndicator size="small" color="white" />
+                <ActivityIndicator size='small' color='white' />
               ) : (
                 <>
                   <Text style={styles.textSignIn}>Continue</Text>
-                  <ArrowButton color="white" size={18} />
+                  <ArrowButton color='white' size={18} />
                 </>
               )}
             </View>
