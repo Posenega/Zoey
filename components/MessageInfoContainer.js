@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
+import moment from "moment-timezone";
 import Colors, { getThemeColor } from "../constants/Colors";
 import IconPlaceholder from "./IconPlaceholder";
 import Divider from "./Divider";
@@ -18,14 +19,15 @@ const MessageInfoContainer = (props) => {
     <TouchableWithoutFeedback
       onPress={() =>
         props.navigation.navigate("chatRoom", { chatId: props.chatId })
-      }>
+      }
+    >
       <View style={styles.bigContainer}>
         <View style={styles.profileMessageContainer}>
           <View style={styles.profilePictureContainer}>
             <View style={styles.profilePicture}>
               {props.userImage ? (
                 <Image
-                  resizeMode='cover'
+                  resizeMode="cover"
                   style={{ flex: 1 }}
                   source={{
                     uri: `${axios.defaults.baseURL}/${props.userImage}`,
@@ -43,7 +45,11 @@ const MessageInfoContainer = (props) => {
             </Text>
           </View>
           <View style={styles.recentInfo}>
-            <Text style={styles.time}>10:00PM</Text>
+            <Text style={styles.time}>
+              {moment(props.lastMessageCreatedAt)
+                .tz("Asia/Beirut")
+                .format("hh:mm A")}
+            </Text>
             <View style={styles.unreadCountContainer}>
               <Text style={styles.unreadCount}>3</Text>
             </View>

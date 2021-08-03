@@ -23,11 +23,11 @@ import { tryAutoLogin } from "./store/actions/auth";
 import packagesReducer from "./store/reducers/packages";
 import { addChat } from "./store/actions/chats";
 
-// axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
-//   .split(":")
-//   .shift()}:5000`;
+axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
+  .split(":")
+  .shift()}:5000`;
 
-axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
+// axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -113,7 +113,7 @@ export default function App() {
     <Provider store={store}>
       <StatusBar
         translucent
-        backgroundColor='transparent'
+        backgroundColor="transparent"
         barStyle={statusBarTheme}
       />
       <MainNavigator />

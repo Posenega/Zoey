@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BooksNavigator from "./BooksNavigator";
@@ -10,9 +11,9 @@ import ProfileButton from "../components/Icons/ProfileButton";
 import AddButton from "../components/Icons/AddButton";
 import FavoritesNavigator from "./FavoritesNavigator";
 import MessageNavigator from "./MessageNavigator";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import io from "socket.io-client";
 
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchChats } from "../store/actions/chats";
 import { Platform } from "react-native";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -21,31 +22,29 @@ import { setSocket } from "../store/actions/auth";
 
 const BottomTab = createBottomTabNavigator();
 
-let socket;
-
 const TabNavigator = (props) => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
-  const tocket = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     dispatch(fetchChats()).then(() => {
-      socket = io(axios.defaults.baseURL, {
+      const newSocket = io(axios.defaults.baseURL, {
         extraHeaders: {
           Authorization: "Bearer " + token,
         },
       });
-      dispatch(setSocket(socket));
-      socket.join(userId);
-      socket.on("roomAdded", ({ roomId, userId, userImageUrl, username }) => {
-        dispatch(addChat(roomId, userId, username, userImageUrl));
-      });
+      newSocket.emit("subscribe", { userId });
+      newSocket.on(
+        "roomAdded",
+        ({ roomId, userId, userImageUrl, username }) => {
+          dispatch(addChat(roomId, userId, username, userImageUrl));
+        }
+      );
+      dispatch(setSocket(newSocket));
     });
-    return () => {
-      socket.disconnect();
-      dispatch(setSocket(null));
-    };
   }, [dispatch, userId, token]);
+
   return (
     <BottomTab.Navigator
       screenOptions={{

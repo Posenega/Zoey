@@ -27,6 +27,7 @@ export default function MessagesScreen(props) {
         chatId={itemData.item._id}
         userImage={itemData.item.userImage}
         lastMessageText={itemData.item.messages[0]?.text}
+        lastMessageCreatedAt={itemData.item.messages[0]?.createdAt}
       />
     );
   };

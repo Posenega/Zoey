@@ -15,11 +15,6 @@ const packagesReducer = (state = initialState, action) => {
     case FETCH_PACKAGES_START:
       return { ...state, isLoading: true };
     case FETCH_PACKAGES_SUCCESS:
-      console.log({
-        ...state,
-        isLoading: false,
-        packages: [...action.packages],
-      });
       return {
         ...state,
         isLoading: false,

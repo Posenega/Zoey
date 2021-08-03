@@ -22,7 +22,7 @@ const initialState = {
   imageUrl: "",
   isVerify: false,
   isLoading: false,
-  socket,
+  socket: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -53,7 +53,7 @@ const authReducer = (state = initialState, action) => {
     case UPDATE_USER_SUCCESS:
       return { ...state, ...action.updatedState, isLoading: false };
     case SET_SOCKET:
-      return { ...state, socket };
+      return { ...state, socket: action.socket };
     case SET_VERIFY_USER:
       return {
         ...initialState,

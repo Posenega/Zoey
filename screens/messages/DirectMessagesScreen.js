@@ -17,7 +17,6 @@ import MessageComposer from "../../components/MessageComposer";
 import SentMessage from "../../components/messages/SentMessage";
 import ReceivedMessage from "../../components/messages/ReceivedMessage";
 import { addMessage, fetchChatMessages } from "../../store/actions/chats";
-import io from "socket.io-client";
 
 export default function DirectMessagesScreen(props) {
   const dispatch = useDispatch();
@@ -32,7 +31,6 @@ export default function DirectMessagesScreen(props) {
 
     return () => {
       socket?.emit("leaveRoom", { roomId: cId });
-      socket?.disconnect();
     };
   }, [socket]);
 
