@@ -31,9 +31,10 @@ export default function DirectMessagesScreen(props) {
     });
 
     return () => {
+      socket.off("message");
       socket?.emit("leaveRoom", { roomId: cId });
     };
-  }, [socket]);
+  }, []);
 
   const { userId, chatId } = props.route.params;
   const chat = useSelector((state) =>

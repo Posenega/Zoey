@@ -86,12 +86,12 @@ export const addChatMessagesFail = (chatId) => {
 export const requestAddChat = (secondUserId) => {
   return (dispatch, getState) => {
     const socket = getState().auth.socket;
-    socket?.emit(addRoom, { secondUserId }, ({ chat }) => {
+    socket?.emit("addRoom", { secondUserId }, ({ chat }) => {
       dispatch(
         addChat(
           chat._id,
           chat.user._id,
-          chat.user.firstName + " " + dbChat.user.lastName,
+          chat.user.firstName + " " + chat.user.lastName,
           chat.user.imageUrl
         )
       );

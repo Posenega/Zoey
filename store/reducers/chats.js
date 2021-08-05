@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import {
   ADD_CHAT,
   ADD_CHAT_MESSAGES_START,
@@ -79,9 +80,10 @@ export default chatsReducer = (state = initialState, action) => {
       }
 
       const message = {
+        _id: action.messageId,
         text: action.messageText,
         isMine: action.isMine,
-        _id: action.messageId,
+
         createdAt: action.createdAt,
       };
       const targetedChat = {

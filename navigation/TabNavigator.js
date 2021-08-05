@@ -41,9 +41,15 @@ const TabNavigator = (props) => {
   });
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token);
-    });
+    let hasMounted = false;
+    if (!hasMounted) {
+      registerForPushNotificationsAsync().then((token) => {
+        setExpoPushToken(token);
+      });
+    }
+    return () => {
+      hasMounted = true;
+    };
   }, []);
 
   useEffect(() => {

@@ -18,6 +18,7 @@ import AddPackage from "./Modal/AddPackage";
 function AddModal(props) {
   const addBookStatus = useSelector((state) => state.books.addBookStatus);
   const modalState = useSelector((state) => state.addBookModal.modalState);
+  const modalRef = useSelector((state) => state.addBookModal.ref);
   const styles = getStyles(props.theme);
 
   const { reset } = useForm();
@@ -25,8 +26,10 @@ function AddModal(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(addRef(modalizeRef));
-  }, [modalizeRef]);
+    if (!modalRef) {
+      dispatch(addRef(modalizeRef));
+    }
+  }, [modalizeRef, modalRef]);
 
   useEffect(() => {
     if (addBookStatus === "SUCCESS") {

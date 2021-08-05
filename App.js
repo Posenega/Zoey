@@ -24,9 +24,9 @@ import { tryAutoLogin } from "./store/actions/auth";
 import packagesReducer from "./store/reducers/packages";
 import { addChat } from "./store/actions/chats";
 
-axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
-  .split(":")
-  .shift()}:5000`;
+axios.defaults.baseURL = Constants?.manifest?.debuggerHost
+  ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:5000`
+  : "https://stormy-garden-51665.herokuapp.com";
 
 // axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
 
