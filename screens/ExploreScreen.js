@@ -12,11 +12,10 @@ import {
 import { useHeaderHeight } from "@react-navigation/elements";
 import Books from "../components/Books";
 import { useSelector, useDispatch, connect } from "react-redux";
-import SharedStyles from "../constants/SharedStyles";
 import CustomTextInput from "../components/CustomTextInput";
 import Colors, { getThemeColor } from "../constants/Colors";
 import FilterButton from "../components/Icons/FilterButton";
-import { fetchBooks } from "../store/actions/books";
+import { fetchBooks, filterBooks } from "../store/actions/books";
 import Options from "../components/Options";
 import BookFilters from "../components/BookFilters";
 import { fetchPackages } from "../store/actions/packages";

@@ -1,17 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { connect } from 'react-redux';
-import Colors, { getThemeColor } from '../../constants/Colors';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { connect } from "react-redux";
+import Colors, { getThemeColor } from "../../constants/Colors";
 
 function SentMessage({ messageText, theme }) {
   const styles = getStyles(theme);
   return (
-    <View onStartShouldSetResponder={() => true} style={styles.rmmc}>
+    <View style={styles.rmmc}>
       <View
         style={{
           ...styles.messageContainer,
           ...styles.rmc,
-        }}>
+        }}
+      >
         <Text style={{ ...styles.textMessage, ...styles.rtm }}>
           {messageText}
         </Text>
@@ -23,8 +24,8 @@ function SentMessage({ messageText, theme }) {
 const getStyles = (theme) =>
   StyleSheet.create({
     rmmc: {
-      width: '100%',
-      alignItems: 'flex-end',
+      width: "100%",
+      alignItems: "flex-end",
     },
     messageContainer: {
       maxWidth: 275,
@@ -34,16 +35,16 @@ const getStyles = (theme) =>
       marginVertical: 1,
     },
     rmc: {
-      backgroundColor: getThemeColor('primary', theme),
+      backgroundColor: getThemeColor("primary", theme),
       borderBottomEndRadius: 0,
-      color: 'white',
+      color: "white",
     },
     textMessage: {
       fontSize: 15,
       lineHeight: 15,
     },
     rtm: {
-      color: 'white',
+      color: "white",
     },
   });
 

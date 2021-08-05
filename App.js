@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNetInfo, NetInfoStateType } from "@react-native-community/netinfo";
+
 import Constants from "expo-constants";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";

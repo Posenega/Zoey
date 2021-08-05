@@ -9,6 +9,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from "react-native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,12 +52,16 @@ export default function DirectMessagesScreen(props) {
     dispatch(fetchChatMessages(cId));
   }, [dispatch, cId]);
 
+  const screenWidth = Dimensions.get("window").width;
+
   const renderMessage = (itemData) => {
+    let message;
     if (itemData.item.isMine) {
-      return <SentMessage messageText={itemData.item.text} />;
+      message = <SentMessage messageText={itemData.item.text} />;
     } else {
-      return <ReceivedMessage messageText={itemData.item.text} />;
+      message = <ReceivedMessage messageText={itemData.item.text} />;
     }
+    return message;
   };
 
   return (
@@ -90,7 +95,7 @@ export default function DirectMessagesScreen(props) {
             </View>
             <KeyboardAvoidingView
               keyboardVerticalOffset={120}
-              behavior={Platform.OS === "ios" ? "padding" : null}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.composerContainer}
             >
               <View>

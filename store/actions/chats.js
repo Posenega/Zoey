@@ -63,7 +63,9 @@ export const addMessageRequest = (chatId, text) => {
   return async (dispatch, getState) => {
     const socket = getState().auth.socket;
     socket?.emit("sendMessage", { roomId: chatId, text }, (message) => {
-      dispatch(addMessage(chatId, message.text, true, message._id));
+      dispatch(
+        addMessage(chatId, message.text, true, message.createdAt, message._id)
+      );
       return Promise.resolve();
     });
   };
@@ -101,8 +103,21 @@ export const addChat = (chatId, userId, username, userImage) => {
   return { type: ADD_CHAT, chatId, userId, username, userImage };
 };
 
-export const addMessage = (chatId, messageText, isMine, messageId) => {
-  return { type: ADD_MESSAGE, chatId, messageText, isMine, messageId };
+export const addMessage = (
+  chatId,
+  messageText,
+  isMine,
+  createdAt,
+  messageId
+) => {
+  return {
+    type: ADD_MESSAGE,
+    chatId,
+    messageText,
+    isMine,
+    createdAt,
+    messageId,
+  };
 };
 
 export const setChats = (chats) => {

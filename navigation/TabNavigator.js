@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Constants from "expo-constants";
+import jwtDecode from "jwt-decode";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BooksNavigator from "./BooksNavigator";
@@ -19,6 +21,7 @@ import { Platform } from "react-native";
 import ProfileScreen from "../screens/ProfileScreen";
 import ProfileNavigator from "./ProfileNavigator";
 import { setSocket } from "../store/actions/auth";
+import * as Notifications from "expo-notifications";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -26,24 +29,56 @@ const TabNavigator = (props) => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
   const token = useSelector((state) => state.auth.token);
+  const socket = useSelector((state) => state.auth.socket);
+  const [expoPushToken, setExpoPushToken] = useState("");
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
   useEffect(() => {
-    dispatch(fetchChats()).then(() => {
-      const newSocket = io(axios.defaults.baseURL, {
-        extraHeaders: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      newSocket.emit("subscribe", { userId });
-      newSocket.on(
-        "roomAdded",
-        ({ roomId, userId, userImageUrl, username }) => {
-          dispatch(addChat(roomId, userId, username, userImageUrl));
-        }
-      );
-      dispatch(setSocket(newSocket));
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token);
     });
-  }, [dispatch, userId, token]);
+  }, []);
+
+  useEffect(() => {
+    if (
+      token &&
+      jwtDecode(token).exp > Date.now() / 1000 &&
+      userId &&
+      expoPushToken
+    ) {
+      dispatch(fetchChats()).then(() => {
+        const newSocket = io(axios.defaults.baseURL, {
+          extraHeaders: {
+            Authorization: "Bearer " + token,
+          },
+          query: { expoPushToken },
+        });
+        newSocket.emit("subscribe", { userId });
+        newSocket.on(
+          "roomAdded",
+          ({ roomId, userId, userImageUrl, username }) => {
+            dispatch(addChat(roomId, userId, username, userImageUrl));
+          }
+        );
+        dispatch(setSocket(newSocket));
+      });
+    }
+  }, [dispatch, userId, token, expoPushToken]);
+
+  useEffect(() => {
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, [socket]);
 
   return (
     <BottomTab.Navigator
@@ -136,3 +171,34 @@ export default connect(
   }),
   {}
 )(TabNavigator);
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}

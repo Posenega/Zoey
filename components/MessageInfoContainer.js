@@ -48,7 +48,12 @@ const MessageInfoContainer = (props) => {
             <Text style={styles.time}>
               {moment(props.lastMessageCreatedAt)
                 .tz("Asia/Beirut")
-                .format("hh:mm A")}
+                .format(
+                  new Date(props.lastMessageCreatedAt).setHours(0, 0, 0, 0) ===
+                    new Date().setHours(0, 0, 0, 0)
+                    ? "hh:mm A"
+                    : "D MMM YYYY"
+                )}
             </Text>
             <View style={styles.unreadCountContainer}>
               <Text style={styles.unreadCount}>3</Text>
@@ -101,7 +106,6 @@ const getStyles = (theme) =>
       marginTop: 5,
     },
     recentInfo: {
-      flex: 1.2,
       height: "100%",
       flexDirection: "column",
       alignItems: "flex-end",

@@ -82,6 +82,7 @@ export default chatsReducer = (state = initialState, action) => {
         text: action.messageText,
         isMine: action.isMine,
         _id: action.messageId,
+        createdAt: action.createdAt,
       };
       const targetedChat = {
         ...state.myChats[targetedChatIndex],
