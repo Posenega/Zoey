@@ -70,8 +70,7 @@ function AddBook(props) {
         </Text>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          style={styles.badgeContainer}
-        >
+          style={styles.badgeContainer}>
           <View style={styles.badge}>
             {addBookStatus === "LOADING" ? (
               <ActivityIndicator
@@ -100,24 +99,11 @@ function AddBook(props) {
                   setValue("package", false);
                 }
               }}
-              value={value}
-            >
+              value={value}>
               For School
             </Option>
           )}
         />
-        {/* {watch("forSchool") && (
-            <Controller
-              name="package"
-              defaultValue={false}
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Option onChange={onChange} value={value}>
-                  Package
-                </Option>
-              )}
-            />
-          )} */}
       </View>
       <View style={{ paddingHorizontal: 18, marginBottom: 10 }}>
         <Controller
@@ -218,29 +204,6 @@ function AddBook(props) {
           )}
         />
       </View>
-      {/* {watch("forSchool") && (
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          <Controller
-            control={control}
-            name="categories"
-            defaultValue={""}
-            render={({ field: { onChange, value } }) => (
-              <Options
-                style={{ marginBottom: -10 }}
-                multipleAllowed={watch("package")}
-                watch={watch}
-                value={value}
-                onChange={onChange}
-                items={Categories}
-              />
-            )}
-          />
-        </View>
-      )} */}
 
       <View style={{ paddingHorizontal: 18 }}>
         <Controller
@@ -254,8 +217,8 @@ function AddBook(props) {
             <DropDownMenu
               text="Select a type"
               items={[
-                { label: "Exchange", value: "Exchange" },
-                { label: "Sell", value: "Sell" },
+                { label: "Exchange", value: "exchange" },
+                { label: "Sell", value: "sell" },
               ]}
               onBlur={onBlur}
               value={value}

@@ -11,8 +11,7 @@ function SentMessage({ messageText, theme }) {
         style={{
           ...styles.messageContainer,
           ...styles.rmc,
-        }}
-      >
+        }}>
         <Text style={{ ...styles.textMessage, ...styles.rtm }}>
           {messageText}
         </Text>

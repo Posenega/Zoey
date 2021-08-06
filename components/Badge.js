@@ -57,6 +57,7 @@ const getStyles = (theme) =>
       paddingHorizontal: 12,
       paddingVertical: 5,
       alignItems: "center",
+      fontFamily: "rubik-medium",
     },
   });
 

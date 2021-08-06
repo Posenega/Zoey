@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Dimensions } from "react-native";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Modalize } from "react-native-modalize";
 import { getThemeColor } from "../constants/Colors";
@@ -41,7 +41,7 @@ function AddModal(props) {
 
   return (
     <Modalize
-      modalHeight={600}
+      adjustToContentHeight
       alwaysOpen={addBookStatus === "LOADING"}
       onOpened={() => dispatch(modalOpen())}
       onClosed={() => {
@@ -56,8 +56,7 @@ function AddModal(props) {
       modalStyle={{
         backgroundColor: getThemeColor("main", props.theme),
       }}
-      ref={modalizeRef}
-    >
+      ref={modalizeRef}>
       {modalState === "book" ? (
         <AddBook />
       ) : modalState === "package" ? (
@@ -68,8 +67,7 @@ function AddModal(props) {
           <View style={styles.buttonContainer}>
             <CustomButton
               containerStyle={{ marginRight: 15 }}
-              onPress={() => dispatch(modalSetState("book"))}
-            >
+              onPress={() => dispatch(modalSetState("book"))}>
               Book
             </CustomButton>
             <CustomButton onPress={() => dispatch(modalSetState("package"))}>

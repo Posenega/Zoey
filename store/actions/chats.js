@@ -17,7 +17,6 @@ export const fetchChats = () => {
       const res = await axios.get("/api/chats", {
         headers: { Authorization: "Bearer " + token },
       });
-
       dispatch(
         setChats(
           res.data.chats.map((chat) => {

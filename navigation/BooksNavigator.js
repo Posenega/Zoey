@@ -24,8 +24,7 @@ const BooksNavigator = (props) => (
         backgroundColor: getThemeColor("background", props.theme),
       },
       headerTitleAlign: "left",
-    }}
-  >
+    }}>
     <Stack.Screen
       name="explore"
       component={ExploreScreen}

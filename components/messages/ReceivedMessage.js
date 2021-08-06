@@ -9,8 +9,7 @@ export default function ReceivedMessage({ messageText }) {
         style={{
           ...styles.messageContainer,
           ...styles.smc,
-        }}
-      >
+        }}>
         <Text style={{ ...styles.textMessage, ...styles.stm }}>
           {messageText}
         </Text>
@@ -25,13 +24,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   messageContainer: {
-    // minWidth: 100,
     maxWidth: 275,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    fontSize: 10,
-    marginVertical: 10,
+    paddingVertical: 8,
+    marginVertical: 1,
   },
   smc: {
     backgroundColor: "white",
@@ -39,7 +36,7 @@ const styles = StyleSheet.create({
     color: "#2b2b2b",
   },
   textMessage: {
-    fontSize: 10,
+    fontSize: 15,
     lineHeight: 15,
   },
   stm: {

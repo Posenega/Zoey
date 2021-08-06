@@ -8,6 +8,7 @@ import Colors, { getThemeColor } from "../constants/Colors";
 import Books from "../components/Books";
 import { fetchUserBooks } from "../store/actions/books";
 import IconPlaceholder from "../components/IconPlaceholder";
+import NoData from "../components/NoData";
 // import { getUser } from "../store/actions/auth";
 
 function ProfileScreen(props) {
@@ -52,8 +53,7 @@ function ProfileScreen(props) {
           )}
           <Text
             numberOfLines={1}
-            style={{ ...styles.mediumText, textAlign: "center" }}
-          >
+            style={{ ...styles.mediumText, textAlign: "center" }}>
             {firstName} {lastName}
           </Text>
         </View>
@@ -63,10 +63,10 @@ function ProfileScreen(props) {
           Your Books
         </Text>
         {allBooks.length <= 0 ? (
-          <View style={styles.center}>
-            <Text style={styles.text}>You don't have any books yet.</Text>
-            <Text style={styles.text}>Go create Some!</Text>
-          </View>
+          <NoData
+            firstLine="You don't have any books yet."
+            secondLine="Go create Some!"
+          />
         ) : (
           <Books books={allBooks} navigation={props.navigation} />
         )}
@@ -118,18 +118,6 @@ const getStyles = (theme) =>
 
     body: {
       flex: 2.5,
-    },
-    center: {
-      justifyContent: "center",
-      alignItems: "center",
-      flex: 1,
-    },
-    text: {
-      color: getThemeColor("text", theme),
-      fontFamily: "rubik-bold",
-      fontSize: 15,
-      marginVertical: 5,
-      letterSpacing: 1,
     },
   });
 

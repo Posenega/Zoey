@@ -19,22 +19,22 @@ export const ADD_BOOK_FINISH = "ADD_BOOK_FINISH";
 export const DELETE_BOOK_SUCCESS = "DELETE_BOOK_SUCCESS";
 
 export const fetchBooks = () => {
-  return (dispatch, getState) => {
-    const token = getState().auth.token;
-    dispatch({ type: FETCH_BOOKS_START });
-    axios
-      .get("/api/books/browse", {
+  return async (dispatch, getState) => {
+    try {
+      const token = getState().auth.token;
+      dispatch({ type: FETCH_BOOKS_START });
+      const response = await axios.get("/api/books/browse", {
         headers: { Authorization: "Bearer " + token },
-      })
-      .then(function (response) {
-        dispatch({
-          type: FETCH_BOOKS_SUCCESS,
-          books: response.data.books,
-        });
-      })
-      .catch(function (error) {
-        dispatch({ type: FETCH_BOOKS_FAILURE, payload: error });
       });
+
+      dispatch({
+        type: FETCH_BOOKS_SUCCESS,
+        books: response.data.books,
+      });
+      return Promise.resolve();
+    } catch (error) {
+      dispatch({ type: FETCH_BOOKS_FAILURE, payload: error });
+    }
   };
 };
 

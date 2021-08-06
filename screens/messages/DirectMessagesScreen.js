@@ -83,10 +83,10 @@ export default function DirectMessagesScreen(props) {
               flex: 9,
               paddingHorizontal: 18,
               marginBottom: 1,
-            }}
-          >
+            }}>
             <View style={styles.messageList}>
               <FlatList
+                showsVerticalScrollIndicator={false}
                 inverted
                 style={{ width: "100%" }}
                 data={chat.messages}
@@ -97,8 +97,7 @@ export default function DirectMessagesScreen(props) {
             <KeyboardAvoidingView
               keyboardVerticalOffset={120}
               behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={styles.composerContainer}
-            >
+              style={styles.composerContainer}>
               <View>
                 <MessageComposer chatId={cId} />
               </View>

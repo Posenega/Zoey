@@ -76,14 +76,6 @@ function BookDetailScreen(props) {
     }
   }, [isChatting]);
 
-  const bookType = () => {
-    if (displayedBook.type === "Sell") {
-      return "For sale";
-    } else if (displayedBook.type === "Exchange") {
-      return "Exchange";
-    }
-  };
-
   return (
     <View style={{ flex: 1 }}>
       {displayedBook && isFavorite !== null ? (
@@ -97,8 +89,7 @@ function BookDetailScreen(props) {
                 zIndex: 1,
                 left: 10,
                 top: 50,
-              }}
-            >
+              }}>
               <BackButton
                 onPress={() => props.navigation.goBack()}
                 size={40}
@@ -136,8 +127,7 @@ function BookDetailScreen(props) {
                       ? requestRemoveFavoriteBook(id)
                       : requestAddFavoriteBook(id)
                   );
-                }}
-              >
+                }}>
                 <FavoriteButton
                   size={20}
                   color={
@@ -154,18 +144,9 @@ function BookDetailScreen(props) {
                       dispatch(deleteBook(displayedBook._id)).then(() =>
                         props.navigation.goBack()
                       );
-                    }}
-                  >
+                    }}>
                     <DeleteButton color={getThemeColor("idle", props.theme)} />
                   </TouchableOpacity>
-                  {/* <TouchableOpacity
-                onPress={() => {
-                  dispatch(modalSetEditMode(displayedBook));
-                  addBookModalRef?.current?.open();
-                }}
-                style={{ marginLeft: 15 }}>
-                <EditButton />
-              </TouchableOpacity> */}
                 </View>
               ) : null}
             </View>
@@ -174,6 +155,7 @@ function BookDetailScreen(props) {
                 ? displayedBook.author
                 : displayedBook.grade}
             </Text>
+            <Divider style={{ marginBottom: 12, marginTop: 12 }} fullDivider />
             <View style={{ flexDirection: "row", marginBottom: 10 }}>
               {displayedBook.isPackage && (
                 <Badge
@@ -182,8 +164,7 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   Package
                 </Badge>
               )}
@@ -194,23 +175,25 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   For School
+                </Badge>
+              )}
+              {displayedBook.type !== "sell" && (
+                <Badge
+                  style={styles.badge}
+                  color={getThemeColor("primary", props.theme)}
+                  backgroundColor={getThemeColor(
+                    "badgeBackground",
+                    props.theme
+                  )}>
+                  Exchange
                 </Badge>
               )}
               <Badge
                 style={styles.badge}
                 color={getThemeColor("primary", props.theme)}
-                backgroundColor={getThemeColor("badgeBackground", props.theme)}
-              >
-                {bookType()}
-              </Badge>
-              <Badge
-                style={styles.badge}
-                color={getThemeColor("primary", props.theme)}
-                backgroundColor={getThemeColor("badgeBackground", props.theme)}
-              >
+                backgroundColor={getThemeColor("badgeBackground", props.theme)}>
                 {displayedBook.condition}
               </Badge>
             </View>
@@ -241,7 +224,7 @@ function BookDetailScreen(props) {
                   <Text>{displayedBook.price + " L.L"}</Text>
                 </View>
               )}
-              {displayedBook.creator !== userId && (
+              {displayedBook.creator !== userId ? (
                 <TouchableOpacity
                   onPress={() => {
                     if (isChatting) {
@@ -251,15 +234,26 @@ function BookDetailScreen(props) {
                     } else {
                       dispatch(requestAddChat(displayedBook.creator));
                     }
-                  }}
-                >
-                  <View style={styles.messageContainer}>
+                  }}>
+                  <View style={{ ...styles.container, ...styles.message }}>
                     <MessageButton size={20} color="white" />
-                    <Text style={styles.message}>Messages</Text>
+                    <Text style={{ ...styles.containerText, marginLeft: 5 }}>
+                      Messages
+                    </Text>
                   </View>
                 </TouchableOpacity>
+              ) : (
+                <View style={{ ...styles.container, ...styles.sold }}>
+                  <Text style={styles.containerText}>Sold</Text>
+                </View>
               )}
             </View>
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate("settings", { screen: "pricing" })
+              }>
+              <Text style={styles.alertMessage}>Check Suggested Prices</Text>
+            </TouchableOpacity>
           </View>
         </>
       ) : (
@@ -324,7 +318,6 @@ const getStyles = (theme) =>
       maxWidth: 75,
       marginRight: 5,
       height: 22,
-      marginTop: 24,
     },
     description: {
       flex: 1,
@@ -336,6 +329,7 @@ const getStyles = (theme) =>
       marginTop: 12,
     },
     price: {
+      maxWidth: 200,
       justifyContent: "center",
       alignItems: "center",
       marginRight: 15,
@@ -344,7 +338,7 @@ const getStyles = (theme) =>
       backgroundColor: "#EDEDED",
       borderRadius: 10,
     },
-    messageContainer: {
+    container: {
       width: 130,
       flexDirection: "row",
       justifyContent: "center",
@@ -353,12 +347,23 @@ const getStyles = (theme) =>
       paddingVertical: 13,
       paddingHorizontal: 20,
 
-      backgroundColor: getThemeColor("primary", theme),
       borderRadius: 10,
     },
-    message: {
-      marginLeft: 5,
+    containerText: {
       color: "white",
+    },
+    message: {
+      backgroundColor: getThemeColor("primary", theme),
+    },
+    sold: {
+      backgroundColor: "red",
+    },
+    alertMessage: {
+      fontSize: 10,
+      marginTop: 10,
+      marginLeft: 5,
+      color: "#06c",
+      textDecorationLine: "underline",
     },
   });
 export default connect(

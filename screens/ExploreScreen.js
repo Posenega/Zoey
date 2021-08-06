@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableOpacity,
   Animated,
+  RefreshControl,
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Books from "../components/Books";
@@ -19,26 +20,38 @@ import { fetchBooks, filterBooks } from "../store/actions/books";
 import Options from "../components/Options";
 import BookFilters from "../components/BookFilters";
 import { fetchPackages } from "../store/actions/packages";
+import NoData from "../components/NoData";
+
 function ExploreScreen(props) {
   const styles = getStyles(props.theme);
   useEffect(() => {
     dispatch(fetchPackages());
     dispatch(fetchBooks());
   }, []);
+
+  const isLoading = useSelector((state) => state.books.isLoading);
+
   const headerHeight = useHeaderHeight();
+
   const [packageIsSelected, setPackageIsSelected] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
   const filteredBooks = useSelector((state) => {
     return state.books.filteredBooks;
   });
+
   const isSearching = useSelector((state) => {
     return state.books.isSearching;
   });
+
   const packages = useSelector((state) => {
     return state.packages.packages;
   });
+
   const dispatch = useDispatch();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
   const openFilters = () => {
     Animated.timing(fadeAnim, {
       toValue: fadeAnim._value === 1 ? 0 : 1,
@@ -54,8 +67,7 @@ function ExploreScreen(props) {
           // ...SharedStyles.screen,
           flex: 1,
           paddingTop: headerHeight,
-        }}
-      >
+        }}>
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <View style={styles.inputContainer}>
@@ -70,8 +82,7 @@ function ExploreScreen(props) {
             </View>
             <TouchableOpacity
               onPress={openFilters}
-              style={styles.filterContainer}
-            >
+              style={styles.filterContainer}>
               <View style={styles.filterBox}>
                 <FilterButton />
               </View>
@@ -83,22 +94,13 @@ function ExploreScreen(props) {
         {!isSearching && (
           <View style={styles.trendingNow}>
             <Text style={styles.trendingNowText}>Trending Now</Text>
-            {filteredBooks.length > 0 ? (
-              <Books
-                isHorizontal
-                navigation={props.navigation}
-                books={filteredBooks}
-              />
-            ) : (
-              <View style={styles.noBooks}>
-                <Text style={styles.noBooksMessages}>
-                  There is no Books Yet
-                </Text>
-                <Text style={styles.noBooksMessages}>
-                  Be the First to add Some!
-                </Text>
-              </View>
-            )}
+
+            <Books
+              isLoading={isLoading}
+              isHorizontal
+              navigation={props.navigation}
+              books={filteredBooks}
+            />
           </View>
         )}
         <View style={styles.forYou}>
@@ -106,8 +108,7 @@ function ExploreScreen(props) {
             style={{
               flexDirection: "row",
               alignItems: "flex-end",
-            }}
-          >
+            }}>
             {!isSearching && (
               <TouchableOpacity onPress={() => setPackageIsSelected(false)}>
                 <Text
@@ -115,8 +116,7 @@ function ExploreScreen(props) {
                     packageIsSelected
                       ? styles.forYouText
                       : { ...styles.forYouTextSelected, marginRight: 20 }
-                  }
-                >
+                  }>
                   For You
                 </Text>
               </TouchableOpacity>
@@ -124,29 +124,35 @@ function ExploreScreen(props) {
             <TouchableOpacity
               onPress={() => {
                 setPackageIsSelected(true);
-              }}
-            >
+              }}>
               <Text
                 style={
                   packageIsSelected
                     ? { ...styles.forYouTextSelected, marginRight: 20 }
                     : styles.forYouText
-                }
-              >
+                }>
                 Packages
               </Text>
             </TouchableOpacity>
           </View>
-          {filteredBooks.length > 0 ? (
-            <Books navigation={props.navigation} books={filteredBooks} />
-          ) : (
-            <View style={styles.noBooks}>
-              <Text style={styles.noBooksMessages}>There is no Books Yet</Text>
-              <Text style={styles.noBooksMessages}>
-                Be the First to add Some!
-              </Text>
-            </View>
-          )}
+
+          <Books
+            isLoading={isLoading}
+            refreshControl={
+              <RefreshControl
+                title="Reloading..."
+                titleColor={getThemeColor("text", props.theme)}
+                tintColor={getThemeColor("text", props.theme)}
+                refreshing={refreshing}
+                onRefresh={() => {
+                  setRefreshing(true);
+                  dispatch(fetchBooks()).then(() => setRefreshing(false));
+                }}
+              />
+            }
+            navigation={props.navigation}
+            books={filteredBooks}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -218,17 +224,6 @@ const getStyles = (theme) =>
       flexDirection: "row",
       marginTop: 15,
       paddingLeft: "4.8%",
-    },
-    noBooks: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    noBooksMessages: {
-      color: "#939393",
-      fontSize: 15,
-      letterSpacing: 1,
-      marginBottom: 5,
     },
   });
 

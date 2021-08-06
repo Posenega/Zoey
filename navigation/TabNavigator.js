@@ -16,9 +16,8 @@ import MessageNavigator from "./MessageNavigator";
 import io from "socket.io-client";
 
 import { connect, useDispatch, useSelector } from "react-redux";
-import { fetchChats } from "../store/actions/chats";
+import { fetchChats, addChat } from "../store/actions/chats";
 import { Platform } from "react-native";
-import ProfileScreen from "../screens/ProfileScreen";
 import ProfileNavigator from "./ProfileNavigator";
 import { setSocket } from "../store/actions/auth";
 import * as Notifications from "expo-notifications";
@@ -32,13 +31,13 @@ const TabNavigator = (props) => {
   const socket = useSelector((state) => state.auth.socket);
   const [expoPushToken, setExpoPushToken] = useState("");
 
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
-  });
+  // Notifications.setNotificationHandler({
+  //   handleNotification: async () => ({
+  //     shouldShowAlert: false,
+  //     shouldPlaySound: false,
+  //     shouldSetBadge: false,
+  //   }),
+  // });
 
   useEffect(() => {
     let hasMounted = false;
@@ -57,7 +56,7 @@ const TabNavigator = (props) => {
       token &&
       jwtDecode(token).exp > Date.now() / 1000 &&
       userId &&
-      expoPushToken
+      (!Constants.isDevice || expoPushToken)
     ) {
       dispatch(fetchChats()).then(() => {
         const newSocket = io(axios.defaults.baseURL, {
@@ -89,6 +88,7 @@ const TabNavigator = (props) => {
   return (
     <BottomTab.Navigator
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarActiveTintColor: getThemeColor("primary", props.theme),
         tabBarInactiveTintColor: getThemeColor("idle", props.theme),
@@ -99,8 +99,7 @@ const TabNavigator = (props) => {
           height: Platform.OS === "android" ? "7%" : "10%",
           backgroundColor: getThemeColor("main", props.theme),
         },
-      }}
-    >
+      }}>
       <BottomTab.Screen
         name="Explore"
         component={BooksNavigator}
@@ -194,7 +193,7 @@ async function registerForPushNotificationsAsync() {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
   } else {
-    alert("Must use physical device for Push Notifications");
+    // alert("Must use physical device for Push Notifications");
   }
 
   if (Platform.OS === "android") {

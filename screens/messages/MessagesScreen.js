@@ -12,6 +12,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import MessageInfoContainer from "../../components/MessageInfoContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChats } from "../../store/actions/chats";
+import NoData from "../../components/NoData";
 
 export default function MessagesScreen(props) {
   const headerHeight = useHeaderHeight();
@@ -36,12 +37,14 @@ export default function MessagesScreen(props) {
     <View style={{ ...SharedStyles.screen, paddingTop: headerHeight }}>
       {isLoading ? (
         <ActivityIndicator />
-      ) : (
+      ) : chats ? (
         <FlatList
           data={chats}
           renderItem={renderChat}
           keyExtractor={(item) => item._id}
         />
+      ) : (
+        <NoData firstLine="No Messages." />
       )}
     </View>
   );
