@@ -21,8 +21,7 @@ function Book(props) {
         props.navigation.navigate("detail", {
           id: props.id,
         })
-      }
-    >
+      }>
       <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
         <View style={styles.bookImage}>
           <Image style={styles.image} source={{ uri: props.image }} />
@@ -36,15 +35,16 @@ function Book(props) {
           </Text>
 
           <Badge
+            style={{ alignSelf: "flex-start", width: null }}
             category={props.category}
             color={props.color}
-            backgroundColor={props.backgroundColor}
-          >
-            {props.category}
-            {/* {!props.isPackage
-              ? Categories.find((category) => category.value == props.category)
-                  .label
-              : "Package"} */}
+            backgroundColor={props.backgroundColor}>
+            {/* {props.category} */}
+
+            {
+              Categories.find((category) => category.value == props.category)
+                .label
+            }
           </Badge>
         </View>
       </View>
