@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View, TextInput, StyleSheet } from "react-native";
 import { connect, useDispatch } from "react-redux";
@@ -10,8 +10,16 @@ function MessageComposer({ chatId, theme }) {
   const styles = getStyles(theme);
   const { control, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
+
+  const isSending = useRef(false);
   const onSubmit = (data) => {
-    dispatch(addMessageRequest(chatId, data.messageText)).then(reset);
+    if (!isSending.current) {
+      isSending.current = true;
+      dispatch(addMessageRequest(chatId, data.messageText)).then(() => {
+        reset();
+        isSending.current = false;
+      });
+    }
   };
   return (
     <View style={styles.messageComposer}>

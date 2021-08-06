@@ -60,13 +60,35 @@ export const fetchChatMessages = (chatId) => {
 
 export const addMessageRequest = (chatId, text) => {
   return async (dispatch, getState) => {
-    const socket = getState().auth.socket;
-    socket?.emit("sendMessage", { roomId: chatId, text }, (message) => {
-      dispatch(
-        addMessage(chatId, message.text, true, message.createdAt, message._id)
-      );
+    try {
+      const socket = getState().auth.socket;
+      const sendMessagePromise = new Promise((resolve, reject) => {
+        socket?.emit(
+          "sendMessage",
+          { roomId: chatId, text },
+          ({ message, error }) => {
+            dispatch(
+              addMessage(
+                chatId,
+                message.text,
+                true,
+                message.createdAt,
+                message._id
+              )
+            );
+            resolve();
+
+            if (error) {
+              reject();
+            }
+          }
+        );
+      });
+      await sendMessagePromise;
       return Promise.resolve();
-    });
+    } catch (e) {
+      throw e;
+    }
   };
 };
 

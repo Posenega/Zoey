@@ -33,7 +33,7 @@ const TabNavigator = (props) => {
 
   // Notifications.setNotificationHandler({
   //   handleNotification: async () => ({
-  //     shouldShowAlert: false,
+  //     shouldShowAlert: true,
   //     shouldPlaySound: false,
   //     shouldSetBadge: false,
   //   }),
@@ -41,11 +41,13 @@ const TabNavigator = (props) => {
 
   useEffect(() => {
     let hasMounted = false;
-    if (!hasMounted) {
-      registerForPushNotificationsAsync().then((token) => {
+
+    registerForPushNotificationsAsync().then((token) => {
+      if (!hasMounted) {
         setExpoPushToken(token);
-      });
-    }
+      }
+    });
+
     return () => {
       hasMounted = true;
     };
@@ -99,7 +101,8 @@ const TabNavigator = (props) => {
           height: Platform.OS === "android" ? "7%" : "10%",
           backgroundColor: getThemeColor("main", props.theme),
         },
-      }}>
+      }}
+    >
       <BottomTab.Screen
         name="Explore"
         component={BooksNavigator}
