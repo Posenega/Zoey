@@ -19,7 +19,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchChats, addChat } from "../store/actions/chats";
 import { Platform } from "react-native";
 import ProfileNavigator from "./ProfileNavigator";
-import { setSocket } from "../store/actions/auth";
+import { setSocket, uploadExpoPushToken } from "../store/actions/auth";
 import * as Notifications from "expo-notifications";
 
 const BottomTab = createBottomTabNavigator();
@@ -31,13 +31,13 @@ const TabNavigator = (props) => {
   const socket = useSelector((state) => state.auth.socket);
   const [expoPushToken, setExpoPushToken] = useState("");
 
-  // Notifications.setNotificationHandler({
-  //   handleNotification: async () => ({
-  //     shouldShowAlert: true,
-  //     shouldPlaySound: false,
-  //     shouldSetBadge: false,
-  //   }),
-  // });
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
   useEffect(() => {
     let hasMounted = false;
@@ -48,7 +48,20 @@ const TabNavigator = (props) => {
       }
     });
 
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const data = response.notification.request.content.data;
+        if (data.type === "chatRoom") {
+          console.log(data.userId);
+          props.navigation.navigate("chatRoom", {
+            userId: data.userId,
+          });
+        }
+      }
+    );
+
     return () => {
+      subscription.remove();
       hasMounted = true;
     };
   }, []);
@@ -60,21 +73,22 @@ const TabNavigator = (props) => {
       userId &&
       (!Constants.isDevice || expoPushToken)
     ) {
-      dispatch(fetchChats()).then(() => {
-        const newSocket = io(axios.defaults.baseURL, {
-          extraHeaders: {
-            Authorization: "Bearer " + token,
-          },
-          query: { expoPushToken },
+      dispatch(uploadExpoPushToken(expoPushToken)).then(() => {
+        dispatch(fetchChats()).then(() => {
+          const newSocket = io(axios.defaults.baseURL, {
+            extraHeaders: {
+              Authorization: "Bearer " + token,
+            },
+          });
+          newSocket.emit("subscribe", { userId });
+          newSocket.on(
+            "roomAdded",
+            ({ roomId, userId, userImageUrl, username }) => {
+              dispatch(addChat(roomId, userId, username, userImageUrl));
+            }
+          );
+          dispatch(setSocket(newSocket));
         });
-        newSocket.emit("subscribe", { userId });
-        newSocket.on(
-          "roomAdded",
-          ({ roomId, userId, userImageUrl, username }) => {
-            dispatch(addChat(roomId, userId, username, userImageUrl));
-          }
-        );
-        dispatch(setSocket(newSocket));
       });
     }
   }, [dispatch, userId, token, expoPushToken]);

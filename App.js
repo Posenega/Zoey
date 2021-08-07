@@ -28,8 +28,6 @@ axios.defaults.baseURL = Constants.manifest?.debuggerHost
   ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:5000`
   : "https://stormy-garden-51665.herokuapp.com";
 
-// axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
-
 const fetchFonts = () => {
   return Font.loadAsync({
     rubik: require("./assets/fonts/Rubik-Regular.ttf"),

@@ -153,8 +153,22 @@ export const setVerifyUser = (email, userId) => {
 
 export const logout = () => {
   return async (dispatch, getState) => {
-    await SecureStore.deleteItemAsync("userData");
-    dispatch({ type: LOGOUT });
+    try {
+      const token = getState().auth.token;
+      await SecureStore.deleteItemAsync("userData");
+      await axios({
+        method: "patch",
+        url: "/api/users/update",
+        data: { expoPushToken: " " },
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      dispatch({ type: LOGOUT });
+    }
   };
 };
 
@@ -166,6 +180,27 @@ const tryAutoLoginFail = () => {
   return { type: TRY_AUTO_LOGIN_FAIL };
 };
 
+export const uploadExpoPushToken = (expoPushToken) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+
+    try {
+      await axios({
+        method: "patch",
+        url: "/api/users/update",
+        data: { expoPushToken },
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      return Promise.resolve();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
+
 export const updateUser = (data, setError, goBack) => {
   return (dispatch, getState) => {
     dispatch(authSetLoading());
@@ -175,7 +210,7 @@ export const updateUser = (data, setError, goBack) => {
     axios({
       method: "patch",
       url: "/api/users/update",
-      data,
+      data: { data },
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + token,
@@ -199,6 +234,7 @@ export const updateUser = (data, setError, goBack) => {
         goBack();
       })
       .catch((e) => {
+        console.log("error");
         dispatch(authStopLoading());
         setError("oldPassword", {
           type: "server",

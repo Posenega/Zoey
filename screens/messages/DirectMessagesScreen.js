@@ -23,11 +23,14 @@ export default function DirectMessagesScreen(props) {
   const dispatch = useDispatch();
 
   const socket = useSelector((state) => state.auth.socket);
+  const chatterId = useSelector((state) => state.auth.userId);
 
   useEffect(() => {
     socket?.emit("joinRoom", { roomId: cId });
-    socket?.on("message", ({ text, messageId }) => {
-      dispatch(addMessage(cId, text, false, messageId));
+    socket?.on("message", ({ text, messageId, createdAt, sender }) => {
+      dispatch(
+        addMessage(cId, text, sender === chatterId, createdAt, messageId)
+      );
     });
 
     return () => {
@@ -83,7 +86,8 @@ export default function DirectMessagesScreen(props) {
               flex: 9,
               paddingHorizontal: 18,
               marginBottom: 1,
-            }}>
+            }}
+          >
             <View style={styles.messageList}>
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -97,7 +101,8 @@ export default function DirectMessagesScreen(props) {
             <KeyboardAvoidingView
               keyboardVerticalOffset={120}
               behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={styles.composerContainer}>
+              style={styles.composerContainer}
+            >
               <View>
                 <MessageComposer chatId={cId} />
               </View>

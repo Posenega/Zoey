@@ -15,6 +15,7 @@ function MessageComposer({ chatId, theme }) {
   const onSubmit = (data) => {
     if (!isSending.current) {
       isSending.current = true;
+
       dispatch(addMessageRequest(chatId, data.messageText)).then(() => {
         reset();
         isSending.current = false;

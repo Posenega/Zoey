@@ -12,6 +12,7 @@ export const CHATS_STOP_LOADING = "CHATS_STOP_LOADING";
 export const fetchChats = () => {
   return async (dispatch, getState) => {
     try {
+      console.log("here");
       dispatch(chatsSetLoading());
       const token = getState().auth.token;
       const res = await axios.get("/api/chats", {
@@ -30,6 +31,7 @@ export const fetchChats = () => {
           })
         )
       );
+
       return Promise.resolve();
     } catch (e) {
       console.log(e);
@@ -87,6 +89,7 @@ export const addMessageRequest = (chatId, text) => {
       await sendMessagePromise;
       return Promise.resolve();
     } catch (e) {
+      console.log(e);
       throw e;
     }
   };
@@ -107,6 +110,7 @@ export const addChatMessagesFail = (chatId) => {
 export const requestAddChat = (secondUserId) => {
   return (dispatch, getState) => {
     const socket = getState().auth.socket;
+
     socket?.emit("addRoom", { secondUserId }, ({ chat }) => {
       dispatch(
         addChat(
