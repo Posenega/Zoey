@@ -30,7 +30,8 @@ import { addChat, requestAddChat } from "../store/actions/chats";
 
 function BookDetailScreen(props) {
   const styles = getStyles(props.theme);
-  const id = props.route.params.id;
+  const { id, isPackage } = props.route.params || {};
+
   const { getState, subscribe } = useStore();
 
   const dispatch = useDispatch();
@@ -51,8 +52,8 @@ function BookDetailScreen(props) {
   useEffect(() => {
     unsubscribe.current = subscribe(() => {
       const state = getState();
-
-      const book = state.books.books.find((book) => book?._id === id);
+      const selected = isPackage ? "packages" : "books";
+      const book = state[selected][selected].find((book) => book?._id === id);
       setDisplayedBook(book);
       setIsFavorite(state.books.favoriteBooks.some((b) => b?._id === book._id));
       const chatting =

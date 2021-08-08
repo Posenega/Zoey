@@ -16,6 +16,7 @@ function HorizontalBook(props) {
       onPress={() =>
         props.navigation.navigate("detail", {
           id: props.id,
+          isPackage: props.isPackage,
         })
       }
     >

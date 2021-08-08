@@ -20,6 +20,7 @@ function Books({
   isHorizontal,
   isLoading,
   theme,
+  isPackage,
 }) {
   const renderBook = (itemData) => {
     const book = itemData.item;
@@ -30,12 +31,12 @@ function Books({
         color={book.color}
         backgroundColor={book.backgroundColor}
         title={book.title}
-        category={book.isPackage ? null : book.categories[0]}
+        category={book.categories[0]}
         image={`${axios.defaults.baseURL}/${book.imageUrl}`}
         author={book.author}
         navigation={navigation}
         grade={book.grade}
-        isPackage={book.isPackage}
+        isPackage={isPackage}
         isForSchool={book.isForSchool}
       />
     );
@@ -46,6 +47,7 @@ function Books({
           image={`${axios.defaults.baseURL}/${book.imageUrl}`}
           id={book?._id}
           navigation={navigation}
+          isPackage={isPackage}
         />
       );
     }

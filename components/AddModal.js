@@ -32,12 +32,12 @@ function AddModal(props) {
   }, [modalizeRef, modalRef]);
 
   useEffect(() => {
-    if (addBookStatus === "SUCCESS") {
+    if (modalState === "book" && addBookStatus === "SUCCESS") {
       reset();
       modalizeRef.current?.close();
       dispatch(addBookFinish());
     }
-  }, [addBookStatus]);
+  }, [addBookStatus, modalState]);
 
   return (
     <Modalize
@@ -56,18 +56,20 @@ function AddModal(props) {
       modalStyle={{
         backgroundColor: getThemeColor("main", props.theme),
       }}
-      ref={modalizeRef}>
+      ref={modalizeRef}
+    >
       {modalState === "book" ? (
         <AddBook />
       ) : modalState === "package" ? (
-        <AddPackage />
+        <AddPackage closeModal={modalizeRef.current?.close} />
       ) : (
         <View style={styles.selector}>
           <Text style={styles.headerText}>What would you like to create?</Text>
           <View style={styles.buttonContainer}>
             <CustomButton
               containerStyle={{ marginRight: 15 }}
-              onPress={() => dispatch(modalSetState("book"))}>
+              onPress={() => dispatch(modalSetState("book"))}
+            >
               Book
             </CustomButton>
             <CustomButton onPress={() => dispatch(modalSetState("package"))}>

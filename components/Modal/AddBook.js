@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
   View,
@@ -28,19 +28,17 @@ function AddBook(props) {
     formState: { errors },
     setValue,
   } = useForm();
-  const [localUrl, setLocalUrl] = useState();
+
   const addBookStatus = useSelector((state) => state.books.addBookStatus);
   const editedBook = useSelector((state) => state.addBookModal.editedBook);
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    if (!Array.isArray(data.categories)) {
-      data.categories = [data.categories];
-    }
+    data.categories = [data.categories];
 
     let formData = new FormData();
 
-    let filename = localUrl.split("/").pop();
+    let filename = data.localUrl.split("/").pop();
     let match = /\.(\w+)$/.exec(filename);
     let fileType = match ? `image/${match[1]}` : `image`;
 
@@ -48,7 +46,7 @@ function AddBook(props) {
     formData.append("description", data.description);
     watch("forSchool") ? null : formData.append("author", data.author);
     formData.append("imageUrl", {
-      uri: localUrl,
+      uri: data.localUrl,
       name: filename,
       type: fileType,
     });
@@ -70,7 +68,8 @@ function AddBook(props) {
         </Text>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          style={styles.badgeContainer}>
+          style={styles.badgeContainer}
+        >
           <View style={styles.badge}>
             {addBookStatus === "LOADING" ? (
               <ActivityIndicator
@@ -99,7 +98,8 @@ function AddBook(props) {
                   setValue("package", false);
                 }
               }}
-              value={value}>
+              value={value}
+            >
               For School
             </Option>
           )}
@@ -297,7 +297,7 @@ function AddBook(props) {
               text="Add book cover"
               aspect={[2, 3]}
               sendData={useCallback((result) => {
-                setLocalUrl(result);
+                setValue("localUrl", result);
               }, [])}
               error={errors.imageUrl?.message}
             />

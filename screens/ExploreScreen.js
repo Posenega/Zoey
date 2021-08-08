@@ -20,32 +20,34 @@ import { fetchBooks, filterBooks } from "../store/actions/books";
 import Options from "../components/Options";
 import BookFilters from "../components/BookFilters";
 import { fetchPackages } from "../store/actions/packages";
-import NoData from "../components/NoData";
+import BookPackageSelector from "../components/BookPackageSelector";
 
 function ExploreScreen(props) {
   const styles = getStyles(props.theme);
   useEffect(() => {
-    dispatch(fetchPackages());
     dispatch(fetchBooks());
   }, []);
 
-  const isLoading = useSelector((state) => state.books.isLoading);
+  const packagesIsSelected = useSelector(
+    (state) => state.bookPackageSelector.selected === "packages"
+  );
+
+  const isLoading = useSelector((state) => {
+    if (packagesIsSelected) return state.packages.isLoading;
+    return state.books.isLoading;
+  });
 
   const headerHeight = useHeaderHeight();
 
-  const [packageIsSelected, setPackageIsSelected] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const filteredBooks = useSelector((state) => {
+    if (packagesIsSelected) return state.packages.packages;
     return state.books.filteredBooks;
   });
 
   const isSearching = useSelector((state) => {
     return state.books.isSearching;
-  });
-
-  const packages = useSelector((state) => {
-    return state.packages.packages;
   });
 
   const dispatch = useDispatch();
@@ -67,7 +69,8 @@ function ExploreScreen(props) {
           // ...SharedStyles.screen,
           flex: 1,
           paddingTop: headerHeight,
-        }}>
+        }}
+      >
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <View style={styles.inputContainer}>
@@ -82,7 +85,8 @@ function ExploreScreen(props) {
             </View>
             <TouchableOpacity
               onPress={openFilters}
-              style={styles.filterContainer}>
+              style={styles.filterContainer}
+            >
               <View style={styles.filterBox}>
                 <FilterButton />
               </View>
@@ -100,41 +104,12 @@ function ExploreScreen(props) {
               isHorizontal
               navigation={props.navigation}
               books={filteredBooks}
+              isPackage={packagesIsSelected}
             />
           </View>
         )}
         <View style={styles.forYou}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-end",
-            }}>
-            {!isSearching && (
-              <TouchableOpacity onPress={() => setPackageIsSelected(false)}>
-                <Text
-                  style={
-                    packageIsSelected
-                      ? styles.forYouText
-                      : { ...styles.forYouTextSelected, marginRight: 20 }
-                  }>
-                  For You
-                </Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              onPress={() => {
-                setPackageIsSelected(true);
-              }}>
-              <Text
-                style={
-                  packageIsSelected
-                    ? { ...styles.forYouTextSelected, marginRight: 20 }
-                    : styles.forYouText
-                }>
-                Packages
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {!isSearching && <BookPackageSelector />}
 
           <Books
             isLoading={isLoading}
@@ -146,12 +121,15 @@ function ExploreScreen(props) {
                 refreshing={refreshing}
                 onRefresh={() => {
                   setRefreshing(true);
-                  dispatch(fetchBooks()).then(() => setRefreshing(false));
+                  dispatch(
+                    packagesIsSelected ? fetchPackages(true) : fetchBooks(true)
+                  ).then(() => setRefreshing(false));
                 }}
               />
             }
             navigation={props.navigation}
             books={filteredBooks}
+            isPackage={packagesIsSelected}
           />
         </View>
       </View>
@@ -207,19 +185,7 @@ const getStyles = (theme) =>
       flex: 1,
       marginTop: 20,
     },
-    forYouText: {
-      marginRight: 20,
-      marginBottom: 10,
-      fontFamily: "rubik-bold",
-      fontSize: 14,
-      color: "grey",
-    },
-    forYouTextSelected: {
-      marginBottom: 10,
-      fontFamily: "rubik-bold",
-      fontSize: 16,
-      color: getThemeColor("text", theme),
-    },
+
     option: {
       flexDirection: "row",
       marginTop: 15,

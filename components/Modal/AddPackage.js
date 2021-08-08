@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
   View,
@@ -30,39 +30,14 @@ function AddPackage(props) {
     formState: { errors },
     setValue,
   } = useForm();
-  const [localUrl, setLocalUrl] = useState();
+
   //   const addPackageStatus = useSelector((state) => state.packages.addBookStatus);
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    if (!Array.isArray(data.categories)) {
-      data.categories = [data.categories];
-    }
-
-    let formData = new FormData();
-
-    let filename = localUrl.split("/").pop();
-    let match = /\.(\w+)$/.exec(filename);
-    let fileType = match ? `image/${match[1]}` : `image`;
-
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("imageUrl", {
-      uri: localUrl,
-      name: filename,
-      type: fileType,
-    });
-    formData.append("type", data.type);
-    formData.append("categories", JSON.stringify(data.categories));
-    watch("forSchool") ? formData.append("grade", data.grade) : null;
-    formData.append("price", data.price);
-    formData.append("condition", data.condition);
-    formData.append("isForSchool", data.forSchool);
-
-    formData.append("numberOfBooks", data.numberOfBooks);
-
-    dispatch(requestAddPackage(formData));
+    dispatch(requestAddPackage(data)).then(props.closeModal);
   };
+  const isLoading = useSelector((state) => state.packages.addingIsLoading);
 
   return (
     <View style={styles.modal}>
@@ -73,7 +48,11 @@ function AddPackage(props) {
           style={styles.badgeContainer}
         >
           <View style={styles.badge}>
-            <Text style={styles.badgText}>Add package</Text>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <Text style={styles.badgText}>Add package</Text>
+            )}
           </View>
         </TouchableOpacity>
       </View>
@@ -83,16 +62,7 @@ function AddPackage(props) {
           defaultValue={false}
           control={control}
           render={({ field: { onChange, value } }) => (
-            <Option
-              onChange={(val) => {
-                onChange(val);
-                if (!val) {
-                  setValue("categories", "");
-                  setValue("package", false);
-                }
-              }}
-              value={value}
-            >
+            <Option onChange={onChange} value={value}>
               For School
             </Option>
           )}
@@ -198,7 +168,15 @@ function AddPackage(props) {
         <Controller
           control={control}
           name="categories"
-          defaultValue={""}
+          defaultValue={[]}
+          rules={{
+            validate: (val) => {
+              if (val.length < 1) {
+                return false;
+              }
+              return true;
+            },
+          }}
           render={({ field: { onChange, value } }) => (
             <Options
               style={{ marginBottom: -10 }}
@@ -306,7 +284,7 @@ function AddPackage(props) {
               text="Add book cover"
               aspect={[2, 3]}
               sendData={useCallback((result) => {
-                setLocalUrl(result);
+                setValue("localUrl", result);
               }, [])}
               error={errors.imageUrl?.message}
             />

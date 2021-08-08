@@ -23,6 +23,7 @@ import * as SecureStore from "expo-secure-store";
 import { tryAutoLogin } from "./store/actions/auth";
 import packagesReducer from "./store/reducers/packages";
 import { addChat } from "./store/actions/chats";
+import bookPackageSelectorReducer from "./store/reducers/bookPackageSelector";
 
 axios.defaults.baseURL = Constants.manifest?.debuggerHost
   ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:5000`
@@ -90,6 +91,7 @@ export default function App() {
     chats: chatsReducer,
     themes: themesReducer,
     packages: packagesReducer,
+    bookPackageSelector: bookPackageSelectorReducer,
   });
 
   const rootReducer = (state, action) => {

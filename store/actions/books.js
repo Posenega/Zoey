@@ -18,11 +18,11 @@ export const ADD_BOOK_SUCCESS = "ADD_BOOK_SUCCESS";
 export const ADD_BOOK_FINISH = "ADD_BOOK_FINISH";
 export const DELETE_BOOK_SUCCESS = "DELETE_BOOK_SUCCESS";
 
-export const fetchBooks = () => {
+export const fetchBooks = (refresh = false) => {
   return async (dispatch, getState) => {
     try {
       const token = getState().auth.token;
-      dispatch({ type: FETCH_BOOKS_START });
+      dispatch({ type: FETCH_BOOKS_START, refresh });
       const response = await axios.get("/api/books/browse", {
         headers: { Authorization: "Bearer " + token },
       });

@@ -31,7 +31,7 @@ const initialState = {
 const booksReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_BOOKS_START:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: !action.refresh };
     case FETCH_BOOKS_SUCCESS:
       return {
         ...state,

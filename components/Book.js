@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Categories from "../constants/Categories";
-import Grades from "../constants/Grades";
 import { getThemeColor } from "../constants/Colors";
 import Badge from "./Badge";
 
@@ -20,8 +19,10 @@ function Book(props) {
       onPress={() =>
         props.navigation.navigate("detail", {
           id: props.id,
+          isPackage: props.isPackage,
         })
-      }>
+      }
+    >
       <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
         <View style={styles.bookImage}>
           <Image style={styles.image} source={{ uri: props.image }} />
@@ -38,13 +39,14 @@ function Book(props) {
             style={{ alignSelf: "flex-start", width: null }}
             category={props.category}
             color={props.color}
-            backgroundColor={props.backgroundColor}>
+            backgroundColor={props.backgroundColor}
+          >
             {/* {props.category} */}
 
-            {
+            {(props.category &&
               Categories.find((category) => category.value == props.category)
-                .label
-            }
+                ?.label) ||
+              props.category}
           </Badge>
         </View>
       </View>
