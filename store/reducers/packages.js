@@ -5,6 +5,7 @@ import {
   ADD_PACKAGE,
   ADD_PACKAGE_START,
   ADD_PACKAGE_FAILURE,
+  DELETE_PACKAGE,
 } from "../actions/packages";
 
 const initialState = {
@@ -41,6 +42,15 @@ const packagesReducer = (state = initialState, action) => {
       return { ...state, addingIsLoading: true };
     case ADD_PACKAGE_FAILURE:
       return { ...state, addingIsLoading: false };
+    case DELETE_PACKAGE:
+      console.log(state.packages, " ", action.packageId);
+      const filterPackages = (packages) =>
+        packages.filter(({ _id }) => _id !== action.packageId);
+      return {
+        ...state,
+        packages: filterPackages(state.packages),
+        filteredPackages: filterPackages(state.filteredPackages),
+      };
     default:
       return state;
   }

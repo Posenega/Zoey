@@ -6,6 +6,7 @@ export const FETCH_PACKAGES_FAILURE = "FETCH_PACKAGES_FAILURE";
 export const ADD_PACKAGE = "ADD_PACKAGE";
 export const ADD_PACKAGE_START = "ADD_PACKAGE_START";
 export const ADD_PACKAGE_FAILURE = "ADD_PACKAGE_FAILURE";
+export const DELETE_PACKAGE = "DELETE_PACKAGE";
 
 export const requestAddPackage = ({
   title,
@@ -86,6 +87,22 @@ export const fetchPackages = (refresh = false) => {
   };
 };
 
+export const requestDeletePackage = (packageId) => {
+  return async (dispatch, getState) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.delete("/api/packages/" + packageId, {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      dispatch(deletePackage(packageId));
+      return Promise.resolve();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const addPackage = (toAddPackage) => {
   return { type: ADD_PACKAGE, package: toAddPackage };
 };
@@ -96,4 +113,8 @@ export const addPackageStart = () => {
 
 export const addPackageFailure = () => {
   return { type: ADD_PACKAGE_FAILURE };
+};
+
+export const deletePackage = (packageId) => {
+  return { type: DELETE_PACKAGE, packageId };
 };

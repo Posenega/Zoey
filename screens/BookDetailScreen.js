@@ -27,6 +27,7 @@ import DeleteButton from "../components/Icons/DeleteButton";
 import EditButton from "../components/Icons/EditButton";
 import { modalSetEditMode } from "../store/actions/addBookModal";
 import { addChat, requestAddChat } from "../store/actions/chats";
+import { requestDeletePackage } from "../store/actions/packages";
 
 function BookDetailScreen(props) {
   const styles = getStyles(props.theme);
@@ -138,21 +139,23 @@ function BookDetailScreen(props) {
                   }
                 />
               </TouchableOpacity>
-              {userId === displayedBook.creator ? (
+              {userId === displayedBook.creator && (
                 <View style={{ marginLeft: 15, flexDirection: "row" }}>
                   <TouchableOpacity
                     onPress={() => {
                       unsubscribe.current();
 
-                      dispatch(deleteBook(displayedBook._id)).then(() =>
-                        props.navigation.goBack()
-                      );
+                      dispatch(
+                        isPackage
+                          ? requestDeletePackage(displayedBook._id)
+                          : deleteBook(displayedBook._id)
+                      ).then(() => props.navigation.goBack());
                     }}
                   >
                     <DeleteButton color={getThemeColor("idle", props.theme)} />
                   </TouchableOpacity>
                 </View>
-              ) : null}
+              )}
             </View>
             <Text numberOfLines={1} style={styles.author}>
               {displayedBook.author
