@@ -6,12 +6,18 @@ import {
   ADD_PACKAGE_START,
   ADD_PACKAGE_FAILURE,
   DELETE_PACKAGE,
+  ADD_FAVORITE_PACKAGE_SUCCESS,
+  REMOVE_FAVORITE_PACKAGE_SUCCESS,
+  FETCH_FAVORITES_PACKAGES_START,
+  FETCH_FAVORITES_PACKAGES_SUCCESS,
+  FETCH_FAVORITES_PACKAGES_FAILURE,
 } from "../actions/packages";
 
 const initialState = {
   hasInit: false,
   packages: [],
   filteredPackages: [],
+  favoritePackages: [],
   isLoading: false,
   addingIsLoading: false,
   error: null,
@@ -51,6 +57,33 @@ const packagesReducer = (state = initialState, action) => {
         packages: filterPackages(state.packages),
         filteredPackages: filterPackages(state.filteredPackages),
       };
+    case ADD_FAVORITE_PACKAGE_SUCCESS:
+      let toFavPackage = state.packages.find((p) => p._id === action.packageId);
+      if (!toFavPackage) {
+        return state;
+      }
+      return {
+        ...state,
+        favoritePackages: [toFavPackage].concat(state.favoritePackages),
+      };
+    case REMOVE_FAVORITE_PACKAGE_SUCCESS:
+      return {
+        ...state,
+        favoritePackages: state.favoritePackages.filter(
+          (p) => p._id !== action.packageId
+        ),
+      };
+
+    case FETCH_FAVORITES_PACKAGES_START:
+      return { ...state, isLoading: true };
+    case FETCH_FAVORITES_PACKAGES_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        favoriteBooks: [...action.packages],
+      };
+    case FETCH_FAVORITES_PACKAGES_FAILURE:
+      return { ...state, isLoading: false, error: action.payload };
     default:
       return state;
   }

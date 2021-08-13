@@ -7,7 +7,15 @@ export const ADD_PACKAGE = "ADD_PACKAGE";
 export const ADD_PACKAGE_START = "ADD_PACKAGE_START";
 export const ADD_PACKAGE_FAILURE = "ADD_PACKAGE_FAILURE";
 export const DELETE_PACKAGE = "DELETE_PACKAGE";
-
+export const ADD_FAVORITE_PACKAGE_SUCCESS = "ADD_FAVORITE_PACKAGE_SUCCESS";
+export const REMOVE_FAVORITE_PACKAGE_SUCCESS =
+  "REMOVE_FAVORITE_PACKAGE_SUCCESS";
+export const FETCH_FAVORITES_PACKAGES_START = "FETCH_FAVORITES_PACKAGES_START";
+export const FETCH_FAVORITES_PACKAGES_SUCCESS =
+  "FETCH_FAVORITES_PACKAGES_SUCCESS";
+export const FETCH_FAVORITES_PACKAGES_FAILURE =
+  "FETCH_FAVORITES_PACKAGES_FAILURE";
+export const FAVORITE_PACKAGE_START = "FAVORITE_PACKAGE_START";
 export const requestAddPackage = ({
   title,
   localUrl,
@@ -57,7 +65,7 @@ export const requestAddPackage = ({
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
         },
-      });
+      }).then(console.log("done"));
       dispatch(addPackage(response.data.package));
       return Promise.resolve();
     } catch (e) {
@@ -117,4 +125,44 @@ export const addPackageFailure = () => {
 
 export const deletePackage = (packageId) => {
   return { type: DELETE_PACKAGE, packageId };
+};
+
+export const requestAddFavoritePackage = (packageId) => {
+  return (dispatch, getState) => {
+    dispatch(addFavoritePackageSuccess(packageId));
+    const token = getState().auth.token;
+    axios({
+      method: "post",
+      url: `/api/packages/favorites/${packageId}`,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }).catch((e) => dispatch(removeFavoritePackageSuccess(packageId)));
+  };
+};
+
+export const requestRemoveFavoritePackage = (packageId) => {
+  return (dispatch, getState) => {
+    dispatch(removeFavoritePackageSuccess(packageId));
+    const token = getState().auth.token;
+    axios({
+      method: "delete",
+      url: `/api/packages/favorites/${packageId}`,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }).catch((e) => dispatch(addFavoritePackageSuccess(packageId)));
+  };
+};
+
+export const favoritePackageStart = () => {
+  return { type: FAVORITE_PACKAGE_START };
+};
+
+export const addFavoritePackageSuccess = (packageId) => {
+  return { type: ADD_FAVORITE_PACKAGE_SUCCESS, packageId };
+};
+
+export const removeFavoritePackageSuccess = (packageId) => {
+  return { type: REMOVE_FAVORITE_PACKAGE_SUCCESS, packageId };
 };

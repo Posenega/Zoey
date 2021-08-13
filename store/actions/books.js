@@ -38,13 +38,12 @@ export const fetchBooks = (refresh = false) => {
   };
 };
 
-export const fetch1Books = () => {
+export const fetchFavoriteBooks = () => {
   return (dispatch, getState) => {
     const token = getState().auth.token;
-    const userId = getState().auth.userId;
     dispatch({ type: FETCH_FAVORITES_BOOKS_START });
     axios
-      .get(`/api/books/favorites/${userId}`, {
+      .get(`/api/books/favorites`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then(function (response) {
@@ -165,15 +164,16 @@ export const requestAddFavoriteBook = (bookId) => {
   return (dispatch, getState) => {
     dispatch(addFavoriteBookSuccess(bookId));
     const token = getState().auth.token;
-    const userId = getState().auth.userId;
     axios({
       method: "post",
-      url: `/api/books/favorites/${bookId}`,
+      url: "/api/books/favorites",
       headers: {
         Authorization: "Bearer " + token,
       },
-      data: { userId },
-    }).catch((e) => dispatch(removeFavoriteBookSuccess(bookId)));
+    }).catch((e) => {
+      console.log(e);
+      dispatch(removeFavoriteBookSuccess(bookId));
+    });
   };
 };
 
@@ -181,14 +181,12 @@ export const requestRemoveFavoriteBook = (bookId) => {
   return (dispatch, getState) => {
     dispatch(removeFavoriteBookSuccess(bookId));
     const token = getState().auth.token;
-    const userId = getState().auth.userId;
     axios({
       method: "delete",
-      url: `/api/books/favorites/${bookId}`,
+      url: "/api/books/favorites",
       headers: {
         Authorization: "Bearer " + token,
       },
-      data: { userId },
     }).catch((e) => dispatch(addFavoriteBookSuccess(bookId)));
   };
 };
@@ -218,9 +216,8 @@ export const fetchUserBooks = () => {
   return (dispatch, getState) => {
     dispatch({ type: FETCH_USER_BOOKS_START });
     const token = getState().auth.token;
-    const userId = getState().auth.userId;
     axios
-      .get(`/api/books/user/${userId}`, {
+      .get(`/api/books/user`, {
         headers: {
           Authorization: "Bearer " + token,
         },

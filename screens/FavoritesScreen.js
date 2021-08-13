@@ -11,12 +11,17 @@ import NoData from "../components/NoData";
 import BookPackageSelector from "../components/BookPackageSelector";
 
 function FavoritesScreen({ navigation, theme }) {
-  const styles = getStyles(theme);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
   }, []);
-  const displayedBooks = useSelector((state) => state.books.favoriteBooks);
+  const packagesIsSelected = useSelector(
+    (state) => state.bookPackageSelector.selected === "packages"
+  );
+  const displayedBooks = useSelector((state) => {
+    if (packagesIsSelected) return state.packages.favoritePackages;
+    return state.books.favoriteBooks;
+  });
 
   const headerHeight = useHeaderHeight();
 
@@ -25,18 +30,21 @@ function FavoritesScreen({ navigation, theme }) {
       style={{
         ...SharedStyles.screen,
         paddingTop: headerHeight,
-      }}>
+      }}
+    >
       <BookPackageSelector style={{ marginTop: 5 }} />
       {displayedBooks.length <= 0 ? (
         <NoData firstLine="No Favorites." secondLine="Go Add Some!" />
       ) : (
-        <Books books={displayedBooks} navigation={navigation} />
+        <Books
+          books={displayedBooks}
+          navigation={navigation}
+          isPackage={packagesIsSelected}
+        />
       )}
     </View>
   );
 }
-
-const getStyles = (theme) => StyleSheet.create({});
 
 export const screenOptions = {
   headerTitle: "Your Favorites",
