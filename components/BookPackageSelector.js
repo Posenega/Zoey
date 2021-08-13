@@ -6,46 +6,37 @@ import {
   setPackagesSelected,
 } from "../store/actions/bookPackageSelector";
 import { getThemeColor } from "../constants/Colors";
-function BookPackageSelector({ theme }) {
+function BookPackageSelector({ theme, style }) {
   const styles = getStyles(theme);
   const packagesIsSelected = useSelector(
     (state) => state.bookPackageSelector.selected === "packages"
   );
   const dispatch = useDispatch();
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "flex-end",
-      }}
-    >
+    <View style={{ ...style, flexDirection: "row", alignItems: "flex-end" }}>
       <TouchableOpacity
         onPress={() => {
           dispatch(setBooksSelected());
-        }}
-      >
+        }}>
         <Text
           style={
             !packagesIsSelected
               ? { ...styles.forYouText, ...styles.forYouTextSelected }
               : styles.forYouText
-          }
-        >
-          For You
+          }>
+          Books
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
           dispatch(setPackagesSelected());
-        }}
-      >
+        }}>
         <Text
           style={
             packagesIsSelected
               ? { ...styles.forYouText, ...styles.forYouTextSelected }
               : styles.forYouText
-          }
-        >
+          }>
           Packages
         </Text>
       </TouchableOpacity>

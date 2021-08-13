@@ -8,6 +8,7 @@ import SharedStyles from "../constants/SharedStyles";
 import { fetchFavoriteBooks } from "../store/actions/books";
 import Colors, { getThemeColor } from "../constants/Colors";
 import NoData from "../components/NoData";
+import BookPackageSelector from "../components/BookPackageSelector";
 
 function FavoritesScreen({ navigation, theme }) {
   const styles = getStyles(theme);
@@ -25,6 +26,7 @@ function FavoritesScreen({ navigation, theme }) {
         ...SharedStyles.screen,
         paddingTop: headerHeight,
       }}>
+      <BookPackageSelector style={{ marginTop: 5 }} />
       {displayedBooks.length <= 0 ? (
         <NoData firstLine="No Favorites." secondLine="Go Add Some!" />
       ) : (

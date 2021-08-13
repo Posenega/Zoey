@@ -10,6 +10,7 @@ import { fetchUserBooks } from "../store/actions/books";
 import IconPlaceholder from "../components/IconPlaceholder";
 import NoData from "../components/NoData";
 // import { getUser } from "../store/actions/auth";
+import BookPackageSelector from "../components/BookPackageSelector";
 
 function ProfileScreen(props) {
   const styles = getStyles(props.theme);
@@ -40,28 +41,25 @@ function ProfileScreen(props) {
   return (
     <View style={SharedStyles.screen}>
       <View style={styles.header}>
-        <View style={styles.userInfo}>
-          {imageUrl ? (
-            <Image
-              style={styles.image}
-              source={{
-                uri: `${axios.defaults.baseURL}/${imageUrl}`,
-              }}
-            />
-          ) : (
-            <IconPlaceholder size={68} iconSize={60} />
-          )}
-          <Text
-            numberOfLines={1}
-            style={{ ...styles.mediumText, textAlign: "center" }}>
-            {firstName} {lastName}
-          </Text>
-        </View>
+        {imageUrl ? (
+          <Image
+            style={styles.image}
+            source={{
+              uri: `${axios.defaults.baseURL}/${imageUrl}`,
+            }}
+          />
+        ) : (
+          <IconPlaceholder size={68} iconSize={60} />
+        )}
+        <Text
+          numberOfLines={1}
+          style={{ ...styles.mediumText, textAlign: "center" }}>
+          {firstName} {lastName}
+        </Text>
       </View>
       <View style={styles.body}>
-        <Text style={{ ...styles.mediumText, textAlign: "left" }}>
-          Your Books
-        </Text>
+        <BookPackageSelector style={{ marginTop: 10 }} />
+
         {allBooks.length <= 0 ? (
           <NoData
             firstLine="You don't have any books yet."
@@ -82,34 +80,21 @@ export const profileScreenOptions = {
 const getStyles = (theme) =>
   StyleSheet.create({
     header: {
-      paddingTop: "10%",
-      flex: 1,
+      marginTop: "20%",
+      flex: 0.65,
       flexDirection: "column",
+      flexDirection: "column",
+      justifyContent: "flex-end",
+      alignItems: "center",
     },
     mediumText: {
       width: "85%",
-      marginTop: 15,
+      marginTop: 10,
       fontSize: 16,
       fontFamily: "rubik-medium",
       color: getThemeColor("text", theme),
     },
-    topHeader: {
-      flexDirection: "row",
-      height: 55,
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    headerText: {
-      fontFamily: "rubik-bold",
-      fontSize: 18,
-      color: getThemeColor("text", theme),
-    },
-    userInfo: {
-      flexDirection: "column",
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    },
+
     image: {
       height: 68,
       width: 68,

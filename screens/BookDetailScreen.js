@@ -91,8 +91,7 @@ function BookDetailScreen(props) {
                 zIndex: 1,
                 left: 10,
                 top: 50,
-              }}
-            >
+              }}>
               <BackButton
                 onPress={() => props.navigation.goBack()}
                 size={40}
@@ -130,8 +129,7 @@ function BookDetailScreen(props) {
                       ? requestRemoveFavoriteBook(id)
                       : requestAddFavoriteBook(id)
                   );
-                }}
-              >
+                }}>
                 <FavoriteButton
                   size={20}
                   color={
@@ -150,8 +148,7 @@ function BookDetailScreen(props) {
                           ? requestDeletePackage(displayedBook._id)
                           : deleteBook(displayedBook._id)
                       ).then(() => props.navigation.goBack());
-                    }}
-                  >
+                    }}>
                     <DeleteButton color={getThemeColor("idle", props.theme)} />
                   </TouchableOpacity>
                 </View>
@@ -171,8 +168,7 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   Package
                 </Badge>
               )}
@@ -183,8 +179,7 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   For School
                 </Badge>
               )}
@@ -195,16 +190,14 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   Exchange
                 </Badge>
               )}
               <Badge
                 style={styles.badge}
                 color={getThemeColor("primary", props.theme)}
-                backgroundColor={getThemeColor("badgeBackground", props.theme)}
-              >
+                backgroundColor={getThemeColor("badgeBackground", props.theme)}>
                 {displayedBook.condition}
               </Badge>
             </View>
@@ -245,8 +238,7 @@ function BookDetailScreen(props) {
                     } else {
                       dispatch(requestAddChat(displayedBook.creator));
                     }
-                  }}
-                >
+                  }}>
                   <View style={{ ...styles.container, ...styles.message }}>
                     <MessageButton size={20} color="white" />
                     <Text style={{ ...styles.containerText, marginLeft: 5 }}>
@@ -263,8 +255,7 @@ function BookDetailScreen(props) {
             <TouchableOpacity
               onPress={() =>
                 props.navigation.navigate("settings", { screen: "pricing" })
-              }
-            >
+              }>
               <Text style={styles.alertMessage}>Check Suggested Prices</Text>
             </TouchableOpacity>
           </View>
@@ -359,17 +350,12 @@ const getStyles = (theme) =>
       alignItems: "center",
       paddingVertical: 13,
       paddingHorizontal: 20,
+      backgroundColor: getThemeColor("primary", theme),
 
       borderRadius: 10,
     },
     containerText: {
       color: "white",
-    },
-    message: {
-      backgroundColor: getThemeColor("primary", theme),
-    },
-    sold: {
-      backgroundColor: "red",
     },
     alertMessage: {
       fontSize: 10,

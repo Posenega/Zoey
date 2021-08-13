@@ -38,7 +38,7 @@ export const fetchBooks = (refresh = false) => {
   };
 };
 
-export const fetchFavoriteBooks = () => {
+export const fetch1Books = () => {
   return (dispatch, getState) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
