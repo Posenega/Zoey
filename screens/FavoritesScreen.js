@@ -9,11 +9,13 @@ import { fetchFavoriteBooks } from "../store/actions/books";
 import Colors, { getThemeColor } from "../constants/Colors";
 import NoData from "../components/NoData";
 import BookPackageSelector from "../components/BookPackageSelector";
+import { fetchFavoritePackages } from "../store/actions/packages";
 
 function FavoritesScreen({ navigation, theme }) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
+    dispatch(fetchFavoritePackages());
   }, []);
   const packagesIsSelected = useSelector(
     (state) => state.bookPackageSelector.selected === "packages"
@@ -22,7 +24,6 @@ function FavoritesScreen({ navigation, theme }) {
     if (packagesIsSelected) return state.packages.favoritePackages;
     return state.books.favoriteBooks;
   });
-
   const headerHeight = useHeaderHeight();
 
   return (

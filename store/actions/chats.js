@@ -12,7 +12,6 @@ export const CHATS_STOP_LOADING = "CHATS_STOP_LOADING";
 export const fetchChats = () => {
   return async (dispatch, getState) => {
     try {
-      console.log("here");
       dispatch(chatsSetLoading());
       const token = getState().auth.token;
       const res = await axios.get("/api/chats", {

@@ -42,10 +42,13 @@ export const fetchFavoriteBooks = () => {
   return (dispatch, getState) => {
     const token = getState().auth.token;
     dispatch({ type: FETCH_FAVORITES_BOOKS_START });
-    axios
-      .get(`/api/books/favorites`, {
-        headers: { Authorization: "Bearer " + token },
-      })
+    axios({
+      method: "post",
+      url: "/api/books/favorites",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
       .then(function (response) {
         dispatch({
           type: FETCH_FAVORITES_BOOKS_SUCCESS,
@@ -166,7 +169,7 @@ export const requestAddFavoriteBook = (bookId) => {
     const token = getState().auth.token;
     axios({
       method: "post",
-      url: "/api/books/favorites",
+      url: `/api/books/favorites/${bookId}`,
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -216,12 +219,13 @@ export const fetchUserBooks = () => {
   return (dispatch, getState) => {
     dispatch({ type: FETCH_USER_BOOKS_START });
     const token = getState().auth.token;
-    axios
-      .get(`/api/books/user`, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
+    axios({
+      method: "POST",
+      url: "/api/books/user",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
       .then(function (response) {
         dispatch({
           type: FETCH_USER_BOOKS_SUCCESS,

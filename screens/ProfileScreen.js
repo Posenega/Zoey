@@ -11,6 +11,7 @@ import IconPlaceholder from "../components/IconPlaceholder";
 import NoData from "../components/NoData";
 // import { getUser } from "../store/actions/auth";
 import BookPackageSelector from "../components/BookPackageSelector";
+import { fetchUserPackages } from "../store/actions/packages";
 
 function ProfileScreen(props) {
   const styles = getStyles(props.theme);
@@ -19,6 +20,7 @@ function ProfileScreen(props) {
 
   useEffect(() => {
     dispatch(fetchUserBooks());
+    dispatch(fetchUserPackages());
     props.navigation.setOptions({
       headerRight: () => (
         <SettingsButton
@@ -30,14 +32,17 @@ function ProfileScreen(props) {
     });
     // dispatch(getUser(userId));
   }, []);
-
+  const packagesIsSelected = useSelector(
+    (state) => state.bookPackageSelector.selected === "packages"
+  );
   const allBooks = useSelector((state) => {
+    if (packagesIsSelected) return state.packages.userPackages;
     return state.books.userBooks;
   });
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
   const imageUrl = useSelector((state) => state.auth.imageUrl);
-
+  console.log(allBooks);
   return (
     <View style={SharedStyles.screen}>
       <View style={styles.header}>
@@ -53,7 +58,8 @@ function ProfileScreen(props) {
         )}
         <Text
           numberOfLines={1}
-          style={{ ...styles.mediumText, textAlign: "center" }}>
+          style={{ ...styles.mediumText, textAlign: "center" }}
+        >
           {firstName} {lastName}
         </Text>
       </View>

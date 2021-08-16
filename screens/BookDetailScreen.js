@@ -58,6 +58,7 @@ function BookDetailScreen(props) {
     unsubscribe.current = subscribe(() => {
       const state = getState();
       const selected = isPackage ? "packages" : "books";
+      console.log(state[selected][selected]);
       const book = state[selected][selected].find((book) => book?._id === id);
       setDisplayedBook(book);
       setIsFavorite(
@@ -229,7 +230,7 @@ function BookDetailScreen(props) {
                   {displayedBook.categories
                     .map((category) => {
                       return Categories.find((cat) => cat.value === category)
-                        .label;
+                        ?.label;
                     })
                     .join(" , ")}
                 </Text>

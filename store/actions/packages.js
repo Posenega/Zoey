@@ -16,6 +16,8 @@ export const FETCH_FAVORITES_PACKAGES_SUCCESS =
 export const FETCH_FAVORITES_PACKAGES_FAILURE =
   "FETCH_FAVORITES_PACKAGES_FAILURE";
 export const FAVORITE_PACKAGE_START = "FAVORITE_PACKAGE_START";
+export const FETCH_USER_PACKAGES = "FETCH_USER_PACKAGES";
+
 export const requestAddPackage = ({
   title,
   localUrl,
@@ -65,12 +67,30 @@ export const requestAddPackage = ({
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
         },
-      }).then(console.log("done"));
+      });
       dispatch(addPackage(response.data.package));
       return Promise.resolve();
     } catch (e) {
       dispatch(addPackageFailure());
       throw e;
+    }
+  };
+};
+
+export const fetchUserPackages = () => {
+  return async (dispatch, getState) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.get("/api/packages/user", {
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch({
+        type: FETCH_USER_PACKAGES,
+        packages: response.data.packages,
+      });
+      return Promise.resolve();
+    } catch (error) {
+      console.log(error);
     }
   };
 };
@@ -152,6 +172,29 @@ export const requestRemoveFavoritePackage = (packageId) => {
         Authorization: "Bearer " + token,
       },
     }).catch((e) => dispatch(addFavoritePackageSuccess(packageId)));
+  };
+};
+
+export const fetchFavoritePackages = () => {
+  return (dispatch, getState) => {
+    const token = getState().auth.token;
+    dispatch({ type: FETCH_FAVORITES_PACKAGES_START });
+    axios
+      .get("/api/packages/favorites", {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then(function (response) {
+        dispatch({
+          type: FETCH_FAVORITES_PACKAGES_SUCCESS,
+          packages: response.data.packages,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: FETCH_FAVORITES_PACKAGES_FAILURE,
+          payload: error,
+        });
+      });
   };
 };
 

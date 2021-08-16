@@ -55,7 +55,7 @@ function Books({
   };
   return isLoading ? (
     <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-      <ActivityIndicator s color={getThemeColor("text", theme)} />
+      <ActivityIndicator color={getThemeColor("text", theme)} />
       {Platform.OS === "ios" && <Text>Loading...</Text>}
     </View>
   ) : books.length <= 0 ? (
