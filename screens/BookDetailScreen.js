@@ -11,7 +11,12 @@ import {
 } from "react-native";
 import Divider from "../components/Divider";
 import Categories from "../constants/Categories";
-import { useSelector, useDispatch, connect, useStore } from "react-redux";
+import {
+  useSelector,
+  useDispatch,
+  connect,
+  useStore,
+} from "react-redux";
 import Badge from "../components/Badge";
 import MessageButton from "../components/Icons/MessageButton";
 import Colors, { getThemeColor } from "../constants/Colors";
@@ -58,12 +63,17 @@ function BookDetailScreen(props) {
     unsubscribe.current = subscribe(() => {
       const state = getState();
       const selected = isPackage ? "packages" : "books";
-      console.log(state[selected][selected]);
-      const book = state[selected][selected].find((book) => book?._id === id);
+      const secondSelected = isPackage ? "userPackages" : "userBooks";
+      console.log(state[selected][secondSelected]);
+      const book = state[selected][secondSelected].find(
+        (book) => book?._id === id
+      );
       setDisplayedBook(book);
       setIsFavorite(
         isPackage
-          ? state.packages.favoritePackages.some((p) => p?._id === book._id)
+          ? state.packages.favoritePackages.some(
+              (p) => p?._id === book._id
+            )
           : state.books.favoriteBooks.some((b) => b?._id === book._id)
       );
       const chatting =
@@ -100,8 +110,7 @@ function BookDetailScreen(props) {
                 zIndex: 1,
                 left: 10,
                 top: 50,
-              }}
-            >
+              }}>
               <BackButton
                 onPress={() => props.navigation.goBack()}
                 size={40}
@@ -143,17 +152,19 @@ function BookDetailScreen(props) {
                       ? requestAddFavoritePackage(id)
                       : requestAddFavoriteBook(id)
                   );
-                }}
-              >
+                }}>
                 <FavoriteButton
                   size={20}
                   color={
-                    isFavorite ? "red" : getThemeColor("idle", props.theme)
+                    isFavorite
+                      ? "red"
+                      : getThemeColor("idle", props.theme)
                   }
                 />
               </TouchableOpacity>
               {userId === displayedBook.creator && (
-                <View style={{ marginLeft: 15, flexDirection: "row" }}>
+                <View
+                  style={{ marginLeft: 15, flexDirection: "row" }}>
                   <TouchableOpacity
                     onPress={() => {
                       unsubscribe.current();
@@ -163,9 +174,10 @@ function BookDetailScreen(props) {
                           ? requestDeletePackage(displayedBook._id)
                           : deleteBook(displayedBook._id)
                       ).then(() => props.navigation.goBack());
-                    }}
-                  >
-                    <DeleteButton color={getThemeColor("idle", props.theme)} />
+                    }}>
+                    <DeleteButton
+                      color={getThemeColor("idle", props.theme)}
+                    />
                   </TouchableOpacity>
                 </View>
               )}
@@ -175,7 +187,10 @@ function BookDetailScreen(props) {
                 ? displayedBook.author
                 : displayedBook.grade}
             </Text>
-            <Divider style={{ marginBottom: 12, marginTop: 12 }} fullDivider />
+            <Divider
+              style={{ marginBottom: 12, marginTop: 12 }}
+              fullDivider
+            />
             <View style={{ flexDirection: "row", marginBottom: 10 }}>
               {displayedBook.isPackage && (
                 <Badge
@@ -184,8 +199,7 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   Package
                 </Badge>
               )}
@@ -196,8 +210,7 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   For School
                 </Badge>
               )}
@@ -208,16 +221,17 @@ function BookDetailScreen(props) {
                   backgroundColor={getThemeColor(
                     "badgeBackground",
                     props.theme
-                  )}
-                >
+                  )}>
                   Exchange
                 </Badge>
               )}
               <Badge
                 style={styles.badge}
                 color={getThemeColor("primary", props.theme)}
-                backgroundColor={getThemeColor("badgeBackground", props.theme)}
-              >
+                backgroundColor={getThemeColor(
+                  "badgeBackground",
+                  props.theme
+                )}>
                 {displayedBook.condition}
               </Badge>
             </View>
@@ -229,8 +243,9 @@ function BookDetailScreen(props) {
                 <Text style={styles.categories}>
                   {displayedBook.categories
                     .map((category) => {
-                      return Categories.find((cat) => cat.value === category)
-                        ?.label;
+                      return Categories.find(
+                        (cat) => cat.value === category
+                      )?.label;
                     })
                     .join(" , ")}
                 </Text>
@@ -241,7 +256,9 @@ function BookDetailScreen(props) {
                 />
               </View>
             )}
-            <Text style={styles.description}>{displayedBook.description}</Text>
+            <Text style={styles.description}>
+              {displayedBook.description}
+            </Text>
             <View style={styles.footerContainer}>
               {displayedBook.type === "sell" && displayedBook.price && (
                 <View style={styles.price}>
@@ -258,11 +275,18 @@ function BookDetailScreen(props) {
                     } else {
                       dispatch(requestAddChat(displayedBook.creator));
                     }
-                  }}
-                >
-                  <View style={{ ...styles.container, ...styles.message }}>
+                  }}>
+                  <View
+                    style={{
+                      ...styles.container,
+                      ...styles.message,
+                    }}>
                     <MessageButton size={20} color="white" />
-                    <Text style={{ ...styles.containerText, marginLeft: 5 }}>
+                    <Text
+                      style={{
+                        ...styles.containerText,
+                        marginLeft: 5,
+                      }}>
                       Messages
                     </Text>
                   </View>
@@ -275,10 +299,13 @@ function BookDetailScreen(props) {
             </View>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate("settings", { screen: "pricing" })
-              }
-            >
-              <Text style={styles.alertMessage}>Check Suggested Prices</Text>
+                props.navigation.navigate("settings", {
+                  screen: "pricing",
+                })
+              }>
+              <Text style={styles.alertMessage}>
+                Check Suggested Prices
+              </Text>
             </TouchableOpacity>
           </View>
         </>

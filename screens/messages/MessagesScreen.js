@@ -34,10 +34,11 @@ export default function MessagesScreen(props) {
   };
 
   return (
-    <View style={{ ...SharedStyles.screen, paddingTop: headerHeight }}>
+    <View
+      style={{ ...SharedStyles.screen, paddingTop: headerHeight }}>
       {isLoading ? (
         <ActivityIndicator />
-      ) : chats ? (
+      ) : chats === [] ? (
         <FlatList
           data={chats}
           renderItem={renderChat}

@@ -69,8 +69,7 @@ function ExploreScreen(props) {
           // ...SharedStyles.screen,
           flex: 1,
           paddingTop: headerHeight,
-        }}
-      >
+        }}>
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <View style={styles.inputContainer}>
@@ -85,8 +84,7 @@ function ExploreScreen(props) {
             </View>
             <TouchableOpacity
               onPress={openFilters}
-              style={styles.filterContainer}
-            >
+              style={styles.filterContainer}>
               <View style={styles.filterBox}>
                 <FilterButton />
               </View>
@@ -122,7 +120,9 @@ function ExploreScreen(props) {
                 onRefresh={() => {
                   setRefreshing(true);
                   dispatch(
-                    packagesIsSelected ? fetchPackages(true) : fetchBooks(true)
+                    packagesIsSelected
+                      ? fetchPackages(true)
+                      : fetchBooks(true)
                   ).then(() => setRefreshing(false));
                 }}
               />

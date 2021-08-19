@@ -54,13 +54,22 @@ function Books({
     return <BookComponent />;
   };
   return isLoading ? (
-    <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+    <View
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        flex: 1,
+      }}>
       <ActivityIndicator color={getThemeColor("text", theme)} />
       {Platform.OS === "ios" && <Text>Loading...</Text>}
     </View>
   ) : books.length <= 0 ? (
     <NoData
-      firstLine="There is no Books Yet"
+      firstLine={
+        isPackage
+          ? "There is no Packages Yet"
+          : "There is no Books Yet"
+      }
       secondLine="Be the First to add Some!"
     />
   ) : (
@@ -68,7 +77,9 @@ function Books({
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       style={
-        !isHorizontal ? { flex: 1 } : { flex: 1, paddingHorizontal: "4.8%" }
+        !isHorizontal
+          ? { flex: 1 }
+          : { flex: 1, paddingHorizontal: "4.8%" }
       }
       horizontal={isHorizontal}
       data={books}

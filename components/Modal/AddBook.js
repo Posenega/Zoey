@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Alert,
 } from "react-native";
 import Option from "../Option";
 import { getThemeColor } from "../../constants/Colors";
@@ -16,7 +17,9 @@ import { requestAddBook } from "../../store/actions/books";
 import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
-import Categories from "../../constants/Categories";
+import Categories, {
+  schoolSubjects,
+} from "../../constants/Categories";
 import Grades from "../../constants/Grades";
 function AddBook(props) {
   const styles = getStyles(props.theme);
@@ -29,8 +32,12 @@ function AddBook(props) {
     setValue,
   } = useForm();
 
-  const addBookStatus = useSelector((state) => state.books.addBookStatus);
-  const editedBook = useSelector((state) => state.addBookModal.editedBook);
+  const addBookStatus = useSelector(
+    (state) => state.books.addBookStatus
+  );
+  const editedBook = useSelector(
+    (state) => state.addBookModal.editedBook
+  );
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
@@ -44,7 +51,9 @@ function AddBook(props) {
 
     formData.append("title", data.title);
     formData.append("description", data.description);
-    watch("forSchool") ? null : formData.append("author", data.author);
+    watch("forSchool")
+      ? null
+      : formData.append("author", data.author);
     formData.append("imageUrl", {
       uri: data.localUrl,
       name: filename,
@@ -60,6 +69,26 @@ function AddBook(props) {
     dispatch(requestAddBook(formData));
   };
 
+  const showAlert = () =>
+    Alert.alert(
+      "Pricing",
+      "Check out The pricing list that we have prepared to lead you while adding your books for sell.",
+      [
+        {
+          text: "Later",
+          style: "cancel",
+        },
+        {
+          text: "Check Now",
+          // onPress: () => console.log("checked"),
+          style: "default",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+
   return (
     <View style={styles.modal}>
       <View style={styles.modalHeader}>
@@ -68,8 +97,7 @@ function AddBook(props) {
         </Text>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          style={styles.badgeContainer}
-        >
+          style={styles.badgeContainer}>
           <View style={styles.badge}>
             {addBookStatus === "LOADING" ? (
               <ActivityIndicator
@@ -98,8 +126,7 @@ function AddBook(props) {
                   setValue("package", false);
                 }
               }}
-              value={value}
-            >
+              value={value}>
               For School
             </Option>
           )}
@@ -152,7 +179,8 @@ function AddBook(props) {
             required: "Description is required.",
             minLength: {
               value: 5,
-              message: "Description must be greater than 5 characters.",
+              message:
+                "Description must be greater than 5 characters.",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -199,7 +227,7 @@ function AddBook(props) {
               watch={watch}
               value={value}
               onChange={onChange}
-              items={Categories}
+              items={watch("forSchool") ? schoolSubjects : Categories}
             />
           )}
         />
@@ -228,6 +256,7 @@ function AddBook(props) {
           )}
         />
       </View>
+      {watch("type") === "sell" && showAlert()}
       {watch("type") === "sell" ? (
         <View style={{ paddingHorizontal: 18, marginTop: 10 }}>
           <Controller

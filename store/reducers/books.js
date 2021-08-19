@@ -71,7 +71,9 @@ const booksReducer = (state = initialState, action) => {
       return { ...state, addBookStatus: "PENDING" };
 
     case ADD_FAVORITE_BOOK_SUCCESS:
-      let toFavBook = state.books.find((book) => book._id === action.bookId);
+      let toFavBook = state.books.find(
+        (book) => book._id === action.bookId
+      );
       if (!toFavBook) {
         return state;
       }
@@ -122,7 +124,10 @@ const booksReducer = (state = initialState, action) => {
             return false;
           }
           if (action.otherFilters) {
-            if (action.otherFilters.includes("Package") && !book.isPackage) {
+            if (
+              action.otherFilters.includes("Package") &&
+              !book.isPackage
+            ) {
               return false;
             }
             if (
@@ -153,6 +158,11 @@ const booksReducer = (state = initialState, action) => {
     case FETCH_USER_BOOKS_START:
       return { ...state, isLoading: true };
     case FETCH_USER_BOOKS_SUCCESS:
+      console.log({
+        ...state,
+        isLoading: false,
+        userBooks: [...action.books],
+      });
       return {
         ...state,
         isLoading: false,

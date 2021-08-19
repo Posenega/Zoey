@@ -17,14 +17,18 @@ import { getThemeColor } from "../constants/Colors";
 
 const MainNavigator = (props) => {
   const isAuth = useSelector((state) => !!state.auth.token);
-  const isTryAutoLogin = useSelector((state) => state.auth.tryAutoLogin);
+  const isTryAutoLogin = useSelector(
+    (state) => state.auth.tryAutoLogin
+  );
   const isVerify = useSelector((state) => state.auth.isVerify);
   const Stack = createStackNavigator();
 
   return (
     <NavigationContainer
       theme={{
-        colors: { background: props.theme === "dark" ? "#2b2b2b" : null },
+        colors: {
+          background: props.theme === "dark" ? "#2b2b2b" : null,
+        },
       }}>
       {isTryAutoLogin ? (
         <SplashScreen />
@@ -35,22 +39,25 @@ const MainNavigator = (props) => {
           screenOptions={{
             headerShown: false,
             cardStyle: {
-              backgroundColor: getThemeColor("background", props.theme),
+              backgroundColor: getThemeColor(
+                "background",
+                props.theme
+              ),
             },
           }}>
-          <Stack.Screen name='tab' component={TabNavigator} />
+          <Stack.Screen name="tab" component={TabNavigator} />
           <Stack.Screen
             options={directMessagesScreenOptions}
-            name='chatRoom'
+            name="chatRoom"
             component={DirectMessagesScreen}
           />
           <Stack.Screen
-            name='detail'
+            name="detail"
             component={BookDetailScreen}
             options={bookDetailScreenOptions}
           />
           <Stack.Screen
-            name='settings'
+            name="settings"
             component={SettingsNavigator}
             options={{ headerTitle: "settings" }}
           />

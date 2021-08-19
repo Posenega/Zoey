@@ -17,8 +17,7 @@ export default function BookFilters({ fadeAnim }) {
           inputRange: [0, 1],
           outputRange: [0, 80],
         }),
-      }}
-    >
+      }}>
       <Options
         multipleAllowed
         onChange={(categories) => {
@@ -32,12 +31,18 @@ export default function BookFilters({ fadeAnim }) {
         multipleAllowed
         onChange={(otherFilters, addedFilter) => {
           let toAddOtherFilters = otherFilters;
-          if (addedFilter === "Used" && otherFilters.includes("New")) {
+          if (
+            addedFilter === "Used" &&
+            otherFilters.includes("New")
+          ) {
             toAddOtherFilters = otherFilters.filter(
               (filter) => filter != "New"
             );
           }
-          if (addedFilter === "New" && otherFilters.includes("Used")) {
+          if (
+            addedFilter === "New" &&
+            otherFilters.includes("Used")
+          ) {
             toAddOtherFilters = otherFilters.filter(
               (filter) => filter != "Used"
             );

@@ -24,3 +24,18 @@ export default [
   { label: "Self-Help", value: "self-help" },
   { label: "True Crime", value: "true-crime" },
 ];
+
+const schoolSubjects = [
+  { label: "Maths", value: "maths" },
+  { label: "Physics", value: "physics" },
+  { label: "Biology", value: "biology" },
+  { label: "Chemistry", value: "chemistry" },
+  { label: "English", value: "emglish" },
+  { label: "Arabic", value: "arabic" },
+  { label: "French", value: "french" },
+  { label: "Sociology", value: "sociology" },
+  { label: "Economy", value: "economy" },
+  { label: "Philosophie", value: "philosophie" },
+];
+
+export { schoolSubjects };

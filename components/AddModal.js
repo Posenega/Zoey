@@ -16,8 +16,12 @@ import CustomButton from "./CustomButton";
 import AddPackage from "./Modal/AddPackage";
 
 function AddModal(props) {
-  const addBookStatus = useSelector((state) => state.books.addBookStatus);
-  const modalState = useSelector((state) => state.addBookModal.modalState);
+  const addBookStatus = useSelector(
+    (state) => state.books.addBookStatus
+  );
+  const modalState = useSelector(
+    (state) => state.addBookModal.modalState
+  );
   const modalRef = useSelector((state) => state.addBookModal.ref);
   const styles = getStyles(props.theme);
 
@@ -56,23 +60,24 @@ function AddModal(props) {
       modalStyle={{
         backgroundColor: getThemeColor("main", props.theme),
       }}
-      ref={modalizeRef}
-    >
+      ref={modalizeRef}>
       {modalState === "book" ? (
         <AddBook />
       ) : modalState === "package" ? (
         <AddPackage closeModal={modalizeRef.current?.close} />
       ) : (
         <View style={styles.selector}>
-          <Text style={styles.headerText}>What would you like to create?</Text>
+          <Text style={styles.headerText}>
+            What would you like to create?
+          </Text>
           <View style={styles.buttonContainer}>
             <CustomButton
               containerStyle={{ marginRight: 15 }}
-              onPress={() => dispatch(modalSetState("book"))}
-            >
+              onPress={() => dispatch(modalSetState("book"))}>
               Book
             </CustomButton>
-            <CustomButton onPress={() => dispatch(modalSetState("package"))}>
+            <CustomButton
+              onPress={() => dispatch(modalSetState("package"))}>
               Package
             </CustomButton>
           </View>

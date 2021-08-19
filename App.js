@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNetInfo, NetInfoStateType } from "@react-native-community/netinfo";
+import {
+  useNetInfo,
+  NetInfoStateType,
+} from "@react-native-community/netinfo";
 
 import Constants from "expo-constants";
 import { applyMiddleware, combineReducers, createStore } from "redux";
@@ -26,7 +29,9 @@ import { addChat } from "./store/actions/chats";
 import bookPackageSelectorReducer from "./store/reducers/bookPackageSelector";
 
 axios.defaults.baseURL = Constants.manifest?.debuggerHost
-  ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:5000`
+  ? `http://${Constants.manifest.debuggerHost
+      .split(":")
+      .shift()}:5000`
   : "https://stormy-garden-51665.herokuapp.com";
 
 const fetchFonts = () => {
@@ -108,8 +113,9 @@ export default function App() {
   );
 
   const statusBarTheme =
-    store.getState().themes.theme === "dark" ? "dark-content" : "light-content";
-
+    store.getState().themes.theme === "dark"
+      ? "dark-content"
+      : "light-content";
   return (
     <Provider store={store}>
       <StatusBar

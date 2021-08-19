@@ -42,7 +42,6 @@ function ProfileScreen(props) {
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
   const imageUrl = useSelector((state) => state.auth.imageUrl);
-  console.log(allBooks);
   return (
     <View style={SharedStyles.screen}>
       <View style={styles.header}>
@@ -58,8 +57,7 @@ function ProfileScreen(props) {
         )}
         <Text
           numberOfLines={1}
-          style={{ ...styles.mediumText, textAlign: "center" }}
-        >
+          style={{ ...styles.mediumText, textAlign: "center" }}>
           {firstName} {lastName}
         </Text>
       </View>
@@ -68,7 +66,11 @@ function ProfileScreen(props) {
 
         {allBooks.length <= 0 ? (
           <NoData
-            firstLine="You don't have any books yet."
+            firstLine={
+              packagesIsSelected
+                ? "You don't have any Package yet"
+                : "You don't have any Book yet"
+            }
             secondLine="Go create Some!"
           />
         ) : (

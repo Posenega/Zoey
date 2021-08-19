@@ -45,8 +45,7 @@ export default function Options({
 
                   onChange([...value].filter(Boolean), item.value);
                 }
-              }}
-            >
+              }}>
               {item.label || item.value}
             </Option>
           );
