@@ -62,9 +62,9 @@ const booksReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        books: [toBeAddedBook, ...state.books],
+        // books: [toBeAddedBook, ...state.books],
         userBooks: [toBeAddedBook, ...state.userBooks],
-        filteredBooks: [toBeAddedBook, ...state.filteredBooks],
+
         addBookStatus: "SUCCESS",
       };
     case ADD_BOOK_FINISH:
@@ -101,9 +101,6 @@ const booksReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, error: action.payload };
 
     case FILTER_BOOKS:
-      // if (!action.searchTerm) {
-      //   return { ...state, filteredBooks: state.books, isFiltering: false };
-      // }
       return {
         ...state,
         filteredBooks: state.books.filter((book) => {
@@ -124,12 +121,6 @@ const booksReducer = (state = initialState, action) => {
             return false;
           }
           if (action.otherFilters) {
-            if (
-              action.otherFilters.includes("Package") &&
-              !book.isPackage
-            ) {
-              return false;
-            }
             if (
               action.otherFilters.includes("For School") &&
               !book.isForSchool
@@ -158,11 +149,6 @@ const booksReducer = (state = initialState, action) => {
     case FETCH_USER_BOOKS_START:
       return { ...state, isLoading: true };
     case FETCH_USER_BOOKS_SUCCESS:
-      console.log({
-        ...state,
-        isLoading: false,
-        userBooks: [...action.books],
-      });
       return {
         ...state,
         isLoading: false,

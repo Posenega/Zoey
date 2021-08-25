@@ -22,8 +22,8 @@ const Badge = ({
     catColor = getThemeColor("primary", theme);
     catBackgroundColor = getThemeColor("badgeBackground", theme);
   } else {
-    catColor = "white";
-    catBackgroundColor = "red";
+    catColor = "#FFC300";
+    catBackgroundColor = "#FFF0C1";
   }
 
   return (

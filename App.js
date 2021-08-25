@@ -124,7 +124,6 @@ export default function App() {
         barStyle={statusBarTheme}
       />
       <MainNavigator />
-      <AddModal />
     </Provider>
   );
 }

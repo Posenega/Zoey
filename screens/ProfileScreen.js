@@ -20,7 +20,7 @@ function ProfileScreen(props) {
 
   useEffect(() => {
     dispatch(fetchUserBooks());
-    dispatch(fetchUserPackages());
+
     props.navigation.setOptions({
       headerRight: () => (
         <SettingsButton
@@ -33,15 +33,18 @@ function ProfileScreen(props) {
     // dispatch(getUser(userId));
   }, []);
   const packagesIsSelected = useSelector(
-    (state) => state.bookPackageSelector.selected === "packages"
+    (state) => state.bookPackageSelector.mySelected === "packages"
   );
-  const allBooks = useSelector((state) => {
+  const myBooks = useSelector((state) => {
     if (packagesIsSelected) return state.packages.userPackages;
     return state.books.userBooks;
   });
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
   const imageUrl = useSelector((state) => state.auth.imageUrl);
+  const city = useSelector((state) => state.auth.city);
+  console.log(city);
+
   return (
     <View style={SharedStyles.screen}>
       <View style={styles.header}>
@@ -62,9 +65,9 @@ function ProfileScreen(props) {
         </Text>
       </View>
       <View style={styles.body}>
-        <BookPackageSelector style={{ marginTop: 10 }} />
+        <BookPackageSelector style={{ marginTop: 10 }} mySelected />
 
-        {allBooks.length <= 0 ? (
+        {myBooks.length <= 0 ? (
           <NoData
             firstLine={
               packagesIsSelected
@@ -74,7 +77,12 @@ function ProfileScreen(props) {
             secondLine="Go create Some!"
           />
         ) : (
-          <Books books={allBooks} navigation={props.navigation} />
+          <Books
+            isPackage={packagesIsSelected}
+            isMine
+            books={myBooks}
+            navigation={props.navigation}
+          />
         )}
       </View>
     </View>

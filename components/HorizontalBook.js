@@ -17,10 +17,12 @@ function HorizontalBook(props) {
         props.navigation.navigate("detail", {
           id: props.id,
           isPackage: props.isPackage,
+          isMine: props.isMine,
         })
-      }
-    >
-      <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
+      }>
+      <View
+        onStartShouldSetResponder={() => true}
+        style={styles.bookContainer}>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: props.image }} />
         </View>

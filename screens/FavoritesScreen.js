@@ -15,10 +15,11 @@ function FavoritesScreen({ navigation, theme }) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
-    dispatch(fetchFavoritePackages());
+    // dispatch(fetchFavoritePackages());
   }, []);
   const packagesIsSelected = useSelector(
-    (state) => state.bookPackageSelector.selected === "packages"
+    (state) =>
+      state.bookPackageSelector.favoritesSelected === "packages"
   );
   const displayedBooks = useSelector((state) => {
     if (packagesIsSelected) return state.packages.favoritePackages;
@@ -31,9 +32,11 @@ function FavoritesScreen({ navigation, theme }) {
       style={{
         ...SharedStyles.screen,
         paddingTop: headerHeight,
-      }}
-    >
-      <BookPackageSelector style={{ marginTop: 5 }} />
+      }}>
+      <BookPackageSelector
+        style={{ marginTop: 5 }}
+        favoritesSelected
+      />
       {displayedBooks.length <= 0 ? (
         <NoData firstLine="No Favorites." secondLine="Go Add Some!" />
       ) : (

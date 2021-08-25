@@ -13,17 +13,18 @@ import Badge from "./Badge";
 
 function Book(props) {
   const styles = getStyles(props.theme);
-
   return (
     <TouchableWithoutFeedback
-      onPress={() =>
+      onPress={() => {
         props.navigation.navigate("detail", {
           id: props.id,
           isPackage: props.isPackage,
-        })
-      }
-    >
-      <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
+          isMine: props.isMine,
+        });
+      }}>
+      <View
+        onStartShouldSetResponder={() => true}
+        style={styles.bookContainer}>
         <View style={styles.bookImage}>
           <Image style={styles.image} source={{ uri: props.image }} />
         </View>
@@ -35,19 +36,37 @@ function Book(props) {
             {props.grade ? props.grade : props.author}
           </Text>
 
-          <Badge
-            style={{ alignSelf: "flex-start", width: null }}
-            category={props.category}
-            color={props.color}
-            backgroundColor={props.backgroundColor}
-          >
-            {/* {props.category} */}
+          {!props.isPackage ? (
+            <Badge
+              style={{ alignSelf: "flex-start", width: null }}
+              category={props.category}
+              color={props.color}
+              backgroundColor={props.backgroundColor}>
+              {/* {props.category} */}
 
-            {(props.category &&
-              Categories.find((category) => category.value == props.category)
-                ?.label) ||
-              props.category}
-          </Badge>
+              {(props.category &&
+                Categories.find(
+                  (category) => category.value == props.category
+                )?.label) ||
+                props.category}
+            </Badge>
+          ) : (
+            props.grade && (
+              <Badge
+                style={{ alignSelf: "flex-start", width: null }}
+                category={props.category}
+                color={props.color}
+                backgroundColor={props.backgroundColor}>
+                {/* {props.category} */}
+
+                {(props.category &&
+                  Categories.find(
+                    (category) => category.value == props.category
+                  )?.label) ||
+                  props.grade}
+              </Badge>
+            )
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>

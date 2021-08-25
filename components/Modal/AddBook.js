@@ -1,14 +1,14 @@
 import React, { useCallback } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ScrollView,
-  Alert,
 } from "react-native";
+import showPricingAlert from "../../helpers/showPricingAlert";
 import Option from "../Option";
 import { getThemeColor } from "../../constants/Colors";
 import CustomTextInput from "../CustomTextInput";
@@ -21,6 +21,7 @@ import Categories, {
   schoolSubjects,
 } from "../../constants/Categories";
 import Grades from "../../constants/Grades";
+
 function AddBook(props) {
   const styles = getStyles(props.theme);
   const {
@@ -32,6 +33,8 @@ function AddBook(props) {
     setValue,
   } = useForm();
 
+  const modalizeRef = useSelector((state) => state.addBookModal.ref);
+
   const addBookStatus = useSelector(
     (state) => state.books.addBookStatus
   );
@@ -41,53 +44,9 @@ function AddBook(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    data.categories = [data.categories];
-
-    let formData = new FormData();
-
-    let filename = data.localUrl.split("/").pop();
-    let match = /\.(\w+)$/.exec(filename);
-    let fileType = match ? `image/${match[1]}` : `image`;
-
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    watch("forSchool")
-      ? null
-      : formData.append("author", data.author);
-    formData.append("imageUrl", {
-      uri: data.localUrl,
-      name: filename,
-      type: fileType,
-    });
-    formData.append("type", data.type);
-    formData.append("categories", JSON.stringify(data.categories));
-    formData.append("price", data.price);
-    formData.append("condition", data.condition);
-    formData.append("isForSchool", data.forSchool);
-    watch("forSchool") ? formData.append("grade", data.grade) : null;
-
-    dispatch(requestAddBook(formData));
+    dispatch(requestAddBook(data));
   };
-
-  const showAlert = () =>
-    Alert.alert(
-      "Pricing",
-      "Check out The pricing list that we have prepared to lead you while adding your books for sell.",
-      [
-        {
-          text: "Later",
-          style: "cancel",
-        },
-        {
-          text: "Check Now",
-          // onPress: () => console.log("checked"),
-          style: "default",
-        },
-      ],
-      {
-        cancelable: true,
-      }
-    );
+  const navigation = useNavigation();
 
   return (
     <View style={styles.modal}>
@@ -250,13 +209,21 @@ function AddBook(props) {
               ]}
               onBlur={onBlur}
               value={value}
-              onChange={onChange}
+              onChange={(type) => {
+                if (type === "sell" && watch("forSchool")) {
+                  showPricingAlert(
+                    navigation,
+                    modalizeRef?.current.close
+                  );
+                }
+                onChange(type);
+              }}
               error={errors.type?.message}
             />
           )}
         />
       </View>
-      {watch("type") === "sell" && showAlert()}
+
       {watch("type") === "sell" ? (
         <View style={{ paddingHorizontal: 18, marginTop: 10 }}>
           <Controller

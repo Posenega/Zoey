@@ -1,6 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import FavoritesScreen, { screenOptions } from "../screens/FavoritesScreen";
+import FavoritesScreen, {
+  screenOptions,
+} from "../screens/FavoritesScreen";
 import BookDetailScreen, {
   screenOptions as bookDetailScreenOptions,
 } from "../screens/BookDetailScreen";
@@ -24,17 +26,11 @@ const FavoritesNavigator = (props) => (
         backgroundColor: getThemeColor("background", props.theme),
       },
       headerTitleAlign: "left",
-    }}
-  >
+    }}>
     <Stack.Screen
       name="favorite"
       component={FavoritesScreen}
       options={screenOptions}
-    />
-    <Stack.Screen
-      name="detail"
-      component={BookDetailScreen}
-      options={bookDetailScreenOptions}
     />
   </Stack.Navigator>
 );

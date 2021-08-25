@@ -7,7 +7,12 @@ import MenuButton from "./Icons/MenuButton";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
 
-function DirectMessageHeader({ username, navigation, theme, userImage }) {
+function DirectMessageHeader({
+  username,
+  navigation,
+  theme,
+  userImage,
+}) {
   const styles = getStyles(theme);
   return (
     <View style={styles.header}>
@@ -38,9 +43,9 @@ function DirectMessageHeader({ username, navigation, theme, userImage }) {
         <Text style={styles.reveiverName}>{username}</Text>
         {/* <Text style={styles.status}>Online</Text> */}
       </View>
-      <View style={styles.menu}>
+      {/* <View style={styles.menu}>
         <MenuButton color={getThemeColor("text", theme)} />
-      </View>
+      </View> */}
     </View>
   );
 }

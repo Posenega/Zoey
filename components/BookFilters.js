@@ -4,8 +4,9 @@ import Options from "./Options";
 import Categories from "../constants/Categories";
 import { useDispatch } from "react-redux";
 import { filterBooks } from "../store/actions/books";
+import { filterPackages } from "../store/actions/packages";
 
-export default function BookFilters({ fadeAnim }) {
+export default function BookFilters({ fadeAnim, isPackage }) {
   const [categoriesFilter, setCategoriesFilter] = useState([]);
   const [otherFilters, setOtherFilters] = useState([]);
   const dispatch = useDispatch();
@@ -22,7 +23,11 @@ export default function BookFilters({ fadeAnim }) {
         multipleAllowed
         onChange={(categories) => {
           setCategoriesFilter(categories);
-          dispatch(filterBooks({ categories }));
+          if (isPackage) {
+            dispatch(filterPackages({ categories }));
+          } else {
+            dispatch(filterBooks({ categories }));
+          }
         }}
         value={categoriesFilter}
         items={Categories}
@@ -48,7 +53,15 @@ export default function BookFilters({ fadeAnim }) {
             );
           }
           setOtherFilters(toAddOtherFilters);
-          dispatch(filterBooks({ otherFilters: toAddOtherFilters }));
+          if (isPackage) {
+            dispatch(
+              filterPackages({ otherFilters: toAddOtherFilters })
+            );
+          } else {
+            dispatch(
+              filterBooks({ otherFilters: toAddOtherFilters })
+            );
+          }
         }}
         value={otherFilters}
         items={[

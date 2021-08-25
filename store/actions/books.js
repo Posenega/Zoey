@@ -6,12 +6,16 @@ export const FETCH_USER_BOOKS_FAILURE = "FETCH_USER_BOOKS_FAILURE";
 export const FETCH_BOOKS_START = "FETCH_BOOKS_START";
 export const FETCH_BOOKS_SUCCESS = "FETCH_BOOKS_SUCCESS";
 export const FETCH_BOOKS_FAILURE = "FETCH_BOOKS_FAILURE";
-export const FETCH_FAVORITES_BOOKS_START = "FETCH_FAVORITES_BOOKS_START";
-export const FETCH_FAVORITES_BOOKS_SUCCESS = "FETCH_FAVORITES_BOOKS_SUCCESS";
-export const FETCH_FAVORITES_BOOKS_FAILURE = "FETCH_FAVORITES_BOOKS_FAILURE";
+export const FETCH_FAVORITES_BOOKS_START =
+  "FETCH_FAVORITES_BOOKS_START";
+export const FETCH_FAVORITES_BOOKS_SUCCESS =
+  "FETCH_FAVORITES_BOOKS_SUCCESS";
+export const FETCH_FAVORITES_BOOKS_FAILURE =
+  "FETCH_FAVORITES_BOOKS_FAILURE";
 export const FAVORITE_BOOK_START = "FAVORITE_BOOK_START";
 export const ADD_FAVORITE_BOOK_SUCCESS = "ADD_FAVORITE_BOOK_SUCCESS";
-export const REMOVE_FAVORITE_BOOK_SUCCESS = "REMOVE_FAVORITE_BOOK_SUCCESS";
+export const REMOVE_FAVORITE_BOOK_SUCCESS =
+  "REMOVE_FAVORITE_BOOK_SUCCESS";
 export const FILTER_BOOKS = "FILTER_BOOKS";
 export const ADD_BOOK_START = "ADD_BOOK_START";
 export const ADD_BOOK_SUCCESS = "ADD_BOOK_SUCCESS";
@@ -64,16 +68,50 @@ export const fetchFavoriteBooks = () => {
   };
 };
 
-export const requestAddBook = (data) => {
+export const requestAddBook = ({
+  title,
+  description,
+  categories,
+  author,
+  type,
+  condition,
+  forSchool,
+  grade,
+  localUrl,
+  price,
+}) => {
   return async (dispatch, getState) => {
     try {
       dispatch(addBookStart());
       const token = getState().auth.token;
 
+      categories = [categories];
+
+      let formData = new FormData();
+
+      let filename = localUrl.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let fileType = match ? `image/${match[1]}` : `image`;
+
+      formData.append("title", title);
+      formData.append("description", description);
+      forSchool ? null : formData.append("author", author);
+      formData.append("imageUrl", {
+        uri: localUrl,
+        name: filename,
+        type: fileType,
+      });
+      formData.append("type", type);
+      formData.append("categories", JSON.stringify(categories));
+      formData.append("price", price);
+      formData.append("condition", condition);
+      formData.append("isForSchool", forSchool);
+      forSchool ? formData.append("grade", grade) : null;
+
       const response = await axios({
         method: "post",
         url: "/api/books",
-        data,
+        data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
@@ -206,7 +244,11 @@ export const removeFavoriteBookSuccess = (bookId) => {
   return { type: REMOVE_FAVORITE_BOOK_SUCCESS, bookId };
 };
 
-export const filterBooks = ({ searchTerm, categories, otherFilters }) => {
+export const filterBooks = ({
+  searchTerm,
+  categories,
+  otherFilters,
+}) => {
   return {
     type: FILTER_BOOKS,
     searchTerm,

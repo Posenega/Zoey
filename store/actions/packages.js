@@ -7,16 +7,32 @@ export const ADD_PACKAGE = "ADD_PACKAGE";
 export const ADD_PACKAGE_START = "ADD_PACKAGE_START";
 export const ADD_PACKAGE_FAILURE = "ADD_PACKAGE_FAILURE";
 export const DELETE_PACKAGE = "DELETE_PACKAGE";
-export const ADD_FAVORITE_PACKAGE_SUCCESS = "ADD_FAVORITE_PACKAGE_SUCCESS";
+export const ADD_FAVORITE_PACKAGE_SUCCESS =
+  "ADD_FAVORITE_PACKAGE_SUCCESS";
 export const REMOVE_FAVORITE_PACKAGE_SUCCESS =
   "REMOVE_FAVORITE_PACKAGE_SUCCESS";
-export const FETCH_FAVORITES_PACKAGES_START = "FETCH_FAVORITES_PACKAGES_START";
+export const FETCH_FAVORITES_PACKAGES_START =
+  "FETCH_FAVORITES_PACKAGES_START";
 export const FETCH_FAVORITES_PACKAGES_SUCCESS =
   "FETCH_FAVORITES_PACKAGES_SUCCESS";
 export const FETCH_FAVORITES_PACKAGES_FAILURE =
   "FETCH_FAVORITES_PACKAGES_FAILURE";
 export const FAVORITE_PACKAGE_START = "FAVORITE_PACKAGE_START";
 export const FETCH_USER_PACKAGES = "FETCH_USER_PACKAGES";
+export const FILTER_PACKAGES = "FILTER_PACKAGES";
+
+export const filterPackages = ({
+  searchTerm,
+  categories,
+  otherFilters,
+}) => {
+  return {
+    type: FILTER_PACKAGES,
+    searchTerm,
+    categories,
+    otherFilters,
+  };
+};
 
 export const requestAddPackage = ({
   title,
@@ -119,9 +135,12 @@ export const requestDeletePackage = (packageId) => {
   return async (dispatch, getState) => {
     try {
       const token = getState().auth.token;
-      const response = await axios.delete("/api/packages/" + packageId, {
-        headers: { Authorization: "Bearer " + token },
-      });
+      const response = await axios.delete(
+        "/api/packages/" + packageId,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
 
       dispatch(deletePackage(packageId));
       return Promise.resolve();
@@ -157,7 +176,9 @@ export const requestAddFavoritePackage = (packageId) => {
       headers: {
         Authorization: "Bearer " + token,
       },
-    }).catch((e) => dispatch(removeFavoritePackageSuccess(packageId)));
+    }).catch((e) =>
+      dispatch(removeFavoritePackageSuccess(packageId))
+    );
   };
 };
 

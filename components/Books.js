@@ -21,6 +21,7 @@ function Books({
   isLoading,
   theme,
   isPackage,
+  isMine,
 }) {
   const renderBook = (itemData) => {
     const book = itemData.item;
@@ -38,6 +39,7 @@ function Books({
         grade={book.grade}
         isPackage={isPackage}
         isForSchool={book.isForSchool}
+        isMine={isMine}
       />
     );
     if (isHorizontal) {
@@ -48,6 +50,7 @@ function Books({
           id={book?._id}
           navigation={navigation}
           isPackage={isPackage}
+          isMine={isMine}
         />
       );
     }

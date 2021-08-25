@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import CustomTextInput from "../CustomTextInput";
 import { Controller } from "react-hook-form";
 import DropDownMenu from "../DropDownMenu";
+import Cities from "../../constants/Cities";
 
 export default function StepThree({ control, errors }) {
   return (
@@ -16,11 +17,7 @@ export default function StepThree({ control, errors }) {
           return (
             <DropDownMenu
               text="Select your city"
-              items={[
-                { label: "Beirut", value: "Beirut" },
-                { label: "Mansourieh", value: "Mansourieh" },
-                { label: "Zouk Mikael", value: "Zouk Mikael" },
-              ]}
+              items={Cities}
               onBlur={onBlur}
               value={value}
               onChange={onChange}

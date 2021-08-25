@@ -28,15 +28,19 @@ const authUser = (
 ) => {
   dispatch(authSetLoading());
   axios
-    .post(`/api/users/${authMode === "SIGN_UP" ? "signup" : "login"}`, {
-      firstName,
-      lastName,
-      email,
-      password,
-      city,
-    })
+    .post(
+      `/api/users/${authMode === "SIGN_UP" ? "signup" : "login"}`,
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+        city,
+      }
+    )
     .then((res) => {
-      const { token, email, firstName, lastName, userId, imageUrl } = res.data;
+      const { token, email, firstName, lastName, userId, imageUrl } =
+        res.data;
 
       SecureStore.setItemAsync(
         "userData",
@@ -54,7 +58,14 @@ const authUser = (
             dispatch(setVerifyUser(email, userId));
           } else {
             dispatch(
-              authSuccess(token, email, firstName, lastName, userId, imageUrl)
+              authSuccess(
+                token,
+                email,
+                firstName,
+                lastName,
+                userId,
+                imageUrl
+              )
             );
           }
         })
@@ -68,7 +79,8 @@ const authUser = (
         console.log(setError);
         setError(authMode === "SIGN_UP" ? "city" : "password", {
           type: "server",
-          message: e.response?.data?.message || "Unknown error has occured.",
+          message:
+            e.response?.data?.message || "Unknown error has occured.",
         });
       }
     });
@@ -86,7 +98,14 @@ export const authStopLoading = () => {
   };
 };
 
-const authSuccess = (token, email, firstName, lastName, userId, imageUrl) => {
+const authSuccess = (
+  token,
+  email,
+  firstName,
+  lastName,
+  userId,
+  imageUrl
+) => {
   return {
     type: AUTH_SUCCESS,
     token,
@@ -122,7 +141,16 @@ export const signupUser = (
 
 export const loginUser = (email, password, setError) => {
   return (dispatch, getState) => {
-    authUser("LOG_IN", dispatch, null, null, email, password, null, setError);
+    authUser(
+      "LOG_IN",
+      dispatch,
+      null,
+      null,
+      email,
+      password,
+      null,
+      setError
+    );
   };
 };
 
@@ -138,7 +166,14 @@ export const tryAutoLogin = () => {
         dispatch(setVerifyUser(email, userId));
       } else {
         dispatch(
-          authSuccess(token, email, firstName, lastName, userId, imageUrl)
+          authSuccess(
+            token,
+            email,
+            firstName,
+            lastName,
+            userId,
+            imageUrl
+          )
         );
       }
     } else {
@@ -201,16 +236,40 @@ export const uploadExpoPushToken = (expoPushToken) => {
   };
 };
 
-export const updateUser = (data, setError, goBack) => {
+export const updateUser = (
+  { localUrl, firstName, lastName, oldPassword, newPassword },
+  setError,
+  goBack
+) => {
   return (dispatch, getState) => {
     dispatch(authSetLoading());
     const token = getState().auth.token;
+    let formData = new FormData();
 
-    dispatch({ type: UPDATE_USER_START });
+    if (localUrl) {
+      let filename = localUrl.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let fileType = match ? `image/${match[1]}` : `image`;
+      formData.append("imageUrl", {
+        uri: localUrl,
+        name: filename,
+        type: fileType,
+      });
+    }
+
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    oldPassword === undefined
+      ? null
+      : formData.append("old_password", oldPassword);
+    newPassword === undefined
+      ? null
+      : formData.append("new_password", newPassword);
+
     axios({
       method: "patch",
       url: "/api/users/update",
-      data: { data },
+      data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + token,
@@ -238,7 +297,8 @@ export const updateUser = (data, setError, goBack) => {
         dispatch(authStopLoading());
         setError("oldPassword", {
           type: "server",
-          message: e.response.data?.message || "Unknown error has occured.",
+          message:
+            e.response.data?.message || "Unknown error has occured.",
         });
       });
   };
@@ -299,7 +359,8 @@ export const verifyUser = (confirmationCode, setError) => {
         dispatch(authStopLoading());
         setError("code", {
           type: "server",
-          message: e.response?.data?.message || "Unknown error has occured.",
+          message:
+            e.response?.data?.message || "Unknown error has occured.",
         });
       });
   };

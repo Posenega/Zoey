@@ -19,7 +19,10 @@ import FilterButton from "../components/Icons/FilterButton";
 import { fetchBooks, filterBooks } from "../store/actions/books";
 import Options from "../components/Options";
 import BookFilters from "../components/BookFilters";
-import { fetchPackages } from "../store/actions/packages";
+import {
+  fetchPackages,
+  filterPackages,
+} from "../store/actions/packages";
 import BookPackageSelector from "../components/BookPackageSelector";
 
 function ExploreScreen(props) {
@@ -42,11 +45,14 @@ function ExploreScreen(props) {
   const [refreshing, setRefreshing] = useState(false);
 
   const filteredBooks = useSelector((state) => {
-    if (packagesIsSelected) return state.packages.packages;
+    if (packagesIsSelected) return state.packages.filteredPackages;
     return state.books.filteredBooks;
   });
 
   const isSearching = useSelector((state) => {
+    if (packagesIsSelected) {
+      return state.packages.isSearching;
+    }
     return state.books.isSearching;
   });
 
@@ -75,9 +81,13 @@ function ExploreScreen(props) {
             <View style={styles.inputContainer}>
               <CustomTextInput
                 style={styles.searchInput}
-                onChangeText={(text) =>
-                  dispatch(filterBooks({ searchTerm: text }))
-                }
+                onChangeText={(text) => {
+                  if (packagesIsSelected) {
+                    dispatch(filterPackages({ searchTerm: text }));
+                  } else {
+                    dispatch(filterBooks({ searchTerm: text }));
+                  }
+                }}
                 placeholderTextColor="#999999"
                 placeholder="Search a title..."
               />
@@ -91,7 +101,10 @@ function ExploreScreen(props) {
             </TouchableOpacity>
           </View>
         </View>
-        <BookFilters fadeAnim={fadeAnim} />
+        <BookFilters
+          fadeAnim={fadeAnim}
+          isPackage={packagesIsSelected}
+        />
 
         {!isSearching && (
           <View style={styles.trendingNow}>

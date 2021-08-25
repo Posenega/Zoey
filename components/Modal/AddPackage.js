@@ -17,8 +17,12 @@ import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
 import { requestAddPackage } from "../../store/actions/packages";
-import Categories from "../../constants/Categories";
+import Categories, {
+  schoolSubjects,
+} from "../../constants/Categories";
 import Grades from "../../constants/Grades";
+import showPricingAlert from "../../helpers/showPricingAlert";
+import { useNavigation } from "@react-navigation/native";
 
 function AddPackage(props) {
   const styles = getStyles(props.theme);
@@ -33,11 +37,15 @@ function AddPackage(props) {
 
   //   const addPackageStatus = useSelector((state) => state.packages.addBookStatus);
   const dispatch = useDispatch();
+  const modalizeRef = useSelector((state) => state.addBookModal.ref);
+  const navigation = useNavigation();
 
   const onSubmit = (data) => {
     dispatch(requestAddPackage(data)).then(props.closeModal);
   };
-  const isLoading = useSelector((state) => state.packages.addingIsLoading);
+  const isLoading = useSelector(
+    (state) => state.packages.addingIsLoading
+  );
 
   return (
     <View style={styles.modal}>
@@ -45,8 +53,7 @@ function AddPackage(props) {
         <Text style={styles.headerText}>Add a package</Text>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          style={styles.badgeContainer}
-        >
+          style={styles.badgeContainer}>
           <View style={styles.badge}>
             {isLoading ? (
               <ActivityIndicator />
@@ -108,7 +115,8 @@ function AddPackage(props) {
             required: "Description is required.",
             minLength: {
               value: 5,
-              message: "Description must be greater than 5 characters.",
+              message:
+                "Description must be greater than 5 characters.",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -163,8 +171,7 @@ function AddPackage(props) {
       <View
         style={{
           flexDirection: "row",
-        }}
-      >
+        }}>
         <Controller
           control={control}
           name="categories"
@@ -184,11 +191,7 @@ function AddPackage(props) {
               watch={watch}
               value={value}
               onChange={onChange}
-              items={[
-                { label: "English", value: "English" },
-                { label: "Arabic", value: "Arabic" },
-                { label: "French", value: "French" },
-              ]}
+              items={watch("forSchool") ? schoolSubjects : Categories}
             />
           )}
         />
@@ -210,7 +213,15 @@ function AddPackage(props) {
               ]}
               onBlur={onBlur}
               value={value}
-              onChange={onChange}
+              onChange={(type) => {
+                if (type === "sell" && watch("forSchool")) {
+                  showPricingAlert(
+                    navigation,
+                    modalizeRef?.current.close
+                  );
+                }
+                onChange(type);
+              }}
               error={errors.type?.message}
             />
           )}

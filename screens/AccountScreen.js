@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Text,
@@ -26,9 +26,10 @@ function AccountScreen(props) {
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors },
   } = useForm();
-  const [localUrl, setLocalUrl] = useState("");
+
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
   const firstName = useSelector((state) => state.auth.firstName);
@@ -39,30 +40,8 @@ function AccountScreen(props) {
     if (isLoading) {
       return;
     }
-    let formData = new FormData();
 
-    let filename = localUrl.split("/").pop();
-    let match = /\.(\w+)$/.exec(filename);
-    let fileType = match ? `image/${match[1]}` : `image`;
-
-    localUrl === ""
-      ? null
-      : formData.append("imageUrl", {
-          uri: localUrl,
-          name: filename,
-          type: fileType,
-        });
-    formData.append("id", userId);
-    formData.append("firstName", data.firstName);
-    formData.append("lastName", data.lastName);
-    data.oldPassword === undefined
-      ? null
-      : formData.append("old_password", data.oldPassword);
-    data.newPassword === undefined
-      ? null
-      : formData.append("new_password", data.newPassword);
-
-    dispatch(updateUser(formData, setError, props.navigation.goBack));
+    dispatch(updateUser(data, setError, props.navigation.goBack));
     // props.navigation.goBack();
   };
 
@@ -128,7 +107,7 @@ function AccountScreen(props) {
                   text="Update profile picture"
                   aspect={[1, 1]}
                   sendData={useCallback((result) => {
-                    setLocalUrl(result);
+                    setValue("localUrl", result);
                   }, [])}
                 />
               )}
@@ -220,13 +199,14 @@ function AccountScreen(props) {
 
             <TouchableOpacity
               style={{ width: "100%" }}
-              onPress={handleSubmit(onSubmit)}
-            >
+              onPress={handleSubmit(onSubmit)}>
               <View style={styles.signInButton}>
                 {isLoading ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
-                  <Text style={styles.textSignIn}>Update Profile</Text>
+                  <Text style={styles.textSignIn}>
+                    Update Profile
+                  </Text>
                 )}
               </View>
             </TouchableOpacity>

@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
-import { Controller } from 'react-hook-form';
-import { View, StyleSheet } from 'react-native';
-import CustomTextInput from '../CustomTextInput';
+import React, { useEffect } from "react";
+import { Controller } from "react-hook-form";
+import { View, StyleSheet } from "react-native";
+import CustomTextInput from "../CustomTextInput";
 
 export default function StepTwo({ control, errors, watch }) {
   return (
     <View>
       <Controller
-        name='email'
-        initialValue=''
+        name="email"
+        initialValue=""
         control={control}
         rules={{
-          required: 'Please enter your email.',
+          required: "Please enter your email.",
           validate: (val) => {
             const re = /\S+@\S+\.\S+/;
             if (!re.test(val)) {
-              return 'Please enter a valid Email adress.';
+              return "Please enter a valid Email adress.";
             }
             return true;
           },
@@ -23,22 +23,22 @@ export default function StepTwo({ control, errors, watch }) {
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
-              keyboardType='email-address'
-              autoCapitalize='none'
+              keyboardType="email-address"
+              autoCapitalize="none"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              placeholder='Email'
+              placeholder="Email"
               error={errors.email?.message}
             />
           );
         }}
       />
       <Controller
-        name='password'
-        initialValue=''
+        name="password"
+        initialValue=""
         control={control}
-        rules={{ required: 'Please enter your password.' }}
+        rules={{ required: "Please enter your password." }}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
             <CustomTextInput
@@ -47,20 +47,20 @@ export default function StepTwo({ control, errors, watch }) {
               value={value}
               style={styles.textInput}
               isPassword
-              placeholder='Password'
+              placeholder="Password"
               error={errors.password?.message}
             />
           );
         }}
       />
       <Controller
-        name='confirmPassword'
-        initialValue=''
+        name="confirmPassword"
+        initialValue=""
         control={control}
         rules={{
           validate: (val) => {
-            if (val !== watch('password')) {
-              return 'Passwords do not match.';
+            if (val !== watch("password")) {
+              return "Passwords do not match.";
             }
             return true;
           },
@@ -72,7 +72,7 @@ export default function StepTwo({ control, errors, watch }) {
               onChangeText={onChange}
               value={value}
               isPassword
-              placeholder='Confirm Password'
+              placeholder="Confirm Password"
               style={styles.textInput}
               error={errors.confirmPassword?.message}
             />

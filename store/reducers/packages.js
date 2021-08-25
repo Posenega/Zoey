@@ -12,10 +12,12 @@ import {
   FETCH_FAVORITES_PACKAGES_SUCCESS,
   FETCH_FAVORITES_PACKAGES_FAILURE,
   FETCH_USER_PACKAGES,
+  FILTER_PACKAGES,
 } from "../actions/packages";
 
 const initialState = {
   hasInit: false,
+  hasInitUserPackages: false,
   packages: [],
   filteredPackages: [],
   favoritePackages: [],
@@ -43,12 +45,13 @@ const packagesReducer = (state = initialState, action) => {
       return {
         ...state,
         userPackages: [...action.packages, ...state.userPackages],
+        hasInitUserPackages: true,
       };
     case ADD_PACKAGE:
       return {
         ...state,
-        packages: [action.package, ...state.packages],
-        filteredPackages: [action.package, ...state.filteredPackages],
+        // packages: [action.package, ...state.packages],
+        // filteredPackages: [action.package, ...state.filteredPackages],
         userPackages: [action.package, ...state.userPackages],
         addingIsLoading: false,
       };
@@ -67,13 +70,17 @@ const packagesReducer = (state = initialState, action) => {
         userBooks: filterPackages(state.userPackages),
       };
     case ADD_FAVORITE_PACKAGE_SUCCESS:
-      let toFavPackage = state.packages.find((p) => p._id === action.packageId);
+      let toFavPackage = state.packages.find(
+        (p) => p._id === action.packageId
+      );
       if (!toFavPackage) {
         return state;
       }
       return {
         ...state,
-        favoritePackages: [toFavPackage].concat(state.favoritePackages),
+        favoritePackages: [toFavPackage].concat(
+          state.favoritePackages
+        ),
       };
     case REMOVE_FAVORITE_PACKAGE_SUCCESS:
       return {
@@ -98,10 +105,57 @@ const packagesReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        favoriteBooks: [...action.packages],
+        favoritePackages: [...action.packages],
       };
     case FETCH_FAVORITES_PACKAGES_FAILURE:
       return { ...state, isLoading: false, error: action.payload };
+    case FILTER_PACKAGES:
+      return {
+        ...state,
+        filteredPackages: state.packages.filter((myPackage) => {
+          if (
+            action.searchTerm &&
+            !myPackage.title
+              .toLowerCase()
+              .startsWith(action.searchTerm.toLowerCase())
+          ) {
+            return false;
+          }
+
+          if (
+            action.categories &&
+            action.categories.length > 0 &&
+            !action.categories.some((cat) =>
+              myPackage.categories.includes(cat)
+            )
+          ) {
+            return false;
+          }
+          if (action.otherFilters) {
+            if (
+              action.otherFilters.includes("For School") &&
+              !myPackage.isForSchool
+            ) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("New") &&
+              myPackage.condition !== "New"
+            ) {
+              return false;
+            }
+            if (
+              action.otherFilters.includes("Used") &&
+              myPackage.condition !== "Used"
+            ) {
+              return false;
+            }
+          }
+
+          return true;
+        }),
+        isSearching: !!action.searchTerm,
+      };
     default:
       return state;
   }

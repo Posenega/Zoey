@@ -14,6 +14,7 @@ import BookDetailScreen, {
 } from "../screens/BookDetailScreen";
 import SettingsNavigator from "./SettingsNavigator";
 import { getThemeColor } from "../constants/Colors";
+import AddModal from "../components/AddModal";
 
 const MainNavigator = (props) => {
   const isAuth = useSelector((state) => !!state.auth.token);
@@ -35,33 +36,36 @@ const MainNavigator = (props) => {
       ) : isVerify ? (
         <VerificationScreen />
       ) : isAuth ? (
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            cardStyle: {
-              backgroundColor: getThemeColor(
-                "background",
-                props.theme
-              ),
-            },
-          }}>
-          <Stack.Screen name="tab" component={TabNavigator} />
-          <Stack.Screen
-            options={directMessagesScreenOptions}
-            name="chatRoom"
-            component={DirectMessagesScreen}
-          />
-          <Stack.Screen
-            name="detail"
-            component={BookDetailScreen}
-            options={bookDetailScreenOptions}
-          />
-          <Stack.Screen
-            name="settings"
-            component={SettingsNavigator}
-            options={{ headerTitle: "settings" }}
-          />
-        </Stack.Navigator>
+        <>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              cardStyle: {
+                backgroundColor: getThemeColor(
+                  "background",
+                  props.theme
+                ),
+              },
+            }}>
+            <Stack.Screen name="tab" component={TabNavigator} />
+            <Stack.Screen
+              options={directMessagesScreenOptions}
+              name="chatRoom"
+              component={DirectMessagesScreen}
+            />
+            <Stack.Screen
+              name="detail"
+              component={BookDetailScreen}
+              options={bookDetailScreenOptions}
+            />
+            <Stack.Screen
+              name="settings"
+              component={SettingsNavigator}
+              options={{ headerTitle: "settings" }}
+            />
+          </Stack.Navigator>
+          <AddModal />
+        </>
       ) : (
         <AuthNavigator />
       )}

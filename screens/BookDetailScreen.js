@@ -40,7 +40,7 @@ import {
 
 function BookDetailScreen(props) {
   const styles = getStyles(props.theme);
-  const { id, isPackage } = props.route.params || {};
+  const { id, isPackage, isMine } = props.route.params || {};
 
   const { getState, subscribe } = useStore();
 
@@ -63,11 +63,14 @@ function BookDetailScreen(props) {
     unsubscribe.current = subscribe(() => {
       const state = getState();
       const selected = isPackage ? "packages" : "books";
-      const secondSelected = isPackage ? "userPackages" : "userBooks";
-      console.log(state[selected][secondSelected]);
+      let secondSelected = selected;
+      if (isMine)
+        secondSelected = isPackage ? "userPackages" : "userBooks";
+
       const book = state[selected][secondSelected].find(
         (book) => book?._id === id
       );
+
       setDisplayedBook(book);
       setIsFavorite(
         isPackage
@@ -238,7 +241,7 @@ function BookDetailScreen(props) {
             {displayedBook.categories.length > 1 && (
               <View>
                 <Text style={styles.categoriText}>
-                  Books Available in This Package:
+                  Categories Included in This Package:
                 </Text>
                 <Text style={styles.categories}>
                   {displayedBook.categories
@@ -311,7 +314,7 @@ function BookDetailScreen(props) {
         </>
       ) : (
         <View style={styles.center}>
-          <ActivityIndicator />
+          <ActivityIndicator size="large" color="#2b2b2b" />
         </View>
       )}
     </View>
@@ -356,6 +359,13 @@ const getStyles = (theme) =>
     },
     headerContainer: {
       flexDirection: "row",
+    },
+    categoriText: {
+      fontFamily: "rubik-medium",
+    },
+    categories: {
+      fontSize: 12,
+      marginLeft: 5,
     },
     title: {
       fontFamily: "rubik-bold",
