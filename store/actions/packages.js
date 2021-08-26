@@ -135,17 +135,14 @@ export const requestDeletePackage = (packageId) => {
   return async (dispatch, getState) => {
     try {
       const token = getState().auth.token;
-      const response = await axios.delete(
-        "/api/packages/" + packageId,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      await axios.delete("/api/packages/" + packageId, {
+        headers: { Authorization: "Bearer " + token },
+      });
 
       dispatch(deletePackage(packageId));
       return Promise.resolve();
     } catch (error) {
-      console.log(error);
+      console.log("An error");
     }
   };
 };

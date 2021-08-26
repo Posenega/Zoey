@@ -39,8 +39,15 @@ const authUser = (
       }
     )
     .then((res) => {
-      const { token, email, firstName, lastName, userId, imageUrl } =
-        res.data;
+      const {
+        token,
+        email,
+        firstName,
+        lastName,
+        userId,
+        imageUrl,
+        type: userType,
+      } = res.data;
 
       SecureStore.setItemAsync(
         "userData",
@@ -51,6 +58,7 @@ const authUser = (
           lastName,
           userId,
           imageUrl,
+          userType,
         })
       )
         .then(() => {
@@ -64,7 +72,8 @@ const authUser = (
                 firstName,
                 lastName,
                 userId,
-                imageUrl
+                imageUrl,
+                userType
               )
             );
           }
@@ -104,8 +113,10 @@ const authSuccess = (
   firstName,
   lastName,
   userId,
-  imageUrl
+  imageUrl,
+  userType
 ) => {
+  console.log(userType);
   return {
     type: AUTH_SUCCESS,
     token,
@@ -114,6 +125,7 @@ const authSuccess = (
     lastName,
     userId,
     imageUrl,
+    userType: userType || "user",
   };
 };
 
@@ -159,8 +171,15 @@ export const tryAutoLogin = () => {
     dispatch(tryAutoLoginStart());
     const userData = await SecureStore.getItemAsync("userData");
     if (userData) {
-      const { token, email, firstName, lastName, userId, imageUrl } =
-        JSON.parse(userData);
+      const {
+        token,
+        email,
+        firstName,
+        lastName,
+        userId,
+        imageUrl,
+        userType,
+      } = JSON.parse(userData);
 
       if (!token) {
         dispatch(setVerifyUser(email, userId));
@@ -172,7 +191,8 @@ export const tryAutoLogin = () => {
             firstName,
             lastName,
             userId,
-            imageUrl
+            imageUrl,
+            userType
           )
         );
       }

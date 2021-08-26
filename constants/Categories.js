@@ -5,6 +5,7 @@ export default [
   { label: "Detective and Mystery", value: "detective" },
   { label: "Fantasy", value: "fantasy" },
   { label: "Historical Fiction", value: "hFiction" },
+  { label: "Science", value: "science" },
   { label: "Horror", value: "horror" },
   { label: "Literary Fiction", value: "lFiction" },
   { label: "Romance", value: "romance" },

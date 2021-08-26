@@ -17,6 +17,7 @@ function ProfileScreen(props) {
   const styles = getStyles(props.theme);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
+  const theme = props.theme;
 
   useEffect(() => {
     dispatch(fetchUserBooks());
@@ -25,13 +26,13 @@ function ProfileScreen(props) {
       headerRight: () => (
         <SettingsButton
           style={{ marginRight: 18 }}
-          color={getThemeColor("text", props.theme)}
+          color={getThemeColor("text", theme)}
           onPress={() => props.navigation.navigate("settings")}
         />
       ),
     });
     // dispatch(getUser(userId));
-  }, []);
+  }, [theme]);
   const packagesIsSelected = useSelector(
     (state) => state.bookPackageSelector.mySelected === "packages"
   );

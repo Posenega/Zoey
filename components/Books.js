@@ -10,8 +10,10 @@ import {
 import Book from "./Book";
 import HorizontalBook from "./HorizontalBook";
 import NoData from "./NoData";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
+import { fetchPackages } from "../store/actions/packages";
+import { fetchBooks } from "../store/actions/books";
 
 function Books({
   refreshControl,
@@ -23,6 +25,7 @@ function Books({
   isPackage,
   isMine,
 }) {
+  const dispatch = useDispatch();
   const renderBook = (itemData) => {
     const book = itemData.item;
 
@@ -74,6 +77,9 @@ function Books({
           : "There is no Books Yet"
       }
       secondLine="Be the First to add Some!"
+      onRefresh={() =>
+        dispatch(isPackage ? fetchPackages() : fetchBooks())
+      }
     />
   ) : (
     <FlatList

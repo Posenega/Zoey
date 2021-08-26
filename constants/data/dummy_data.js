@@ -1,9 +1,10 @@
-import Colors from "../constants/Colors";
+import Colors from "../Colors";
 
 export const BOOKS = [
   {
     id: "b1",
-    title: "Algorithms to Live By: The Computer Science of Human Decisions",
+    title:
+      "Algorithms to Live By: The Computer Science of Human Decisions",
     imageUrl:
       "https://cdn.waterstones.com/bookjackets/large/9780/0075/9780007547999.jpg",
     category: "Technology",
@@ -27,7 +28,8 @@ export const BOOKS = [
   },
   {
     id: "b3",
-    title: "Algorithms to Live By: The Computer Science of Human Decisions",
+    title:
+      "Algorithms to Live By: The Computer Science of Human Decisions",
     imageUrl:
       "https://cdn.waterstones.com/bookjackets/large/9780/0075/9780007547999.jpg",
     category: "Technology",
@@ -51,7 +53,8 @@ export const BOOKS = [
   },
   {
     id: "b5",
-    title: "Algorithms to Live By: The Computer Science of Human Decisions",
+    title:
+      "Algorithms to Live By: The Computer Science of Human Decisions",
     imageUrl:
       "https://cdn.waterstones.com/bookjackets/large/9780/0075/9780007547999.jpg",
     category: "Technology",
@@ -75,7 +78,8 @@ export const BOOKS = [
   },
   {
     id: "b7",
-    title: "Algorithms to Live By: The Computer Science of Human Decisions",
+    title:
+      "Algorithms to Live By: The Computer Science of Human Decisions",
     imageUrl:
       "https://cdn.waterstones.com/bookjackets/large/9780/0075/9780007547999.jpg",
     category: "Technology",
@@ -99,7 +103,8 @@ export const BOOKS = [
   },
   {
     id: "b9",
-    title: "Algorithms to Live By: The Computer Science of Human Decisions",
+    title:
+      "Algorithms to Live By: The Computer Science of Human Decisions",
     imageUrl:
       "https://cdn.waterstones.com/bookjackets/large/9780/0075/9780007547999.jpg",
     category: "Technology",

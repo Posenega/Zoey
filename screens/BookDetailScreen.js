@@ -37,10 +37,15 @@ import {
   requestRemoveFavoritePackage,
   requestAddFavoritePackage,
 } from "../store/actions/packages";
+import {
+  BOOKS_PERMISSIONS_TYPES,
+  PACKAGES_PERMISSIONS_TYPES,
+} from "../constants/permissions";
 
 function BookDetailScreen(props) {
   const styles = getStyles(props.theme);
   const { id, isPackage, isMine } = props.route.params || {};
+  const userType = useSelector((state) => state.auth.type);
 
   const { getState, subscribe } = useStore();
 
@@ -144,28 +149,33 @@ function BookDetailScreen(props) {
                   {displayedBook.title}
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(
-                    isFavorite
-                      ? isPackage
-                        ? requestRemoveFavoritePackage(id)
-                        : requestRemoveFavoriteBook(id)
-                      : isPackage
-                      ? requestAddFavoritePackage(id)
-                      : requestAddFavoriteBook(id)
-                  );
-                }}>
-                <FavoriteButton
-                  size={20}
-                  color={
-                    isFavorite
-                      ? "red"
-                      : getThemeColor("idle", props.theme)
-                  }
-                />
-              </TouchableOpacity>
-              {userId === displayedBook.creator && (
+              {!(userId === displayedBook.creator) && (
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(
+                      isFavorite
+                        ? isPackage
+                          ? requestRemoveFavoritePackage(id)
+                          : requestRemoveFavoriteBook(id)
+                        : isPackage
+                        ? requestAddFavoritePackage(id)
+                        : requestAddFavoriteBook(id)
+                    );
+                  }}>
+                  <FavoriteButton
+                    size={20}
+                    color={
+                      isFavorite
+                        ? "red"
+                        : getThemeColor("idle", props.theme)
+                    }
+                  />
+                </TouchableOpacity>
+              )}
+              {(userId === displayedBook.creator ||
+                (isPackage
+                  ? PACKAGES_PERMISSIONS_TYPES.includes(userType)
+                  : BOOKS_PERMISSIONS_TYPES.includes(userType))) && (
                 <View
                   style={{ marginLeft: 15, flexDirection: "row" }}>
                   <TouchableOpacity
@@ -246,9 +256,15 @@ function BookDetailScreen(props) {
                 <Text style={styles.categories}>
                   {displayedBook.categories
                     .map((category) => {
-                      return Categories.find(
-                        (cat) => cat.value === category
-                      )?.label;
+                      return (
+                        <Badge>
+                          {
+                            Categories.find(
+                              (cat) => cat.value === category
+                            )?.label
+                          }
+                        </Badge>
+                      );
                     })
                     .join(" , ")}
                 </Text>
@@ -362,10 +378,12 @@ const getStyles = (theme) =>
     },
     categoriText: {
       fontFamily: "rubik-medium",
+      color: getThemeColor("text", theme),
     },
     categories: {
       fontSize: 12,
       marginLeft: 5,
+      color: getThemeColor("text", theme),
     },
     title: {
       fontFamily: "rubik-bold",

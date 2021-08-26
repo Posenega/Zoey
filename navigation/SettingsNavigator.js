@@ -2,9 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import Colors, { getThemeColor } from "../constants/Colors";
-import ProfileScreen, {
-  screenOptions as profileScreenOptions,
-} from "../screens/ProfileScreen";
+
 import SettingsScreen, {
   screenOptions as settingsScreenOptions,
 } from "../screens/SettingsScreen";
@@ -35,8 +33,7 @@ const ProfileNavigator = (props) => (
         backgroundColor: getThemeColor("background", props.theme),
       },
       headerTitleAlign: "left",
-    }}
-  >
+    }}>
     <Stack.Screen
       name="settingsScreen"
       component={SettingsScreen}

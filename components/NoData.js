@@ -1,11 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 
-export default function NoData({ firstLine, secondLine }) {
+export default function NoData({ firstLine, secondLine, onRefresh }) {
   return (
     <View style={styles.noBooks}>
       <Text style={styles.noBooksMessages}>{firstLine}</Text>
       <Text style={styles.noBooksMessages}>{secondLine}</Text>
+      {onRefresh && (
+        <Button
+          onPress={onRefresh}
+          title="Refresh"
+          style={styles.refreshButton}
+        />
+      )}
     </View>
   );
 }
@@ -21,5 +28,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     letterSpacing: 1,
     marginBottom: 5,
+  },
+  refreshButton: {
+    color: "blue",
   },
 });
