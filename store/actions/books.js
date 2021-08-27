@@ -219,16 +219,20 @@ export const requestAddFavoriteBook = (bookId) => {
 };
 
 export const requestRemoveFavoriteBook = (bookId) => {
+  // console.log(bookId);
   return (dispatch, getState) => {
     dispatch(removeFavoriteBookSuccess(bookId));
     const token = getState().auth.token;
     axios({
       method: "delete",
-      url: "/api/books/favorites",
+      url: "/api/books/favorites/" + bookId,
       headers: {
         Authorization: "Bearer " + token,
       },
-    }).catch((e) => dispatch(addFavoriteBookSuccess(bookId)));
+    }).catch((e) => {
+      console.log(e);
+      dispatch(addFavoriteBookSuccess(bookId));
+    });
   };
 };
 
