@@ -144,6 +144,20 @@ function SettingsScreen(props) {
           }>
           Notifications
         </SettingContainer>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate("soldItems");
+          }}>
+          <SettingContainer
+            icon={
+              <ListIcon
+                size={20}
+                color={getThemeColor("text", props.theme)}
+              />
+            }>
+            Sold Books
+          </SettingContainer>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.textFooter}>© BookApp 2021</Text>

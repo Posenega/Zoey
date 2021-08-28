@@ -16,7 +16,6 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store/actions/auth";
 import ImagePicker from "../components/ImagePicker";
 import CustomTextInput from "../components/CustomTextInput";
-import Option from "../components/Option";
 import DropDownMenu from "../components/DropDownMenu";
 
 function AccountScreen(props) {

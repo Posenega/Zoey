@@ -21,6 +21,37 @@ export const ADD_BOOK_START = "ADD_BOOK_START";
 export const ADD_BOOK_SUCCESS = "ADD_BOOK_SUCCESS";
 export const ADD_BOOK_FINISH = "ADD_BOOK_FINISH";
 export const DELETE_BOOK_SUCCESS = "DELETE_BOOK_SUCCESS";
+export const UPDATE_BOOK = "UPDATE_BOOK";
+
+export const requestUpdateBook = ({
+  title,
+  description,
+  isSold,
+  bookId,
+}) => {
+  return async (dispatch, getState) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.get("/api/books/" + bookId, {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      dispatch({
+        type: FETCH_BOOKS_SUCCESS,
+        books: response.data.books,
+      });
+      return Promise.resolve();
+    } catch (error) {
+      dispatch({ type: FETCH_BOOKS_FAILURE, payload: error });
+    }
+  };
+  axios.patch();
+};
+
+export const updateBook = (updatedFields) => ({
+  type: UPDATE_BOOK,
+  updatedFields,
+});
 
 export const fetchBooks = (refresh = false) => {
   return async (dispatch, getState) => {

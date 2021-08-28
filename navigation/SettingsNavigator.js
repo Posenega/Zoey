@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import PricingScreen, {
   pricingOptions as pricingScreenOptions,
 } from "../screens/PricingScreen";
+import SoldItems from "../screens/SoldItemsScreen";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,7 @@ const ProfileNavigator = (props) => (
       component={PricingScreen}
       options={pricingScreenOptions}
     />
+    <Stack.Screen name="soldItems" component={SoldItems} />
   </Stack.Navigator>
 );
 
