@@ -19,6 +19,8 @@ const initialState = {
   lastName: "",
   userId: "",
   type: "",
+  isStudent: null,
+  grade: "",
   tryAutoLogin: false,
   imageUrl: "",
   isVerify: false,
@@ -47,6 +49,8 @@ const authReducer = (state = initialState, action) => {
         tryAutoLogin: false,
         isVerify: false,
         isLoading: false,
+        isStudent: action.isStudent,
+        grade: action.grade,
       };
 
     case TRY_AUTO_LOGIN_FAIL:

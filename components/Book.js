@@ -20,11 +20,11 @@ function Book(props) {
           id: props.id,
           isPackage: props.isPackage,
           isMine: props.isMine,
+          soldBook: props.soldBook,
         });
-      }}>
-      <View
-        onStartShouldSetResponder={() => true}
-        style={styles.bookContainer}>
+      }}
+    >
+      <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
         <View style={styles.bookImage}>
           <Image style={styles.image} source={{ uri: props.image }} />
         </View>
@@ -41,13 +41,13 @@ function Book(props) {
               style={{ alignSelf: "flex-start", width: null }}
               category={props.category}
               color={props.color}
-              backgroundColor={props.backgroundColor}>
+              backgroundColor={props.backgroundColor}
+            >
               {/* {props.category} */}
 
               {(props.category &&
-                Categories.find(
-                  (category) => category.value == props.category
-                )?.label) ||
+                Categories.find((category) => category.value == props.category)
+                  ?.label) ||
                 props.category}
             </Badge>
           ) : (
@@ -56,7 +56,8 @@ function Book(props) {
                 style={{ alignSelf: "flex-start", width: null }}
                 category={props.category}
                 color={props.color}
-                backgroundColor={props.backgroundColor}>
+                backgroundColor={props.backgroundColor}
+              >
                 {/* {props.category} */}
 
                 {(props.category &&

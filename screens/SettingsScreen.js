@@ -72,8 +72,7 @@ function SettingsScreen(props) {
               {firstName} {lastName}
             </Text>
           </View>
-          <TouchableWithoutFeedback
-            onPress={() => dispatch(logout())}>
+          <TouchableWithoutFeedback onPress={() => dispatch(logout())}>
             <View style={styles.SignOut}>
               <Logout color={getThemeColor("text", props.theme)} />
             </View>
@@ -84,7 +83,8 @@ function SettingsScreen(props) {
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("account");
-          }}>
+          }}
+        >
           <SettingContainer
             style={styles.firstContainer}
             icon={
@@ -92,21 +92,21 @@ function SettingsScreen(props) {
                 size={20}
                 color={getThemeColor("text", props.theme)}
               />
-            }>
+            }
+          >
             Account
           </SettingContainer>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("pricing");
-          }}>
+          }}
+        >
           <SettingContainer
             icon={
-              <ListIcon
-                size={20}
-                color={getThemeColor("text", props.theme)}
-              />
-            }>
+              <ListIcon size={20} color={getThemeColor("text", props.theme)} />
+            }
+          >
             Pricing
           </SettingContainer>
         </TouchableOpacity>
@@ -124,14 +124,16 @@ function SettingsScreen(props) {
             currentTheme === "dark"
               ? dispatch(setTheme("light"))
               : dispatch(setTheme("dark"));
-          }}>
+          }}
+        >
           <SettingContainer
             icon={
               <ShowValueInput
                 size={20}
                 color={getThemeColor("text", props.theme)}
               />
-            }>
+            }
+          >
             Appearance
           </SettingContainer>
         </TouchableOpacity>
@@ -141,20 +143,20 @@ function SettingsScreen(props) {
               size={20}
               color={getThemeColor("text", props.theme)}
             />
-          }>
+          }
+        >
           Notifications
         </SettingContainer>
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate("soldItems");
-          }}>
+            props.navigation.navigate("soldBooks");
+          }}
+        >
           <SettingContainer
             icon={
-              <ListIcon
-                size={20}
-                color={getThemeColor("text", props.theme)}
-              />
-            }>
+              <ListIcon size={20} color={getThemeColor("text", props.theme)} />
+            }
+          >
             Sold Books
           </SettingContainer>
         </TouchableOpacity>

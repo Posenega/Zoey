@@ -24,6 +24,8 @@ function Books({
   theme,
   isPackage,
   isMine,
+  onRefresh,
+  soldBooks,
 }) {
   const dispatch = useDispatch();
   const renderBook = (itemData) => {
@@ -43,6 +45,7 @@ function Books({
         isPackage={isPackage}
         isForSchool={book.isForSchool}
         isMine={isMine}
+        soldBook={soldBooks}
       />
     );
     if (isHorizontal) {
@@ -54,6 +57,7 @@ function Books({
           navigation={navigation}
           isPackage={isPackage}
           isMine={isMine}
+          soldBook={soldBooks}
         />
       );
     }
@@ -65,30 +69,25 @@ function Books({
         justifyContent: "center",
         alignItems: "center",
         flex: 1,
-      }}>
+      }}
+    >
       <ActivityIndicator color={getThemeColor("text", theme)} />
       {Platform.OS === "ios" && <Text>Loading...</Text>}
     </View>
   ) : books.length <= 0 ? (
     <NoData
       firstLine={
-        isPackage
-          ? "There is no Packages Yet"
-          : "There is no Books Yet"
+        isPackage ? "There is no Packages Yet" : "There is no Books Yet"
       }
       secondLine="Be the First to add Some!"
-      onRefresh={() =>
-        dispatch(isPackage ? fetchPackages() : fetchBooks())
-      }
+      onRefresh={onRefresh}
     />
   ) : (
     <FlatList
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       style={
-        !isHorizontal
-          ? { flex: 1 }
-          : { flex: 1, paddingHorizontal: "4.8%" }
+        !isHorizontal ? { flex: 1 } : { flex: 1, paddingHorizontal: "4.8%" }
       }
       horizontal={isHorizontal}
       data={books}

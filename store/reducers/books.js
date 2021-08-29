@@ -15,6 +15,8 @@ import {
   REMOVE_FAVORITE_BOOK_SUCCESS,
   FILTER_BOOKS,
   DELETE_BOOK_SUCCESS,
+  UPDATE_BOOK,
+  updateBook,
 } from "../actions/books";
 
 const initialState = {
@@ -26,6 +28,7 @@ const initialState = {
   addBookStatus: "PENDING",
   isFiltering: false,
   error: null,
+  soldBooks: [],
 };
 
 const booksReducer = (state = initialState, action) => {
@@ -58,6 +61,7 @@ const booksReducer = (state = initialState, action) => {
         isForSchool: action.isForSchool,
         grade: action.grade,
         isPackage: action.isPackage,
+        isSold: false,
       };
 
       return {
@@ -71,9 +75,7 @@ const booksReducer = (state = initialState, action) => {
       return { ...state, addBookStatus: "PENDING" };
 
     case ADD_FAVORITE_BOOK_SUCCESS:
-      let toFavBook = state.books.find(
-        (book) => book._id === action.bookId
-      );
+      let toFavBook = state.books.find((book) => book._id === action.bookId);
       if (!toFavBook) {
         return state;
       }
@@ -152,7 +154,8 @@ const booksReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        userBooks: [...action.books],
+        userBooks: action.soldBooks ? state.userBooks : [...action.books],
+        soldBooks: action.soldBooks ? [...action.books] : state.soldBooks,
       };
     case FETCH_USER_BOOKS_FAILURE:
       return { ...state, isLoading: false, error: action.payload };
@@ -165,7 +168,31 @@ const booksReducer = (state = initialState, action) => {
         books: removeByActionBookId(state.books),
         favoriteBooks: removeByActionBookId(state.favoriteBooks),
         filteredBooks: removeByActionBookId(state.filteredBooks),
+        soldBooks: filterPackages(state.soldPackages),
         userBooks: removeByActionBookId(state.userBooks),
+      };
+    case UPDATE_BOOK:
+      const bookIndex = state.userBooks.findIndex(
+        (book) => book._id === action.bookId
+      );
+      if (bookIndex < 0) {
+        return state;
+      }
+
+      if (action.isSold) {
+        state.userBooks.splice(bookIndex, 1);
+        return {
+          ...state,
+          userBooks: [...state.userBooks],
+          soldBooks: [action.updatedBook, ...state.soldBooks],
+        };
+      }
+
+      state.userBooks.splice(bookIndex, 1, action.updatedBook);
+
+      return {
+        ...state,
+        userBooks: [...state.userBooks],
       };
     default:
       return state;

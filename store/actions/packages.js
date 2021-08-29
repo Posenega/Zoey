@@ -7,12 +7,10 @@ export const ADD_PACKAGE = "ADD_PACKAGE";
 export const ADD_PACKAGE_START = "ADD_PACKAGE_START";
 export const ADD_PACKAGE_FAILURE = "ADD_PACKAGE_FAILURE";
 export const DELETE_PACKAGE = "DELETE_PACKAGE";
-export const ADD_FAVORITE_PACKAGE_SUCCESS =
-  "ADD_FAVORITE_PACKAGE_SUCCESS";
+export const ADD_FAVORITE_PACKAGE_SUCCESS = "ADD_FAVORITE_PACKAGE_SUCCESS";
 export const REMOVE_FAVORITE_PACKAGE_SUCCESS =
   "REMOVE_FAVORITE_PACKAGE_SUCCESS";
-export const FETCH_FAVORITES_PACKAGES_START =
-  "FETCH_FAVORITES_PACKAGES_START";
+export const FETCH_FAVORITES_PACKAGES_START = "FETCH_FAVORITES_PACKAGES_START";
 export const FETCH_FAVORITES_PACKAGES_SUCCESS =
   "FETCH_FAVORITES_PACKAGES_SUCCESS";
 export const FETCH_FAVORITES_PACKAGES_FAILURE =
@@ -20,12 +18,41 @@ export const FETCH_FAVORITES_PACKAGES_FAILURE =
 export const FAVORITE_PACKAGE_START = "FAVORITE_PACKAGE_START";
 export const FETCH_USER_PACKAGES = "FETCH_USER_PACKAGES";
 export const FILTER_PACKAGES = "FILTER_PACKAGES";
+export const UPDATE_PACKAGE = "UPDATE_PACKAGE";
 
-export const filterPackages = ({
-  searchTerm,
-  categories,
-  otherFilters,
+export const requestUpdatePackage = ({
+  title,
+  description,
+  isSold,
+  packageId,
 }) => {
+  return async (dispatch, getState) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.patch(
+        "/api/packages/" + packageId,
+        { title, description, isSold },
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
+      console.log(response.data);
+      dispatch(updatePackage(packageId, response.data.package, isSold));
+      return Promise.resolve();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const updatePackage = (packageId, updatedPackage, isSold) => ({
+  type: UPDATE_PACKAGE,
+  packageId,
+  updatedPackage,
+  isSold,
+});
+
+export const filterPackages = ({ searchTerm, categories, otherFilters }) => {
   return {
     type: FILTER_PACKAGES,
     searchTerm,
@@ -93,16 +120,20 @@ export const requestAddPackage = ({
   };
 };
 
-export const fetchUserPackages = () => {
+export const fetchUserPackages = (soldPackages = false) => {
   return async (dispatch, getState) => {
     try {
       const token = getState().auth.token;
-      const response = await axios.get("/api/packages/user", {
-        headers: { Authorization: "Bearer " + token },
-      });
+      const response = await axios.get(
+        "/api/packages/user" + (soldPackages ? "?soldPackages=true" : ""),
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
       dispatch({
         type: FETCH_USER_PACKAGES,
         packages: response.data.packages,
+        soldPackages,
       });
       return Promise.resolve();
     } catch (error) {
@@ -173,9 +204,7 @@ export const requestAddFavoritePackage = (packageId) => {
       headers: {
         Authorization: "Bearer " + token,
       },
-    }).catch((e) =>
-      dispatch(removeFavoritePackageSuccess(packageId))
-    );
+    }).catch((e) => dispatch(removeFavoritePackageSuccess(packageId)));
   };
 };
 

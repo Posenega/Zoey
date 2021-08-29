@@ -28,16 +28,13 @@ const authUser = (
 ) => {
   dispatch(authSetLoading());
   axios
-    .post(
-      `/api/users/${authMode === "SIGN_UP" ? "signup" : "login"}`,
-      {
-        firstName,
-        lastName,
-        email,
-        password,
-        city,
-      }
-    )
+    .post(`/api/users/${authMode === "SIGN_UP" ? "signup" : "login"}`, {
+      firstName,
+      lastName,
+      email,
+      password,
+      city,
+    })
     .then((res) => {
       const {
         token,
@@ -47,6 +44,8 @@ const authUser = (
         userId,
         imageUrl,
         type: userType,
+        isStudent,
+        grade,
       } = res.data;
 
       SecureStore.setItemAsync(
@@ -59,6 +58,8 @@ const authUser = (
           userId,
           imageUrl,
           userType,
+          isStudent,
+          grade,
         })
       )
         .then(() => {
@@ -73,7 +74,9 @@ const authUser = (
                 lastName,
                 userId,
                 imageUrl,
-                userType
+                userType,
+                isStudent,
+                grade
               )
             );
           }
@@ -88,8 +91,7 @@ const authUser = (
         console.log(setError);
         setError(authMode === "SIGN_UP" ? "city" : "password", {
           type: "server",
-          message:
-            e.response?.data?.message || "Unknown error has occured.",
+          message: e.response?.data?.message || "Unknown error has occured.",
         });
       }
     });
@@ -114,7 +116,9 @@ const authSuccess = (
   lastName,
   userId,
   imageUrl,
-  userType
+  userType,
+  isStudent,
+  grade
 ) => {
   console.log(userType);
   return {
@@ -126,6 +130,8 @@ const authSuccess = (
     userId,
     imageUrl,
     userType: userType || "user",
+    isStudent,
+    grade,
   };
 };
 
@@ -153,16 +159,7 @@ export const signupUser = (
 
 export const loginUser = (email, password, setError) => {
   return (dispatch, getState) => {
-    authUser(
-      "LOG_IN",
-      dispatch,
-      null,
-      null,
-      email,
-      password,
-      null,
-      setError
-    );
+    authUser("LOG_IN", dispatch, null, null, email, password, null, setError);
   };
 };
 
@@ -179,6 +176,8 @@ export const tryAutoLogin = () => {
         userId,
         imageUrl,
         userType,
+        isStudent,
+        grade,
       } = JSON.parse(userData);
 
       if (!token) {
@@ -192,7 +191,9 @@ export const tryAutoLogin = () => {
             lastName,
             userId,
             imageUrl,
-            userType
+            userType,
+            isStudent,
+            grade
           )
         );
       }
@@ -257,7 +258,7 @@ export const uploadExpoPushToken = (expoPushToken) => {
 };
 
 export const updateUser = (
-  { localUrl, firstName, lastName, oldPassword, newPassword },
+  { localUrl, firstName, lastName, oldPassword, newPassword, isStudent, grade },
   setError,
   goBack
 ) => {
@@ -286,6 +287,9 @@ export const updateUser = (
       ? null
       : formData.append("new_password", newPassword);
 
+    isStudent !== undefined && formData.append("isStudent", isStudent);
+    grade && formData.append("grade", grade);
+
     axios({
       method: "patch",
       url: "/api/users/update",
@@ -296,7 +300,8 @@ export const updateUser = (
       },
     })
       .then((response) => {
-        const { firstName, lastName, imageUrl } = response.data;
+        const { firstName, lastName, imageUrl, isStudent, grade } =
+          response.data;
         const { token, email, userId } = getState().auth;
         SecureStore.setItemAsync(
           "userData",
@@ -307,9 +312,13 @@ export const updateUser = (
             lastName,
             userId,
             imageUrl,
+            isStudent,
+            grade,
           })
         );
-        dispatch(updateUserSuccess(firstName, lastName, imageUrl));
+        dispatch(
+          updateUserSuccess(firstName, lastName, imageUrl, isStudent, grade)
+        );
         goBack();
       })
       .catch((e) => {
@@ -317,15 +326,20 @@ export const updateUser = (
         dispatch(authStopLoading());
         setError("oldPassword", {
           type: "server",
-          message:
-            e.response.data?.message || "Unknown error has occured.",
+          message: e.response.data?.message || "Unknown error has occured.",
         });
       });
   };
 };
 
-export const updateUserSuccess = (firstName, lastName, imageUrl) => {
-  const updatedState = { firstName, lastName };
+export const updateUserSuccess = (
+  firstName,
+  lastName,
+  imageUrl,
+  isStudent,
+  grade
+) => {
+  const updatedState = { firstName, lastName, isStudent, grade };
   if (imageUrl) updatedState.imageUrl = imageUrl;
   return {
     type: UPDATE_USER_SUCCESS,
@@ -379,8 +393,7 @@ export const verifyUser = (confirmationCode, setError) => {
         dispatch(authStopLoading());
         setError("code", {
           type: "server",
-          message:
-            e.response?.data?.message || "Unknown error has occured.",
+          message: e.response?.data?.message || "Unknown error has occured.",
         });
       });
   };

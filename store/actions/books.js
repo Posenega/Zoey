@@ -6,16 +6,12 @@ export const FETCH_USER_BOOKS_FAILURE = "FETCH_USER_BOOKS_FAILURE";
 export const FETCH_BOOKS_START = "FETCH_BOOKS_START";
 export const FETCH_BOOKS_SUCCESS = "FETCH_BOOKS_SUCCESS";
 export const FETCH_BOOKS_FAILURE = "FETCH_BOOKS_FAILURE";
-export const FETCH_FAVORITES_BOOKS_START =
-  "FETCH_FAVORITES_BOOKS_START";
-export const FETCH_FAVORITES_BOOKS_SUCCESS =
-  "FETCH_FAVORITES_BOOKS_SUCCESS";
-export const FETCH_FAVORITES_BOOKS_FAILURE =
-  "FETCH_FAVORITES_BOOKS_FAILURE";
+export const FETCH_FAVORITES_BOOKS_START = "FETCH_FAVORITES_BOOKS_START";
+export const FETCH_FAVORITES_BOOKS_SUCCESS = "FETCH_FAVORITES_BOOKS_SUCCESS";
+export const FETCH_FAVORITES_BOOKS_FAILURE = "FETCH_FAVORITES_BOOKS_FAILURE";
 export const FAVORITE_BOOK_START = "FAVORITE_BOOK_START";
 export const ADD_FAVORITE_BOOK_SUCCESS = "ADD_FAVORITE_BOOK_SUCCESS";
-export const REMOVE_FAVORITE_BOOK_SUCCESS =
-  "REMOVE_FAVORITE_BOOK_SUCCESS";
+export const REMOVE_FAVORITE_BOOK_SUCCESS = "REMOVE_FAVORITE_BOOK_SUCCESS";
 export const FILTER_BOOKS = "FILTER_BOOKS";
 export const ADD_BOOK_START = "ADD_BOOK_START";
 export const ADD_BOOK_SUCCESS = "ADD_BOOK_SUCCESS";
@@ -23,34 +19,31 @@ export const ADD_BOOK_FINISH = "ADD_BOOK_FINISH";
 export const DELETE_BOOK_SUCCESS = "DELETE_BOOK_SUCCESS";
 export const UPDATE_BOOK = "UPDATE_BOOK";
 
-export const requestUpdateBook = ({
-  title,
-  description,
-  isSold,
-  bookId,
-}) => {
+export const requestUpdateBook = ({ title, description, isSold, bookId }) => {
   return async (dispatch, getState) => {
     try {
       const token = getState().auth.token;
-      const response = await axios.get("/api/books/" + bookId, {
-        headers: { Authorization: "Bearer " + token },
-      });
-
-      dispatch({
-        type: FETCH_BOOKS_SUCCESS,
-        books: response.data.books,
-      });
+      const response = await axios.patch(
+        "/api/books/" + bookId,
+        { title, description, isSold },
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
+      console.log(response.data);
+      dispatch(updateBook(bookId, response.data.book, isSold));
       return Promise.resolve();
     } catch (error) {
-      dispatch({ type: FETCH_BOOKS_FAILURE, payload: error });
+      console.log(error);
     }
   };
-  axios.patch();
 };
 
-export const updateBook = (updatedFields) => ({
+export const updateBook = (bookId, updatedBook, isSold) => ({
   type: UPDATE_BOOK,
-  updatedFields,
+  bookId,
+  updatedBook,
+  isSold,
 });
 
 export const fetchBooks = (refresh = false) => {
@@ -279,11 +272,7 @@ export const removeFavoriteBookSuccess = (bookId) => {
   return { type: REMOVE_FAVORITE_BOOK_SUCCESS, bookId };
 };
 
-export const filterBooks = ({
-  searchTerm,
-  categories,
-  otherFilters,
-}) => {
+export const filterBooks = ({ searchTerm, categories, otherFilters }) => {
   return {
     type: FILTER_BOOKS,
     searchTerm,
@@ -292,13 +281,14 @@ export const filterBooks = ({
   };
 };
 
-export const fetchUserBooks = () => {
+export const fetchUserBooks = (soldBooks = false) => {
   return (dispatch, getState) => {
     dispatch({ type: FETCH_USER_BOOKS_START });
     const token = getState().auth.token;
+
     axios({
       method: "POST",
-      url: "/api/books/user",
+      url: "/api/books/user" + (soldBooks ? "?soldBooks=true" : ""),
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -307,9 +297,11 @@ export const fetchUserBooks = () => {
         dispatch({
           type: FETCH_USER_BOOKS_SUCCESS,
           books: response.data.books,
+          soldBooks,
         });
       })
       .catch(function (error) {
+        console.log(error);
         dispatch({ type: FETCH_USER_BOOKS_FAILURE, payload: error });
       });
   };

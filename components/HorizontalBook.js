@@ -18,11 +18,11 @@ function HorizontalBook(props) {
           id: props.id,
           isPackage: props.isPackage,
           isMine: props.isMine,
+          soldBook: props.soldBook,
         })
-      }>
-      <View
-        onStartShouldSetResponder={() => true}
-        style={styles.bookContainer}>
+      }
+    >
+      <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: props.image }} />
         </View>

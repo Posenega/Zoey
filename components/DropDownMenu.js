@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Animated,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import ArrowButton from "./Icons/ArrowButton";
 import Colors, { getThemeColor } from "../constants/Colors";
@@ -61,6 +62,7 @@ function DropDownMenu(props) {
               color="#999999"
             />
           </View>
+
           {props.items.map((item) => {
             return (
               <TouchableWithoutFeedback

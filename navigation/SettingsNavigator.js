@@ -34,7 +34,8 @@ const ProfileNavigator = (props) => (
         backgroundColor: getThemeColor("background", props.theme),
       },
       headerTitleAlign: "left",
-    }}>
+    }}
+  >
     <Stack.Screen
       name="settingsScreen"
       component={SettingsScreen}
@@ -55,7 +56,7 @@ const ProfileNavigator = (props) => (
       component={PricingScreen}
       options={pricingScreenOptions}
     />
-    <Stack.Screen name="soldItems" component={SoldItems} />
+    <Stack.Screen name="soldBooks" component={SoldItems} />
   </Stack.Navigator>
 );
 

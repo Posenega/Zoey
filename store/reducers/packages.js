@@ -13,11 +13,13 @@ import {
   FETCH_FAVORITES_PACKAGES_FAILURE,
   FETCH_USER_PACKAGES,
   FILTER_PACKAGES,
+  UPDATE_PACKAGE,
 } from "../actions/packages";
 
 const initialState = {
   hasInit: false,
   hasInitUserPackages: false,
+  hasInitSoldPackages: false,
   packages: [],
   filteredPackages: [],
   favoritePackages: [],
@@ -25,6 +27,7 @@ const initialState = {
   isLoading: false,
   addingIsLoading: false,
   error: null,
+  soldPackages: [],
 };
 
 const packagesReducer = (state = initialState, action) => {
@@ -37,15 +40,22 @@ const packagesReducer = (state = initialState, action) => {
         isLoading: false,
         packages: action.packages,
         filteredPackages: action.packages,
-        hasInit: true,
       };
     case FETCH_PACKAGES_FAILURE:
       return { ...state, isLoading: false, error: action.payload };
     case FETCH_USER_PACKAGES:
       return {
         ...state,
-        userPackages: [...action.packages, ...state.userPackages],
+        userPackages: action.soldPackages
+          ? state.userPackages
+          : [...action.packages],
+        soldPackages: action.soldPackages
+          ? [...action.packages]
+          : state.soldPackages,
         hasInitUserPackages: true,
+        hasInitSoldPackages: action.soldPackages
+          ? true
+          : state.hasInitSoldPackages,
       };
     case ADD_PACKAGE:
       return {
@@ -67,19 +77,16 @@ const packagesReducer = (state = initialState, action) => {
         packages: filterPackages(state.packages),
         filteredPackages: filterPackages(state.filteredPackages),
         userPackages: filterPackages(state.userPackages),
+        soldPackages: filterPackages(state.soldPackages),
       };
     case ADD_FAVORITE_PACKAGE_SUCCESS:
-      let toFavPackage = state.packages.find(
-        (p) => p._id === action.packageId
-      );
+      let toFavPackage = state.packages.find((p) => p._id === action.packageId);
       if (!toFavPackage) {
         return state;
       }
       return {
         ...state,
-        favoritePackages: [toFavPackage].concat(
-          state.favoritePackages
-        ),
+        favoritePackages: [toFavPackage].concat(state.favoritePackages),
       };
     case REMOVE_FAVORITE_PACKAGE_SUCCESS:
       return {
@@ -124,9 +131,7 @@ const packagesReducer = (state = initialState, action) => {
           if (
             action.categories &&
             action.categories.length > 0 &&
-            !action.categories.some((cat) =>
-              myPackage.categories.includes(cat)
-            )
+            !action.categories.some((cat) => myPackage.categories.includes(cat))
           ) {
             return false;
           }
@@ -154,6 +159,30 @@ const packagesReducer = (state = initialState, action) => {
           return true;
         }),
         isSearching: !!action.searchTerm,
+      };
+    case UPDATE_PACKAGE:
+      const packageIndex = state.userPackages.findIndex(
+        (pk) => pk._id === action.packageId
+      );
+      if (packageIndex < 0) {
+        return state;
+      }
+
+      if (action.isSold) {
+        state.userPackages.splice(packageIndex, 1);
+        return {
+          ...state,
+
+          userPackages: [...state.userPackages],
+          soldPackages: [action.updatedPackage, ...state.soldPackages],
+        };
+      }
+
+      state.userPackages.splice(packageIndex, 1, action.updatedPackage);
+
+      return {
+        ...state,
+        userPackages: [...state.userPackages],
       };
     default:
       return state;

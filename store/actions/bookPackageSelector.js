@@ -7,6 +7,7 @@ import {
 export const SET_SELECTED = "SET_SELECTED";
 export const SET_MY_SELECTED = "SET_MY_SELECTED";
 export const SET_FAVORITES_SELECTED = "SET_FAVORITES_SELECTED";
+export const SET_SOLD_SELECTED = "SET_SOLD_SELECTED";
 
 const setSelected = (selected) => {
   return { type: SET_SELECTED, selected };
@@ -76,6 +77,31 @@ export const setPackagesFavoritesSelected = () => {
         dispatch(fetchFavoritePackages());
       }
       dispatch(setFavoritesSelected("packages"));
+    }
+  };
+};
+
+const setSoldSelected = (soldSelected) => {
+  return { type: SET_SOLD_SELECTED, soldSelected };
+};
+
+export const setBooksSoldSelected = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (state.bookPackageSelector.soldSelected !== "books") {
+      dispatch(setSoldSelected("books"));
+    }
+  };
+};
+export const setPackagesSoldSelected = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (state.bookPackageSelector.soldSelected !== "packages") {
+      if (!state.packages.hasInitSoldPackages) {
+        dispatch(fetchUserPackages(true));
+      }
+
+      dispatch(setSoldSelected("packages"));
     }
   };
 };

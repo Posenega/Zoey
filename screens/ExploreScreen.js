@@ -19,10 +19,7 @@ import FilterButton from "../components/Icons/FilterButton";
 import { fetchBooks, filterBooks } from "../store/actions/books";
 import Options from "../components/Options";
 import BookFilters from "../components/BookFilters";
-import {
-  fetchPackages,
-  filterPackages,
-} from "../store/actions/packages";
+import { fetchPackages, filterPackages } from "../store/actions/packages";
 import BookPackageSelector from "../components/BookPackageSelector";
 
 function ExploreScreen(props) {
@@ -75,7 +72,8 @@ function ExploreScreen(props) {
           // ...SharedStyles.screen,
           flex: 1,
           paddingTop: headerHeight,
-        }}>
+        }}
+      >
         <View style={styles.headerContainer}>
           <View style={styles.header}>
             <View style={styles.inputContainer}>
@@ -94,23 +92,24 @@ function ExploreScreen(props) {
             </View>
             <TouchableOpacity
               onPress={openFilters}
-              style={styles.filterContainer}>
+              style={styles.filterContainer}
+            >
               <View style={styles.filterBox}>
                 <FilterButton />
               </View>
             </TouchableOpacity>
           </View>
         </View>
-        <BookFilters
-          fadeAnim={fadeAnim}
-          isPackage={packagesIsSelected}
-        />
+        <BookFilters fadeAnim={fadeAnim} isPackage={packagesIsSelected} />
 
         {!isSearching && (
           <View style={styles.trendingNow}>
             <Text style={styles.trendingNowText}>Trending Now</Text>
 
             <Books
+              onRefresh={() =>
+                dispatch(packagesIsSelected ? fetchPackages() : fetchBooks())
+              }
               isLoading={isLoading}
               isHorizontal
               navigation={props.navigation}
@@ -124,6 +123,9 @@ function ExploreScreen(props) {
 
           <Books
             isLoading={isLoading}
+            onRefresh={() =>
+              dispatch(packagesIsSelected ? fetchPackages() : fetchBooks())
+            }
             refreshControl={
               <RefreshControl
                 title="Reloading..."
@@ -133,9 +135,7 @@ function ExploreScreen(props) {
                 onRefresh={() => {
                   setRefreshing(true);
                   dispatch(
-                    packagesIsSelected
-                      ? fetchPackages(true)
-                      : fetchBooks(true)
+                    packagesIsSelected ? fetchPackages(true) : fetchBooks(true)
                   ).then(() => setRefreshing(false));
                 }}
               />
