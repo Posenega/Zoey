@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import CustomTextInput from "./CustomTextInput";
 import ImageIcon from "./Icons/ImageIcon";
 import * as ExpoImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
-
+import AlertAsync from "react-native-alert-async";
 function ImagePicker(props) {
   const styles = StyleSheet.create({
     imageSelector: {
@@ -61,16 +68,51 @@ function ImagePicker(props) {
 
   const [image, setImage] = useState(props.value || null);
   const pickImage = async () => {
-    let result = await ExpoImagePicker.launchImageLibraryAsync({
-      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: props.aspect,
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-      props.sendData(result.uri);
+    const choice = await AlertAsync(
+      "Choose location",
+      "Please pick a location from where you would like to take a photo",
+      [
+        {
+          text: "Cancel",
+          onPress: () => Promise.resolve("cancel"),
+        },
+        {
+          text: "Camera",
+          onPress: () => "camera",
+        },
+        {
+          text: "Gallery",
+          onPress: () => "library",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => "cancel",
+      }
+    );
+    let result;
+    if (choice === "camera") {
+      result = await ExpoImagePicker.launchCameraAsync({
+        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: props.aspect,
+        quality: 0.2,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri);
+        props.sendData(result.uri);
+      }
+    } else if (choice === "library") {
+      result = await ExpoImagePicker.launchImageLibraryAsync({
+        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: props.aspect,
+        quality: 0.2,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri);
+        props.sendData(result.uri);
+      }
     }
   };
 
@@ -83,6 +125,7 @@ function ImagePicker(props) {
       if (Platform.OS !== "web") {
         const { status } =
           await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+        await ExpoImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
           alert("Sorry, we need camera roll permissions to make this work!");
         }

@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import Divider from "../components/Divider";
-import Categories from "../constants/Categories";
+import Categories, { schoolSubjects } from "../constants/Categories";
 import { useSelector, useDispatch, connect, useStore } from "react-redux";
 import Badge from "../components/Badge";
 import MessageButton from "../components/Icons/MessageButton";
@@ -52,7 +52,6 @@ function BookDetailScreen(props) {
   const [displayedBook, setDisplayedBook] = useState();
   const [isFavorite, setIsFavorite] = useState();
   const [isChatting, setIsChatting] = useState(null);
-
   const initialIsChatting = useRef();
 
   useEffect(() => {
@@ -247,16 +246,13 @@ function BookDetailScreen(props) {
                 <Text style={styles.categories}>
                   {displayedBook.categories
                     .map((category) => {
-                      return (
-                        <Badge>
-                          {
-                            Categories.find((cat) => cat.value === category)
-                              ?.label
-                          }
-                        </Badge>
-                      );
+                      const foundCat = displayedBook.isForSchool
+                        ? schoolSubjects.find((cat) => cat.value == category)
+                            .label
+                        : Categories.find((cat) => cat.value == category).label;
+                      return foundCat;
                     })
-                    .join(" , ")}
+                    .join(", ")}
                 </Text>
 
                 <Divider
