@@ -24,6 +24,7 @@ export const setBooksSelected = () => {
 export const setPackagesSelected = () => {
   return (dispatch, getState) => {
     const state = getState();
+
     if (state.bookPackageSelector.selected !== "packages") {
       if (!state.packages.hasInit) {
         dispatch(fetchPackages());

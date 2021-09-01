@@ -1,27 +1,46 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { Audio } from "expo-av";
 import { Controller, useForm } from "react-hook-form";
 import { View, TextInput, StyleSheet } from "react-native";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import SendButton from "../components/Icons/SendButton";
 import { getThemeColor } from "../constants/Colors";
-import { addMessageRequest } from "../store/actions/chats";
+import { addMessageRequest, requestAddChat } from "../store/actions/chats";
 
-function MessageComposer({ chatId, theme }) {
+function MessageComposer({ chatId, theme, userId, navigation }) {
   const styles = getStyles(theme);
   const { control, handleSubmit, reset } = useForm();
+  const [sound, setSound] = useState();
   const dispatch = useDispatch();
 
   const isSending = useRef(false);
   const onSubmit = (data) => {
     if (!isSending.current) {
-      isSending.current = true;
-
-      dispatch(addMessageRequest(chatId, data.messageText)).then(() => {
+      const resetInput = () => {
+        sound.playAsync();
         reset();
         isSending.current = false;
-      });
+      };
+      isSending.current = true;
+      if (chatId) {
+        dispatch(addMessageRequest(chatId, data.messageText)).then(resetInput);
+      } else {
+        console.log("Adding room to database");
+        dispatch(requestAddChat(userId, data.messageText)).then(resetInput);
+      }
     }
   };
+
+  useEffect(() => {
+    Audio.Sound.createAsync(require("../assets/sentMessageEffect.wav")).then(
+      ({ sound }) => setSound(sound)
+    );
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
   return (
     <View style={styles.messageComposer}>
       <View style={styles.customInput}>

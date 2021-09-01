@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "843675234297",
-    "project_id": "book-app-1742b",
-    "storage_bucket": "book-app-1742b.appspot.com"
+    "project_number": "279479857139",
+    "project_id": "zoey-5d620",
+    "storage_bucket": "zoey-5d620.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:843675234297:android:76eb93013bdd3c89a89728",
+        "mobilesdk_app_id": "1:279479857139:android:2c107b6f8441c8e747ec86",
         "android_client_info": {
-          "package_name": "com.cnq.bookapp"
+          "package_name": "com.tgs.zoey"
         }
       },
       "oauth_client": [
         {
-          "client_id": "843675234297-aedodt47qsajgg5s9q2l4qt27m5cmkph.apps.googleusercontent.com",
+          "client_id": "279479857139-684slmqp751bs9vtjkb4ro2b9msc14jc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCeRZBVFNk8MurDWo8WFEIpH2ZkJPcLKxw"
+          "current_key": "AIzaSyAyg97s226NyjWFzHOB1zl4jpOC9Co_nd4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "843675234297-aedodt47qsajgg5s9q2l4qt27m5cmkph.apps.googleusercontent.com",
+              "client_id": "279479857139-684slmqp751bs9vtjkb4ro2b9msc14jc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

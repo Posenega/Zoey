@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { useNetInfo, NetInfoStateType } from "@react-native-community/netinfo";
 
 import Constants from "expo-constants";
@@ -22,14 +23,12 @@ import { setTheme } from "./store/actions/theme";
 import * as SecureStore from "expo-secure-store";
 import { tryAutoLogin } from "./store/actions/auth";
 import packagesReducer from "./store/reducers/packages";
-import { addChat } from "./store/actions/chats";
+
 import bookPackageSelectorReducer from "./store/reducers/bookPackageSelector";
 
-axios.defaults.baseURL = "https://stormy-garden-51665.herokuapp.com";
-
-// axios.defaults.baseURL = `http://${Constants.manifest.debuggerHost
-//   .split(":")
-//   .shift()}:5000`;
+axios.defaults.baseURL = Constants.manifest.debuggerHost
+  ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:5000`
+  : "https://stormy-garden-51665.herokuapp.com";
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -48,24 +47,24 @@ const fetchTheme = async () => {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  // const { isConnected, type } = useNetInfo();
+  const { isConnected, type } = useNetInfo();
 
-  // const showNetworkAlert = useCallback(() => {
-  //   if (type !== NetInfoStateType.unknown && !isConnected) {
-  //     Alert.alert(
-  //       "Network error!",
-  //       "Please check your internet connection and try again later.",
-  //       [],
-  //       { cancelable: false }
-  //     );
-  //   }
-  // }, [isConnected, type]);
+  const showNetworkAlert = useCallback(() => {
+    if (type !== NetInfoStateType.unknown && !isConnected) {
+      Alert.alert(
+        "Network error!",
+        "Please check your internet connection and try again later.",
+        [],
+        { cancelable: false }
+      );
+    }
+  }, [isConnected, type]);
 
-  // useEffect(() => {
-  //   if (fontsLoaded) {
-  //     showNetworkAlert();
-  //   }
-  // }, [fontsLoaded, showNetworkAlert]);
+  useEffect(() => {
+    if (fontsLoaded) {
+      showNetworkAlert();
+    }
+  }, [fontsLoaded, showNetworkAlert]);
 
   useEffect(() => {
     if (fontsLoaded) {

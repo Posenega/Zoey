@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useSelector, useDispatch, connect } from "react-redux";
 import SharedStyles from "../constants/SharedStyles";
 import SettingsButton from "../components/Icons/SettingsButton";
@@ -12,6 +12,7 @@ import NoData from "../components/NoData";
 // import { getUser } from "../store/actions/auth";
 import BookPackageSelector from "../components/BookPackageSelector";
 import { fetchUserPackages } from "../store/actions/packages";
+import { Image } from "react-native-expo-image-cache";
 
 function ProfileScreen(props) {
   const styles = getStyles(props.theme);
@@ -52,16 +53,15 @@ function ProfileScreen(props) {
         {imageUrl ? (
           <Image
             style={styles.image}
-            source={{
-              uri: `${axios.defaults.baseURL}/${imageUrl}`,
-            }}
+            uri={`${axios.defaults.baseURL}/${imageUrl}`}
           />
         ) : (
           <IconPlaceholder size={68} iconSize={60} />
         )}
         <Text
           numberOfLines={1}
-          style={{ ...styles.mediumText, textAlign: "center" }}>
+          style={{ ...styles.mediumText, textAlign: "center" }}
+        >
           {firstName} {lastName}
         </Text>
       </View>

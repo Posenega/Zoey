@@ -26,6 +26,7 @@ export default chatsReducer = (state = initialState, action) => {
       ) {
         return state;
       }
+
       return {
         ...state,
         myChats: [
@@ -34,7 +35,7 @@ export default chatsReducer = (state = initialState, action) => {
             userId: action.userId,
             username: action.username,
             userImage: action.userImage,
-            messages: [],
+            messages: action.messages,
             isLoading: false,
           },
           ...state.myChats,

@@ -28,30 +28,22 @@ function ExploreScreen(props) {
     dispatch(fetchBooks());
   }, []);
 
-  const packagesIsSelected = useSelector(
-    (state) => state.bookPackageSelector.selected === "packages"
-  );
+  const selected = useSelector((state) => state.bookPackageSelector.selected);
 
-  const isLoading = useSelector((state) => {
-    if (packagesIsSelected) return state.packages.isLoading;
-    return state.books.isLoading;
-  });
+  const packagesIsSelected = selected === "packages";
+
+  const isLoading = useSelector((state) => state[selected].isLoading);
 
   const headerHeight = useHeaderHeight();
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const filteredBooks = useSelector((state) => {
-    if (packagesIsSelected) return state.packages.filteredPackages;
-    return state.books.filteredBooks;
-  });
-
-  const isSearching = useSelector((state) => {
-    if (packagesIsSelected) {
-      return state.packages.isSearching;
-    }
-    return state.books.isSearching;
-  });
+  const filteredBooks = useSelector(
+    (state) =>
+      state[selected][packagesIsSelected ? "filteredPackages" : "filteredBooks"]
+  );
+  const isSearching = useSelector((state) => state[selected].isSearching);
+  const isFiltering = useSelector((state) => state[selected].isFiltering);
 
   const dispatch = useDispatch();
 
@@ -107,8 +99,13 @@ function ExploreScreen(props) {
             <Text style={styles.trendingNowText}>Trending Now</Text>
 
             <Books
-              onRefresh={() =>
-                dispatch(packagesIsSelected ? fetchPackages() : fetchBooks())
+              onRefresh={
+                !isFiltering
+                  ? () =>
+                      dispatch(
+                        packagesIsSelected ? fetchPackages() : fetchBooks()
+                      )
+                  : null
               }
               isLoading={isLoading}
               isHorizontal
@@ -123,8 +120,13 @@ function ExploreScreen(props) {
 
           <Books
             isLoading={isLoading}
-            onRefresh={() =>
-              dispatch(packagesIsSelected ? fetchPackages() : fetchBooks())
+            onRefresh={
+              !isFiltering
+                ? () =>
+                    dispatch(
+                      packagesIsSelected ? fetchPackages() : fetchBooks()
+                    )
+                : null
             }
             refreshControl={
               <RefreshControl

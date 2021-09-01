@@ -28,6 +28,7 @@ const initialState = {
   addingIsLoading: false,
   error: null,
   soldPackages: [],
+  isFiltering: false,
 };
 
 const packagesReducer = (state = initialState, action) => {
@@ -40,6 +41,7 @@ const packagesReducer = (state = initialState, action) => {
         isLoading: false,
         packages: action.packages,
         filteredPackages: action.packages,
+        hasInit: true,
       };
     case FETCH_PACKAGES_FAILURE:
       return { ...state, isLoading: false, error: action.payload };
@@ -116,49 +118,59 @@ const packagesReducer = (state = initialState, action) => {
     case FETCH_FAVORITES_PACKAGES_FAILURE:
       return { ...state, isLoading: false, error: action.payload };
     case FILTER_PACKAGES:
+      const filteredPackages = state.packages.filter((myPackage) => {
+        if (
+          action.searchTerm &&
+          !myPackage.title
+            .toLowerCase()
+            .startsWith(action.searchTerm.toLowerCase())
+        ) {
+          return false;
+        }
+
+        if (
+          action.categories &&
+          action.categories.length > 0 &&
+          !action.categories.some((cat) => myPackage.categories.includes(cat))
+        ) {
+          return false;
+        }
+        if (
+          action.grades &&
+          action.grades.length > 0 &&
+          !action.grades.includes(myPackage.grade)
+        ) {
+          return false;
+        }
+        if (action.otherFilters) {
+          if (
+            action.otherFilters.includes("For School") &&
+            !myPackage.isForSchool
+          ) {
+            return false;
+          }
+          if (
+            action.otherFilters.includes("New") &&
+            myPackage.condition !== "New"
+          ) {
+            return false;
+          }
+          if (
+            action.otherFilters.includes("Used") &&
+            myPackage.condition !== "Used"
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
       return {
         ...state,
-        filteredPackages: state.packages.filter((myPackage) => {
-          if (
-            action.searchTerm &&
-            !myPackage.title
-              .toLowerCase()
-              .startsWith(action.searchTerm.toLowerCase())
-          ) {
-            return false;
-          }
-
-          if (
-            action.categories &&
-            action.categories.length > 0 &&
-            !action.categories.some((cat) => myPackage.categories.includes(cat))
-          ) {
-            return false;
-          }
-          if (action.otherFilters) {
-            if (
-              action.otherFilters.includes("For School") &&
-              !myPackage.isForSchool
-            ) {
-              return false;
-            }
-            if (
-              action.otherFilters.includes("New") &&
-              myPackage.condition !== "New"
-            ) {
-              return false;
-            }
-            if (
-              action.otherFilters.includes("Used") &&
-              myPackage.condition !== "Used"
-            ) {
-              return false;
-            }
-          }
-
-          return true;
-        }),
+        filteredPackages,
         isSearching: !!action.searchTerm,
+        isFiltering: filteredPackages.length !== state.packages.length,
       };
     case UPDATE_PACKAGE:
       const packageIndex = state.userPackages.findIndex(

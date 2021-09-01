@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 import { connect } from "react-redux";
 import Categories from "../constants/Categories";
 import { getThemeColor } from "../constants/Colors";
@@ -26,7 +21,7 @@ function Book(props) {
     >
       <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
         <View style={styles.bookImage}>
-          <Image style={styles.image} source={{ uri: props.image }} />
+          <Image style={styles.image} uri={props.image} />
         </View>
         <View style={styles.details}>
           <Text numberOfLines={2} style={styles.bookTitle}>

@@ -4,11 +4,11 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
 } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 import Divider from "../components/Divider";
 import Categories, { schoolSubjects } from "../constants/Categories";
 import { useSelector, useDispatch, connect, useStore } from "react-redux";
@@ -51,14 +51,13 @@ function BookDetailScreen(props) {
   const userId = useSelector((state) => state.auth.userId);
   const [displayedBook, setDisplayedBook] = useState();
   const [isFavorite, setIsFavorite] = useState();
-  const [isChatting, setIsChatting] = useState(null);
-  const initialIsChatting = useRef();
 
   useEffect(() => {
     dispatch(fetchFavoriteBooks());
   }, []);
 
   const unsubscribe = useRef();
+  const isChatting = useRef();
 
   useEffect(() => {
     unsubscribe.current = subscribe(() => {
@@ -78,26 +77,13 @@ function BookDetailScreen(props) {
           ? state.packages.favoritePackages.some((p) => p?._id === book._id)
           : state.books.favoriteBooks.some((b) => b?._id === book._id)
       );
-      const chatting =
+      isChatting.current =
         state.chats.myChats.findIndex((chat) => {
-          return chat.userId === book.creator;
+          return chat.userId === book.creator._id;
         }) >= 0;
-
-      if (initialIsChatting.current === undefined) {
-        initialIsChatting.current = chatting;
-      }
-      setIsChatting(chatting);
     });
     return unsubscribe.current;
   }, []);
-
-  useEffect(() => {
-    if (isChatting && !initialIsChatting.current) {
-      props.navigation.navigate("chatRoom", {
-        userId: displayedBook.creator,
-      });
-    }
-  }, [isChatting]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -121,19 +107,15 @@ function BookDetailScreen(props) {
               />
             </View>
             <Image
-              style={styles.bluredImage}
               resizeMode="cover"
+              style={styles.bluredImage}
               blurRadius={8}
-              source={{
-                uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
-              }}
+              uri={`${axios.defaults.baseURL}/${displayedBook.imageUrl}`}
             />
             <View style={styles.image}>
               <Image
                 style={{ flex: 1 }}
-                source={{
-                  uri: `${axios.defaults.baseURL}/${displayedBook.imageUrl}`,
-                }}
+                uri={`${axios.defaults.baseURL}/${displayedBook.imageUrl}`}
               />
             </View>
           </View>
@@ -271,13 +253,25 @@ function BookDetailScreen(props) {
               {displayedBook.creator !== userId ? (
                 <TouchableOpacity
                   onPress={() => {
-                    if (isChatting) {
-                      props.navigation.navigate("chatRoom", {
-                        userId: displayedBook.creator,
-                      });
-                    } else {
-                      dispatch(requestAddChat(displayedBook.creator));
-                    }
+                    console.log(isChatting.current);
+                    const params = isChatting.current
+                      ? {
+                          userId: displayedBook.creator._id,
+                        }
+                      : {
+                          pendingChat: {
+                            username:
+                              displayedBook.creator.firstName +
+                              " " +
+                              displayedBook.creator.lastName,
+                            messages: [],
+                            isLoading: false,
+                            userImage: displayedBook.creator.imageUrl,
+                            userId: displayedBook.creator._id,
+                          },
+                        };
+
+                    props.navigation.navigate("chatRoom", params);
                   }}
                 >
                   <View

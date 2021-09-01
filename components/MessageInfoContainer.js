@@ -1,12 +1,7 @@
 import React from "react";
 import axios from "axios";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 import { connect } from "react-redux";
 import moment from "moment-timezone";
 import Colors, { getThemeColor } from "../constants/Colors";
@@ -29,9 +24,7 @@ const MessageInfoContainer = (props) => {
                 <Image
                   resizeMode="cover"
                   style={{ flex: 1 }}
-                  source={{
-                    uri: `${axios.defaults.baseURL}/${props.userImage}`,
-                  }}
+                  uri={`${axios.defaults.baseURL}/${props.userImage}`}
                 />
               ) : (
                 <IconPlaceholder />

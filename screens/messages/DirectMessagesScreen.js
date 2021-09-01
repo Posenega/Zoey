@@ -25,38 +25,45 @@ export default function DirectMessagesScreen(props) {
   const socket = useSelector((state) => state.auth.socket);
   const chatterId = useSelector((state) => state.auth.userId);
 
-  useEffect(() => {
-    socket?.emit("joinRoom", { roomId: cId });
-    socket?.on("message", ({ text, messageId, createdAt, sender }) => {
-      dispatch(
-        addMessage(cId, text, sender === chatterId, createdAt, messageId)
-      );
-    });
+  const { pendingChat, userId, chatId } = props.route.params;
 
-    return () => {
-      socket.off("message");
-      socket?.emit("leaveRoom", { roomId: cId });
-    };
-  }, []);
-
-  const { userId, chatId } = props.route.params;
-  const chat = useSelector((state) =>
-    state.chats.myChats.find((chat) => {
-      if (userId) {
+  const realChat = useSelector((state) => {
+    return state.chats.myChats.find((chat) => {
+      if (pendingChat?.userId) {
+        return chat.userId === pendingChat.userId;
+      } else if (userId) {
         return chat.userId === userId;
       } else {
         return chat._id === chatId;
       }
-    })
-  );
+    });
+  });
+
+  const chat = realChat || pendingChat;
 
   const cId = chat._id;
 
   useEffect(() => {
-    dispatch(fetchChatMessages(cId));
-  }, [dispatch, cId]);
+    if (!pendingChat) {
+      socket?.emit("joinRoom", { roomId: cId });
+      socket?.on("message", ({ text, messageId, createdAt, sender }) => {
+        dispatch(
+          addMessage(cId, text, sender === chatterId, createdAt, messageId)
+        );
+      });
 
-  const screenWidth = Dimensions.get("window").width;
+      return () => {
+        socket.off("message");
+        socket?.emit("leaveRoom", { roomId: cId });
+      };
+    }
+  }, [pendingChat]);
+
+  useEffect(() => {
+    if (!pendingChat) {
+      dispatch(fetchChatMessages(cId));
+    }
+  }, [dispatch, cId, pendingChat]);
 
   const renderMessage = (itemData) => {
     let message;
@@ -104,7 +111,11 @@ export default function DirectMessagesScreen(props) {
               style={styles.composerContainer}
             >
               <View>
-                <MessageComposer chatId={cId} />
+                <MessageComposer
+                  chatId={cId}
+                  userId={chat.userId}
+                  navigation={props.navigation}
+                />
               </View>
             </KeyboardAvoidingView>
           </View>
@@ -141,6 +152,6 @@ const styles = StyleSheet.create({
 });
 
 export const directMessagesOptions = {
-  headerTitle: "Explore",
+  headerTitle: "directMessages",
   headerShown: false,
 };

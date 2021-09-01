@@ -106,25 +106,37 @@ export const addChatMessagesFail = (chatId) => {
   return { type: ADD_CHAT_MESSAGES_FAIL, chatId };
 };
 
-export const requestAddChat = (secondUserId) => {
-  return (dispatch, getState) => {
+export const requestAddChat = (secondUserId, firstMessage) => {
+  return async (dispatch, getState) => {
     const socket = getState().auth.socket;
 
-    socket?.emit("addRoom", { secondUserId }, ({ chat }) => {
-      dispatch(
-        addChat(
-          chat._id,
-          chat.user._id,
-          chat.user.firstName + " " + chat.user.lastName,
-          chat.user.imageUrl
-        )
+    const addChatPromise = new Promise((resolve, reject) => {
+      socket?.emit(
+        "addRoom",
+        { secondUserId, firstMessage },
+        ({ chat, error }) => {
+          if (error) reject(error);
+          dispatch(
+            addChat(
+              chat._id,
+              chat.user._id,
+              chat.user.firstName + " " + chat.user.lastName,
+              chat.user.imageUrl,
+              chat.messages
+            )
+          );
+
+          resolve();
+        }
       );
     });
+    await addChatPromise;
+    return Promise.resolve();
   };
 };
 
-export const addChat = (chatId, userId, username, userImage) => {
-  return { type: ADD_CHAT, chatId, userId, username, userImage };
+export const addChat = (chatId, userId, username, userImage, messages) => {
+  return { type: ADD_CHAT, chatId, userId, username, userImage, messages };
 };
 
 export const addMessage = (

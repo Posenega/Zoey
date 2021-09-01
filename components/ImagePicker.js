@@ -7,70 +7,38 @@ import {
   Image,
   Alert,
 } from "react-native";
-import CustomTextInput from "./CustomTextInput";
+
 import ImageIcon from "./Icons/ImageIcon";
 import * as ExpoImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
-import AlertAsync from "react-native-alert-async";
+
 function ImagePicker(props) {
-  const styles = StyleSheet.create({
-    imageSelector: {
-      borderWidth: props.error ? 2 : null,
-      borderColor: props.error ? "#E24949" : null,
-      backgroundColor: getThemeColor("formBackground", props.theme),
-      paddingHorizontal: 12,
-      height: 44,
-      width: "100%",
-      borderRadius: 10,
-      marginTop: 10,
-      alignItems: "center",
-      flexDirection: "row",
-    },
-    imageSelected: {
-      backgroundColor: getThemeColor("background", props.theme),
-      paddingHorizontal: 12,
-      height: 44,
-      width: "100%",
-      borderRadius: 10,
-      borderWidth: 2,
-      borderColor: getThemeColor("inputBorder", props.theme),
-      marginTop: 10,
-      alignItems: "center",
-      flexDirection: "row",
-    },
-    text: {
-      marginLeft: 10,
-      fontSize: 12,
-      color: props.error
-        ? "#E24949"
-        : getThemeColor("placeholder", props.theme),
-    },
-    textSelected: {
-      marginLeft: 10,
-      fontSize: 12,
-      color: getThemeColor("text", props.theme),
-    },
-    imagePreview: {
-      marginTop: 10,
-      width: "100%",
-      height: 256,
-      alignItems: "center",
-    },
-    image: { width: 192, height: "100%", borderRadius: 10 },
-    errorText: {
-      fontSize: 10,
-      marginLeft: 10,
-      marginTop: 0.5,
-      color: getThemeColor("placeholder", props.theme),
-    },
-  });
+  const styles = getStyles(props.error, props.theme);
 
   const [image, setImage] = useState(props.value || null);
-  const pickImage = async () => {
-    const choice = await AlertAsync(
-      "Choose location",
-      "Please pick a location from where you would like to take a photo",
+
+  const pickImage = () => {
+    const takeImage = async (choice) => {
+      const takeImageFunc =
+        choice === "camera"
+          ? ExpoImagePicker.launchCameraAsync
+          : ExpoImagePicker.launchImageLibraryAsync;
+
+      const result = await takeImageFunc({
+        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        aspect: props.aspect,
+        quality: 0.2,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri);
+      }
+    };
+
+    Alert.alert(
+      "Take image",
+      "From where would you like to take the image?",
       [
         {
           text: "Cancel",
@@ -78,11 +46,11 @@ function ImagePicker(props) {
         },
         {
           text: "Camera",
-          onPress: () => "camera",
+          onPress: () => takeImage("camera"),
         },
         {
           text: "Gallery",
-          onPress: () => "library",
+          onPress: () => takeImage("library"),
         },
       ],
       {
@@ -90,30 +58,6 @@ function ImagePicker(props) {
         onDismiss: () => "cancel",
       }
     );
-    let result;
-    if (choice === "camera") {
-      result = await ExpoImagePicker.launchCameraAsync({
-        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: props.aspect,
-        quality: 0.2,
-      });
-      if (!result.cancelled) {
-        setImage(result.uri);
-        props.sendData(result.uri);
-      }
-    } else if (choice === "library") {
-      result = await ExpoImagePicker.launchImageLibraryAsync({
-        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: props.aspect,
-        quality: 0.2,
-      });
-      if (!result.cancelled) {
-        setImage(result.uri);
-        props.sendData(result.uri);
-      }
-    }
   };
 
   useEffect(() => {
@@ -166,6 +110,57 @@ function ImagePicker(props) {
     </>
   );
 }
+
+const getStyles = (error, theme) =>
+  StyleSheet.create({
+    imageSelector: {
+      borderWidth: error ? 2 : null,
+      borderColor: error ? "#E24949" : null,
+      backgroundColor: getThemeColor("formBackground", theme),
+      paddingHorizontal: 12,
+      height: 44,
+      width: "100%",
+      borderRadius: 10,
+      marginTop: 10,
+      alignItems: "center",
+      flexDirection: "row",
+    },
+    imageSelected: {
+      backgroundColor: getThemeColor("background", theme),
+      paddingHorizontal: 12,
+      height: 44,
+      width: "100%",
+      borderRadius: 10,
+      borderWidth: 2,
+      borderColor: getThemeColor("inputBorder", theme),
+      marginTop: 10,
+      alignItems: "center",
+      flexDirection: "row",
+    },
+    text: {
+      marginLeft: 10,
+      fontSize: 12,
+      color: error ? "#E24949" : getThemeColor("placeholder", theme),
+    },
+    textSelected: {
+      marginLeft: 10,
+      fontSize: 12,
+      color: getThemeColor("text", theme),
+    },
+    imagePreview: {
+      marginTop: 10,
+      width: "100%",
+      height: 256,
+      alignItems: "center",
+    },
+    image: { width: 192, height: "100%", borderRadius: 10 },
+    errorText: {
+      fontSize: 10,
+      marginLeft: 10,
+      marginTop: 0.5,
+      color: getThemeColor("placeholder", theme),
+    },
+  });
 
 export default connect(
   (state) => ({

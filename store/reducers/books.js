@@ -103,49 +103,51 @@ const booksReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, error: action.payload };
 
     case FILTER_BOOKS:
+      const filteredBooks = state.books.filter((book) => {
+        if (
+          action.searchTerm &&
+          !book.title.toLowerCase().startsWith(action.searchTerm.toLowerCase())
+        ) {
+          return false;
+        }
+
+        if (
+          action.categories &&
+          action.categories.length > 0 &&
+          !action.categories.includes(book.categories[0])
+        ) {
+          return false;
+        }
+        if (
+          action.grades &&
+          action.grades.length > 0 &&
+          !action.grades.includes(book.grade)
+        ) {
+          console.log("here");
+          return false;
+        }
+        if (action.otherFilters) {
+          if (action.otherFilters.includes("For School") && !book.isForSchool) {
+            return false;
+          }
+          if (action.otherFilters.includes("New") && book.condition !== "New") {
+            return false;
+          }
+          if (
+            action.otherFilters.includes("Used") &&
+            book.condition !== "Used"
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      });
       return {
         ...state,
-        filteredBooks: state.books.filter((book) => {
-          if (
-            action.searchTerm &&
-            !book.title
-              .toLowerCase()
-              .startsWith(action.searchTerm.toLowerCase())
-          ) {
-            return false;
-          }
-
-          if (
-            action.categories &&
-            action.categories.length > 0 &&
-            !action.categories.includes(book.categories[0])
-          ) {
-            return false;
-          }
-          if (action.otherFilters) {
-            if (
-              action.otherFilters.includes("For School") &&
-              !book.isForSchool
-            ) {
-              return false;
-            }
-            if (
-              action.otherFilters.includes("New") &&
-              book.condition !== "New"
-            ) {
-              return false;
-            }
-            if (
-              action.otherFilters.includes("Used") &&
-              book.condition !== "Used"
-            ) {
-              return false;
-            }
-          }
-
-          return true;
-        }),
+        filteredBooks,
         isSearching: !!action.searchTerm,
+        isFiltering: filteredBooks.length !== state.books.length,
       };
 
     case FETCH_USER_BOOKS_START:

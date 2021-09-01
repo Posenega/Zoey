@@ -8,7 +8,7 @@ function AuthScreen(props) {
   const styles = getStyles(props.theme);
   return (
     <View style={styles.authScreen}>
-      <Text style={styles.header}>Welcome to BookApp</Text>
+      <Text style={styles.header}>Welcome to Zoey</Text>
       <Text style={styles.subHeader}>Choose how you want to log in</Text>
       <CustomButton onPress={() => props.navigation.navigate("createAccount")}>
         Create An Account

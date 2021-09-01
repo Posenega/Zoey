@@ -6,10 +6,10 @@ import {
 } from "../actions/bookPackageSelector";
 
 const initialState = {
-  selected: "book",
-  mySelected: "book",
-  favoritesSelected: "book",
-  soldSelected: "book",
+  selected: "books",
+  mySelected: "books",
+  favoritesSelected: "books",
+  soldSelected: "books",
 };
 
 export default bookPackageSelectorReducer = (state = initialState, action) => {

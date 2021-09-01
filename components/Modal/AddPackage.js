@@ -267,7 +267,7 @@ function AddPackage(props) {
       <View style={{ paddingHorizontal: 18 }}>
         <Controller
           control={control}
-          name="imageUrl"
+          name="localUrl"
           defaultValue={null}
           rules={{ required: "Image is required." }}
           render={({ field: { onChange, value } }) => (
@@ -276,9 +276,6 @@ function AddPackage(props) {
               value={value}
               text="Add book cover"
               aspect={[2, 3]}
-              sendData={useCallback((result) => {
-                setValue("localUrl", result);
-              }, [])}
               error={errors.imageUrl?.message}
             />
           )}

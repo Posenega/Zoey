@@ -26,10 +26,11 @@ export default function BookFilters({ fadeAnim, isPackage }) {
         multipleAllowed
         onChange={(categories) => {
           setCategoriesFilter(categories);
+          const filters = isStudent ? { grades: categories } : { categories };
           if (isPackage) {
-            dispatch(filterPackages({ categories }));
+            dispatch(filterPackages(filters));
           } else {
-            dispatch(filterBooks({ categories }));
+            dispatch(filterBooks(filters));
           }
         }}
         value={categoriesFilter}

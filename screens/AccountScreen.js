@@ -102,7 +102,7 @@ function AccountScreen(props) {
               </View>
               <Controller
                 control={control}
-                name="imageUrl"
+                name="localUrl"
                 defaultValue={null}
                 rules={{ required: false }}
                 render={({ field: { onChange, value } }) => (
@@ -111,9 +111,6 @@ function AccountScreen(props) {
                     value={value}
                     text="Update profile picture"
                     aspect={[1, 1]}
-                    sendData={useCallback((result) => {
-                      setValue("localUrl", result);
-                    }, [])}
                   />
                 )}
               />

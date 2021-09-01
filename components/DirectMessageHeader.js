@@ -1,18 +1,14 @@
 import React from "react";
 import axios from "axios";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import IconPlaceholder from "./IconPlaceholder";
 import ArrowButton from "./Icons/ArrowButton";
 import MenuButton from "./Icons/MenuButton";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
+import { Image } from "react-native-expo-image-cache";
 
-function DirectMessageHeader({
-  username,
-  navigation,
-  theme,
-  userImage,
-}) {
+function DirectMessageHeader({ username, navigation, theme, userImage }) {
   const styles = getStyles(theme);
   return (
     <View style={styles.header}>
@@ -30,9 +26,7 @@ function DirectMessageHeader({
             <Image
               resizeMode="cover"
               style={{ flex: 1 }}
-              source={{
-                uri: `${axios.defaults.baseURL}/${userImage}`,
-              }}
+              uri={`${axios.defaults.baseURL}/${userImage}`}
             />
           ) : (
             <IconPlaceholder />

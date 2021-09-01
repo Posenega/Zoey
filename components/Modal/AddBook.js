@@ -17,9 +17,7 @@ import { requestAddBook } from "../../store/actions/books";
 import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
-import Categories, {
-  schoolSubjects,
-} from "../../constants/Categories";
+import Categories, { schoolSubjects } from "../../constants/Categories";
 import Grades from "../../constants/Grades";
 
 function AddBook(props) {
@@ -35,12 +33,8 @@ function AddBook(props) {
 
   const modalizeRef = useSelector((state) => state.addBookModal.ref);
 
-  const addBookStatus = useSelector(
-    (state) => state.books.addBookStatus
-  );
-  const editedBook = useSelector(
-    (state) => state.addBookModal.editedBook
-  );
+  const addBookStatus = useSelector((state) => state.books.addBookStatus);
+  const editedBook = useSelector((state) => state.addBookModal.editedBook);
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
@@ -56,7 +50,8 @@ function AddBook(props) {
         </Text>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          style={styles.badgeContainer}>
+          style={styles.badgeContainer}
+        >
           <View style={styles.badge}>
             {addBookStatus === "LOADING" ? (
               <ActivityIndicator
@@ -85,7 +80,8 @@ function AddBook(props) {
                   setValue("package", false);
                 }
               }}
-              value={value}>
+              value={value}
+            >
               For School
             </Option>
           )}
@@ -138,8 +134,7 @@ function AddBook(props) {
             required: "Description is required.",
             minLength: {
               value: 5,
-              message:
-                "Description must be greater than 5 characters.",
+              message: "Description must be greater than 5 characters.",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -211,10 +206,7 @@ function AddBook(props) {
               value={value}
               onChange={(type) => {
                 if (type === "sell" && watch("forSchool")) {
-                  showPricingAlert(
-                    navigation,
-                    modalizeRef?.current.close
-                  );
+                  showPricingAlert(navigation, modalizeRef?.current.close);
                 }
                 onChange(type);
               }}
@@ -283,7 +275,7 @@ function AddBook(props) {
       <View style={{ paddingHorizontal: 18 }}>
         <Controller
           control={control}
-          name="imageUrl"
+          name="localUrl"
           defaultValue={null}
           rules={{ required: "Image is required." }}
           render={({ field: { onChange, value } }) => (
@@ -292,9 +284,6 @@ function AddBook(props) {
               value={value}
               text="Add book cover"
               aspect={[2, 3]}
-              sendData={useCallback((result) => {
-                setValue("localUrl", result);
-              }, [])}
               error={errors.imageUrl?.message}
             />
           )}

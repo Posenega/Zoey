@@ -52,12 +52,18 @@ export const updatePackage = (packageId, updatedPackage, isSold) => ({
   isSold,
 });
 
-export const filterPackages = ({ searchTerm, categories, otherFilters }) => {
+export const filterPackages = ({
+  searchTerm,
+  categories,
+  otherFilters,
+  grades,
+}) => {
   return {
     type: FILTER_PACKAGES,
     searchTerm,
     categories,
     otherFilters,
+    grades,
   };
 };
 

@@ -272,12 +272,18 @@ export const removeFavoriteBookSuccess = (bookId) => {
   return { type: REMOVE_FAVORITE_BOOK_SUCCESS, bookId };
 };
 
-export const filterBooks = ({ searchTerm, categories, otherFilters }) => {
+export const filterBooks = ({
+  searchTerm,
+  categories,
+  otherFilters,
+  grades,
+}) => {
   return {
     type: FILTER_BOOKS,
     searchTerm,
     categories,
     otherFilters,
+    grades,
   };
 };
 
