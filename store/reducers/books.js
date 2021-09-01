@@ -162,13 +162,12 @@ const booksReducer = (state = initialState, action) => {
     case DELETE_BOOK_SUCCESS:
       const removeByActionBookId = (books) =>
         books.filter((book) => book._id !== action.bookId);
-
       return {
         ...state,
         books: removeByActionBookId(state.books),
         favoriteBooks: removeByActionBookId(state.favoriteBooks),
         filteredBooks: removeByActionBookId(state.filteredBooks),
-        soldBooks: filterPackages(state.soldPackages),
+        soldBooks: removeByActionBookId(state.soldBooks),
         userBooks: removeByActionBookId(state.userBooks),
       };
     case UPDATE_BOOK:

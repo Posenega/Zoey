@@ -17,9 +17,7 @@ import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
 import { requestAddPackage } from "../../store/actions/packages";
-import Categories, {
-  schoolSubjects,
-} from "../../constants/Categories";
+import Categories, { schoolSubjects } from "../../constants/Categories";
 import Grades from "../../constants/Grades";
 import showPricingAlert from "../../helpers/showPricingAlert";
 import { useNavigation } from "@react-navigation/native";
@@ -43,9 +41,7 @@ function AddPackage(props) {
   const onSubmit = (data) => {
     dispatch(requestAddPackage(data)).then(props.closeModal);
   };
-  const isLoading = useSelector(
-    (state) => state.packages.addingIsLoading
-  );
+  const isLoading = useSelector((state) => state.packages.addingIsLoading);
 
   return (
     <View style={styles.modal}>
@@ -53,7 +49,8 @@ function AddPackage(props) {
         <Text style={styles.headerText}>Add a package</Text>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          style={styles.badgeContainer}>
+          style={styles.badgeContainer}
+        >
           <View style={styles.badge}>
             {isLoading ? (
               <ActivityIndicator />
@@ -74,18 +71,6 @@ function AddPackage(props) {
             </Option>
           )}
         />
-        {/* {watch("forSchool") && (
-            <Controller
-              name="package"
-              defaultValue={false}
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Option onChange={onChange} value={value}>
-                  Package
-                </Option>
-              )}
-            />
-          )} */}
       </View>
       <View style={{ paddingHorizontal: 18, marginBottom: 10 }}>
         <Controller
@@ -115,8 +100,7 @@ function AddPackage(props) {
             required: "Description is required.",
             minLength: {
               value: 5,
-              message:
-                "Description must be greater than 5 characters.",
+              message: "Description must be greater than 5 characters.",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -171,7 +155,8 @@ function AddPackage(props) {
       <View
         style={{
           flexDirection: "row",
-        }}>
+        }}
+      >
         <Controller
           control={control}
           name="categories"
@@ -215,10 +200,7 @@ function AddPackage(props) {
               value={value}
               onChange={(type) => {
                 if (type === "sell" && watch("forSchool")) {
-                  showPricingAlert(
-                    navigation,
-                    modalizeRef?.current.close
-                  );
+                  showPricingAlert(navigation, modalizeRef?.current.close);
                 }
                 onChange(type);
               }}
