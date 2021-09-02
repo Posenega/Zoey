@@ -29,7 +29,9 @@ const TabNavigator = (props) => {
   const userId = useSelector((state) => state.auth.userId);
   const token = useSelector((state) => state.auth.token);
   const socket = useSelector((state) => state.auth.socket);
+  const hasInitChats = useSelector((state) => state.chats.hasInit);
   const [expoPushToken, setExpoPushToken] = useState("");
+  const [toNavigateChatRoomUserId, setToNavigateChatRoomUserId] = useState();
 
   // Notifications.setNotificationHandler({
   //   handleNotification: async () => ({
@@ -38,6 +40,15 @@ const TabNavigator = (props) => {
   //     shouldSetBadge: false,
   //   }),
   // });
+
+  useEffect(() => {
+    if (toNavigateChatRoomUserId && hasInitChats) {
+      setToNavigateChatRoomUserId(null);
+      props.navigation.navigate("chatRoom", {
+        userId: toNavigateChatRoomUserId,
+      });
+    }
+  }, [toNavigateChatRoomUserId, hasInitChats]);
 
   useEffect(() => {
     let hasMounted = false;
@@ -52,9 +63,7 @@ const TabNavigator = (props) => {
       (response) => {
         const data = response.notification.request.content.data;
         if (data.type === "chatRoom") {
-          props.navigation.navigate("chatRoom", {
-            userId: data.userId,
-          });
+          setToNavigateChatRoomUserId(data.userId);
         }
       }
     );

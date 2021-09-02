@@ -89,7 +89,6 @@ const authUser = (
     .catch((e) => {
       dispatch(authStopLoading());
       if (setError) {
-        console.log(setError);
         setError(authMode === "SIGN_UP" ? "city" : "password", {
           type: "server",
           message: e.response?.data?.message || "Unknown error has occured.",
@@ -183,8 +182,6 @@ export const tryAutoLogin = () => {
 
       if (!token) {
         dispatch(setVerifyUser(email, userId));
-      } else if (token && jwtDecode(token).exp < Date.now() / 1000) {
-        dispatch(tryAutoLoginFail());
       } else {
         dispatch(
           authSuccess(

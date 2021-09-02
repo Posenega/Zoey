@@ -12,6 +12,7 @@ import {
 const initialState = {
   myChats: [],
   isLoading: false,
+  hasInit: false,
 };
 
 export default chatsReducer = (state = initialState, action) => {
@@ -96,7 +97,12 @@ export default chatsReducer = (state = initialState, action) => {
         .concat(targetedChat);
       return { ...state, myChats: updatedChats };
     case SET_CHATS:
-      return { ...state, myChats: action.chats, isLoading: false };
+      return {
+        ...state,
+        myChats: action.chats,
+        isLoading: false,
+        hasInit: true,
+      };
     default:
       return state;
   }
