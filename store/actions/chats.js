@@ -135,7 +135,7 @@ export const requestAddChat = (secondUserId, firstMessage) => {
   };
 };
 
-export const addChat = (chatId, userId, username, userImage, messages) => {
+export const addChat = (chatId, userId, username, userImage, messages = []) => {
   return { type: ADD_CHAT, chatId, userId, username, userImage, messages };
 };
 

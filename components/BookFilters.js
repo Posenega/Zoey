@@ -5,12 +5,15 @@ import Categories from "../constants/Categories";
 import { useDispatch, useSelector } from "react-redux";
 import { filterBooks } from "../store/actions/books";
 import { filterPackages } from "../store/actions/packages";
+import SchoolSubjects from "../constants/SchoolSubjects";
 import Grades from "../constants/Grades";
 
 export default function BookFilters({ fadeAnim, isPackage }) {
   const isStudent = useSelector((state) => state.auth.isStudent);
   const [categoriesFilter, setCategoriesFilter] = useState([]);
+  const [gradesFilters, setGradesFilters] = useState([]);
   const [otherFilters, setOtherFilters] = useState([]);
+
   const dispatch = useDispatch();
   return (
     <Animated.View
@@ -18,7 +21,7 @@ export default function BookFilters({ fadeAnim, isPackage }) {
         opacity: fadeAnim,
         height: fadeAnim.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, 80],
+          outputRange: isPackage ? [0, 120] : [0, 80],
         }),
       }}
     >
@@ -26,28 +29,40 @@ export default function BookFilters({ fadeAnim, isPackage }) {
         multipleAllowed
         onChange={(categories) => {
           setCategoriesFilter(categories);
-          const filters = isStudent ? { grades: categories } : { categories };
+
           if (isPackage) {
-            dispatch(filterPackages(filters));
+            dispatch(filterPackages({ categories }));
           } else {
-            dispatch(filterBooks(filters));
+            dispatch(filterBooks({ categories }));
           }
         }}
         value={categoriesFilter}
-        items={isStudent ? Grades : Categories}
+        items={isStudent ? SchoolSubjects : Categories}
       />
+      {isPackage && (
+        <Options
+          multipleAllowed
+          onChange={(grades) => {
+            setGradesFilters(grades);
+
+            dispatch(filterPackages({ grades }));
+          }}
+          value={categoriesFilter}
+          items={Grades}
+        />
+      )}
       <Options
         multipleAllowed
         onChange={(otherFilters, addedFilter) => {
           let toAddOtherFilters = otherFilters;
-          if (addedFilter === "Used" && otherFilters.includes("New")) {
+          if (addedFilter === "used" && otherFilters.includes("new")) {
             toAddOtherFilters = otherFilters.filter(
-              (filter) => filter != "New"
+              (filter) => filter != "new"
             );
           }
-          if (addedFilter === "New" && otherFilters.includes("Used")) {
+          if (addedFilter === "new" && otherFilters.includes("used")) {
             toAddOtherFilters = otherFilters.filter(
-              (filter) => filter != "Used"
+              (filter) => filter != "used"
             );
           }
           setOtherFilters(toAddOtherFilters);
@@ -59,10 +74,9 @@ export default function BookFilters({ fadeAnim, isPackage }) {
         }}
         value={otherFilters}
         items={[
-          { value: "Package" },
           { value: "For School" },
-          { value: "Used" },
-          { value: "New" },
+          { label: "Used", value: "used" },
+          { label: "New", value: "new" },
         ]}
       />
     </Animated.View>

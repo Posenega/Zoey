@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
+import { Alert } from "react-native";
+import { useNetInfo, NetInfoStateType } from "@react-native-community/netinfo";
 import { useSelector, connect } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthNavigator from "./AuthNavigator";
@@ -18,10 +20,26 @@ import AddModal from "../components/AddModal";
 
 const MainNavigator = (props) => {
   const isAuth = useSelector((state) => !!state.auth.token);
-  const isTryAutoLogin = useSelector(
-    (state) => state.auth.tryAutoLogin
-  );
+  const isTryAutoLogin = useSelector((state) => state.auth.tryAutoLogin);
   const isVerify = useSelector((state) => state.auth.isVerify);
+
+  const { isConnected, type } = useNetInfo();
+
+  const showNetworkAlert = useCallback(() => {
+    if (type !== NetInfoStateType.unknown && !isConnected) {
+      Alert.alert(
+        "Network error!",
+        "Zoey needs a functional internet connection to work properly. Please check your internet connection and try again later.",
+        [],
+        { cancelable: false }
+      );
+    }
+  }, [isConnected, type]);
+
+  useEffect(() => {
+    showNetworkAlert();
+  }, [showNetworkAlert]);
+
   const Stack = createStackNavigator();
 
   return (
@@ -30,7 +48,8 @@ const MainNavigator = (props) => {
         colors: {
           background: props.theme === "dark" ? "#2b2b2b" : null,
         },
-      }}>
+      }}
+    >
       {isTryAutoLogin ? (
         <SplashScreen />
       ) : isVerify ? (
@@ -41,12 +60,10 @@ const MainNavigator = (props) => {
             screenOptions={{
               headerShown: false,
               cardStyle: {
-                backgroundColor: getThemeColor(
-                  "background",
-                  props.theme
-                ),
+                backgroundColor: getThemeColor("background", props.theme),
               },
-            }}>
+            }}
+          >
             <Stack.Screen name="tab" component={TabNavigator} />
             <Stack.Screen
               options={directMessagesScreenOptions}

@@ -51,11 +51,11 @@ const ProfileNavigator = (props) => (
       component={AccountScreen}
       options={accountScreenOptions}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
       name="pricing"
       component={PricingScreen}
       options={pricingScreenOptions}
-    />
+    /> */}
     <Stack.Screen name="soldBooks" component={SoldItems} />
   </Stack.Navigator>
 );

@@ -130,12 +130,13 @@ const booksReducer = (state = initialState, action) => {
           if (action.otherFilters.includes("For School") && !book.isForSchool) {
             return false;
           }
-          if (action.otherFilters.includes("New") && book.condition !== "New") {
+
+          if (action.otherFilters.includes("new") && book.condition !== "new") {
             return false;
           }
           if (
-            action.otherFilters.includes("Used") &&
-            book.condition !== "Used"
+            action.otherFilters.includes("used") &&
+            book.condition !== "used"
           ) {
             return false;
           }

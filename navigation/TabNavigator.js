@@ -19,10 +19,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchChats, addChat } from "../store/actions/chats";
 import { Platform } from "react-native";
 import ProfileNavigator from "./ProfileNavigator";
-import {
-  setSocket,
-  uploadExpoPushToken,
-} from "../store/actions/auth";
+import { setSocket, uploadExpoPushToken } from "../store/actions/auth";
 import * as Notifications from "expo-notifications";
 
 const BottomTab = createBottomTabNavigator();
@@ -34,13 +31,13 @@ const TabNavigator = (props) => {
   const socket = useSelector((state) => state.auth.socket);
   const [expoPushToken, setExpoPushToken] = useState("");
 
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
-  });
+  // Notifications.setNotificationHandler({
+  //   handleNotification: async () => ({
+  //     shouldShowAlert: true,
+  //     shouldPlaySound: false,
+  //     shouldSetBadge: false,
+  //   }),
+  // });
 
   useEffect(() => {
     let hasMounted = false;
@@ -51,17 +48,16 @@ const TabNavigator = (props) => {
       }
     });
 
-    const subscription =
-      Notifications.addNotificationResponseReceivedListener(
-        (response) => {
-          const data = response.notification.request.content.data;
-          if (data.type === "chatRoom") {
-            props.navigation.navigate("chatRoom", {
-              userId: data.userId,
-            });
-          }
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const data = response.notification.request.content.data;
+        if (data.type === "chatRoom") {
+          props.navigation.navigate("chatRoom", {
+            userId: data.userId,
+          });
         }
-      );
+      }
+    );
 
     return () => {
       subscription.remove();
@@ -86,9 +82,9 @@ const TabNavigator = (props) => {
           newSocket.emit("subscribe", { userId });
           newSocket.on(
             "roomAdded",
-            ({ roomId, userId, userImageUrl, username }) => {
+            ({ roomId, userId, userImageUrl, username, messages }) => {
               dispatch(
-                addChat(roomId, userId, username, userImageUrl)
+                addChat(roomId, userId, username, userImageUrl, messages)
               );
             }
           );
@@ -120,7 +116,8 @@ const TabNavigator = (props) => {
           height: Platform.OS === "android" ? "7%" : "10%",
           backgroundColor: getThemeColor("main", props.theme),
         },
-      }}>
+      }}
+    >
       <BottomTab.Screen
         name="Explore"
         component={BooksNavigator}
@@ -205,8 +202,7 @@ async function registerForPushNotificationsAsync() {
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== "granted") {
-      const { status } =
-        await Notifications.requestPermissionsAsync();
+      const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
     if (finalStatus !== "granted") {

@@ -72,7 +72,9 @@ function Books({
       }}
     >
       <ActivityIndicator color={getThemeColor("text", theme)} />
-      {Platform.OS === "ios" && <Text>Loading...</Text>}
+      {Platform.OS === "ios" && (
+        <Text style={{ color: getThemeColor("text", theme) }}>Loading...</Text>
+      )}
     </View>
   ) : books.length <= 0 ? (
     <NoData

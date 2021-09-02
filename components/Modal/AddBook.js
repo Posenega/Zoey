@@ -17,7 +17,8 @@ import { requestAddBook } from "../../store/actions/books";
 import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
-import Categories, { schoolSubjects } from "../../constants/Categories";
+import Categories from "../../constants/Categories";
+import SchoolSubjects from "../../constants/SchoolSubjects";
 import Grades from "../../constants/Grades";
 
 function AddBook(props) {
@@ -181,7 +182,7 @@ function AddBook(props) {
               watch={watch}
               value={value}
               onChange={onChange}
-              items={watch("forSchool") ? schoolSubjects : Categories}
+              items={watch("forSchool") ? SchoolSubjects : Categories}
             />
           )}
         />
@@ -205,9 +206,9 @@ function AddBook(props) {
               onBlur={onBlur}
               value={value}
               onChange={(type) => {
-                if (type === "sell" && watch("forSchool")) {
-                  showPricingAlert(navigation, modalizeRef?.current.close);
-                }
+                // if (type === "sell" && watch("forSchool")) {
+                //   showPricingAlert(navigation, modalizeRef?.current.close);
+                // }
                 onChange(type);
               }}
               error={errors.type?.message}
@@ -261,8 +262,8 @@ function AddBook(props) {
             <DropDownMenu
               text="Select the book's condition"
               items={[
-                { label: "New", value: "New" },
-                { label: "Used", value: "Used" },
+                { label: "New", value: "new" },
+                { label: "Used", value: "used" },
               ]}
               onBlur={onBlur}
               value={value}

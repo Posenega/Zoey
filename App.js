@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert } from "react-native";
-import { useNetInfo, NetInfoStateType } from "@react-native-community/netinfo";
 
 import Constants from "expo-constants";
 import { applyMiddleware, combineReducers, createStore } from "redux";
@@ -40,31 +38,13 @@ const fetchFonts = () => {
 
 const fetchTheme = async () => {
   const theme = await SecureStore.getItemAsync("theme");
+  console.log(theme);
   const parsedTheme = JSON.parse(theme);
   return parsedTheme?.theme;
 };
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  const { isConnected, type } = useNetInfo();
-
-  const showNetworkAlert = useCallback(() => {
-    if (type !== NetInfoStateType.unknown && !isConnected) {
-      Alert.alert(
-        "Network error!",
-        "Please check your internet connection and try again later.",
-        [],
-        { cancelable: false }
-      );
-    }
-  }, [isConnected, type]);
-
-  useEffect(() => {
-    if (fontsLoaded) {
-      showNetworkAlert();
-    }
-  }, [fontsLoaded, showNetworkAlert]);
 
   useEffect(() => {
     if (fontsLoaded) {

@@ -17,7 +17,8 @@ import DropDownMenu from "../DropDownMenu";
 import ImagePicker from "../ImagePicker";
 import Options from "../Options";
 import { requestAddPackage } from "../../store/actions/packages";
-import Categories, { schoolSubjects } from "../../constants/Categories";
+import Categories from "../../constants/Categories";
+import SchoolSubjects from "../../constants/SchoolSubjects";
 import Grades from "../../constants/Grades";
 import showPricingAlert from "../../helpers/showPricingAlert";
 import { useNavigation } from "@react-navigation/native";
@@ -176,7 +177,7 @@ function AddPackage(props) {
               watch={watch}
               value={value}
               onChange={onChange}
-              items={watch("forSchool") ? schoolSubjects : Categories}
+              items={watch("forSchool") ? SchoolSubjects : Categories}
             />
           )}
         />
@@ -199,9 +200,9 @@ function AddPackage(props) {
               onBlur={onBlur}
               value={value}
               onChange={(type) => {
-                if (type === "sell" && watch("forSchool")) {
-                  showPricingAlert(navigation, modalizeRef?.current.close);
-                }
+                // if (type === "sell" && watch("forSchool")) {
+                //   showPricingAlert(navigation, modalizeRef?.current.close);
+                // }
                 onChange(type);
               }}
               error={errors.type?.message}

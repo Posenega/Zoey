@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -23,6 +22,7 @@ import IconPlaceholder from "../components/IconPlaceholder";
 import { setTheme } from "../store/actions/theme";
 import themes, { getThemeColor } from "../constants/Colors";
 import ListIcon from "../components/Icons/ListIcon";
+import { Image } from "react-native-expo-image-cache";
 
 function SettingsScreen(props) {
   const dispatch = useDispatch();
@@ -58,9 +58,7 @@ function SettingsScreen(props) {
             {imageUrl ? (
               <Image
                 style={styles.image}
-                source={{
-                  uri: `${axios.defaults.baseURL}/${imageUrl}`,
-                }}
+                uri={`${axios.defaults.baseURL}/${imageUrl}`}
               />
             ) : (
               <IconPlaceholder size={60} iconSize={50} />
@@ -97,7 +95,7 @@ function SettingsScreen(props) {
             Account
           </SettingContainer>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("pricing");
           }}
@@ -109,7 +107,7 @@ function SettingsScreen(props) {
           >
             Pricing
           </SettingContainer>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* <SettingContainer
           icon={
             <LockIcon

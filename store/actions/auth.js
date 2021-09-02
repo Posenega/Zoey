@@ -184,7 +184,7 @@ export const tryAutoLogin = () => {
       if (!token) {
         dispatch(setVerifyUser(email, userId));
       } else if (token && jwtDecode(token).exp < Date.now() / 1000) {
-        dispatch(logout());
+        dispatch(tryAutoLoginFail());
       } else {
         dispatch(
           authSuccess(

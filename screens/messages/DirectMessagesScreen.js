@@ -44,7 +44,7 @@ export default function DirectMessagesScreen(props) {
   const cId = chat._id;
 
   useEffect(() => {
-    if (!pendingChat) {
+    if (realChat) {
       socket?.emit("joinRoom", { roomId: cId });
       socket?.on("message", ({ text, messageId, createdAt, sender }) => {
         dispatch(
@@ -57,7 +57,7 @@ export default function DirectMessagesScreen(props) {
         socket?.emit("leaveRoom", { roomId: cId });
       };
     }
-  }, [pendingChat]);
+  }, [realChat]);
 
   useEffect(() => {
     if (!pendingChat) {
@@ -106,7 +106,7 @@ export default function DirectMessagesScreen(props) {
               />
             </View>
             <KeyboardAvoidingView
-              keyboardVerticalOffset={120}
+              keyboardVerticalOffset={135}
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.composerContainer}
             >

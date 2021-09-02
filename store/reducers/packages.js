@@ -150,14 +150,14 @@ const packagesReducer = (state = initialState, action) => {
             return false;
           }
           if (
-            action.otherFilters.includes("New") &&
-            myPackage.condition !== "New"
+            action.otherFilters.includes("new") &&
+            myPackage.condition !== "new"
           ) {
             return false;
           }
           if (
-            action.otherFilters.includes("Used") &&
-            myPackage.condition !== "Used"
+            action.otherFilters.includes("used") &&
+            myPackage.condition !== "used"
           ) {
             return false;
           }

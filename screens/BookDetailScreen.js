@@ -10,13 +10,14 @@ import {
 } from "react-native";
 import { Image } from "react-native-expo-image-cache";
 import Divider from "../components/Divider";
-import Categories, { schoolSubjects } from "../constants/Categories";
+import Categories from "../constants/Categories";
 import { useSelector, useDispatch, connect, useStore } from "react-redux";
 import Badge from "../components/Badge";
 import MessageButton from "../components/Icons/MessageButton";
 import Colors, { getThemeColor } from "../constants/Colors";
 import FavoriteButton from "../components/Icons/FavoriteButton";
 import BackButton from "../components/Icons/BackButton";
+import SchoolSubjects from "../constants/SchoolSubjects";
 import {
   deleteBook,
   fetchFavoriteBooks,
@@ -217,19 +218,20 @@ function BookDetailScreen(props) {
                 color={getThemeColor("primary", props.theme)}
                 backgroundColor={getThemeColor("badgeBackground", props.theme)}
               >
-                {displayedBook.condition}
+                {displayedBook.condition.charAt(0).toUpperCase() +
+                  displayedBook.condition.slice(1)}
               </Badge>
             </View>
-            {displayedBook.categories.length > 1 && (
+            {isPackage && (
               <View>
                 <Text style={styles.categoriText}>
-                  Categories Included in This Package:
+                  Categorie(s) Included in This Package:
                 </Text>
                 <Text style={styles.categories}>
                   {displayedBook.categories
                     .map((category) => {
                       const foundCat = displayedBook.isForSchool
-                        ? schoolSubjects.find((cat) => cat.value == category)
+                        ? SchoolSubjects.find((cat) => cat.value == category)
                             .label
                         : Categories.find((cat) => cat.value == category).label;
                       return foundCat;
@@ -313,7 +315,7 @@ function BookDetailScreen(props) {
                 )
               )}
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() =>
                 props.navigation.navigate("settings", {
                   screen: "pricing",
@@ -321,7 +323,7 @@ function BookDetailScreen(props) {
               }
             >
               <Text style={styles.alertMessage}>Check Suggested Prices</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </>
       ) : (

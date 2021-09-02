@@ -77,6 +77,7 @@ function MessageComposer({ chatId, theme, userId, navigation }) {
 const getStyles = (theme) =>
   StyleSheet.create({
     messageComposer: {
+      marginTop: 8,
       paddingHorizontal: 10,
       flexDirection: "row",
       alignItems: "center",
