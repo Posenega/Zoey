@@ -48,9 +48,9 @@ const MessageInfoContainer = (props) => {
                     : "D MMM YYYY"
                 )}
             </Text>
-            <View style={styles.unreadCountContainer}>
+            {/* <View style={styles.unreadCountContainer}>
               <Text style={styles.unreadCount}>3</Text>
-            </View>
+            </View> */}
           </View>
         </View>
         <Divider />

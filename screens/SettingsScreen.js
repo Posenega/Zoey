@@ -162,7 +162,7 @@ function SettingsScreen(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.textFooter}>© BookApp 2021</Text>
+        <Text style={styles.textFooter}>© Zoey 2021</Text>
         <Text style={styles.textFooter}>version 0.1.0</Text>
         <Text style={{ ...styles.textFooter, fontStyle: "italic" }}>
           Private Beta

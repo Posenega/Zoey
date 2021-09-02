@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import jwtDecode from "jwt-decode";
 
 export const SIGNUP_USER = "SIGNUP_USER";
 export const AUTH_SET_LOADING = "AUTH_SET_LOADING";
@@ -182,6 +183,8 @@ export const tryAutoLogin = () => {
 
       if (!token) {
         dispatch(setVerifyUser(email, userId));
+      } else if (token && jwtDecode(token).exp < Date.now() / 1000) {
+        dispatch(logout());
       } else {
         dispatch(
           authSuccess(

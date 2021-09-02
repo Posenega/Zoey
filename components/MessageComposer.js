@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Audio } from "expo-av";
 import { Controller, useForm } from "react-hook-form";
 import { View, TextInput, StyleSheet } from "react-native";
@@ -17,7 +17,7 @@ function MessageComposer({ chatId, theme, userId, navigation }) {
   const onSubmit = (data) => {
     if (!isSending.current) {
       const resetInput = () => {
-        sound.playAsync();
+        sound.replayAsync();
         reset();
         isSending.current = false;
       };
@@ -32,10 +32,14 @@ function MessageComposer({ chatId, theme, userId, navigation }) {
   };
 
   useEffect(() => {
+    let hasMounted = true;
     Audio.Sound.createAsync(require("../assets/sentMessageEffect.wav")).then(
-      ({ sound }) => setSound(sound)
+      ({ sound }) => {
+        if (hasMounted) setSound(sound);
+      }
     );
     return () => {
+      hasMounted = false;
       if (sound) {
         sound.unloadAsync();
       }
