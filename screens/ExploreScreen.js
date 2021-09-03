@@ -94,7 +94,7 @@ function ExploreScreen(props) {
         </View>
         <BookFilters fadeAnim={fadeAnim} isPackage={packagesIsSelected} />
 
-        {!isSearching && (
+        {/* {!isSearching && (
           <View style={styles.trendingNow}>
             <Text style={styles.trendingNowText}>Trending Now</Text>
 
@@ -114,7 +114,7 @@ function ExploreScreen(props) {
               isPackage={packagesIsSelected}
             />
           </View>
-        )}
+        )} */}
         <View style={styles.forYou}>
           {!isSearching && <BookPackageSelector />}
 

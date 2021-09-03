@@ -132,7 +132,7 @@ function SettingsScreen(props) {
             Appearance
           </SettingContainer>
         </TouchableOpacity>
-        <SettingContainer
+        {/* <SettingContainer
           icon={
             <NotificationIcon
               size={20}
@@ -141,7 +141,7 @@ function SettingsScreen(props) {
           }
         >
           Notifications
-        </SettingContainer>
+        </SettingContainer> */}
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("soldBooks");
