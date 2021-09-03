@@ -39,7 +39,7 @@ function AddBook(props) {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    dispatch(requestAddBook(data));
+    if (addBookStatus !== "LOADING") dispatch(requestAddBook(data));
   };
   const navigation = useNavigation();
 

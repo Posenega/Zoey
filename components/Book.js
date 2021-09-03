@@ -1,9 +1,9 @@
-import axios from "axios";
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import Image from "./CustomImage";
 import { connect } from "react-redux";
 import Categories from "../constants/Categories";
+import SchoolSubjects from "../constants/SchoolSubjects";
 import { getThemeColor } from "../constants/Colors";
 import Badge from "./Badge";
 
@@ -42,8 +42,13 @@ function Book(props) {
               {/* {props.category} */}
 
               {(props.category &&
-                Categories.find((category) => category.value == props.category)
-                  ?.label) ||
+                (props.isForSchool
+                  ? SchoolSubjects.find(
+                      (category) => category.value == props.category
+                    )?.label
+                  : Categories.find(
+                      (subject) => subject.value == props.category
+                    )?.label)) ||
                 props.category}
             </Badge>
           ) : (

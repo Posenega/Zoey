@@ -40,7 +40,9 @@ function AddPackage(props) {
   const navigation = useNavigation();
 
   const onSubmit = (data) => {
-    dispatch(requestAddPackage(data)).then(props.closeModal);
+    if (!isLoading) {
+      dispatch(requestAddPackage(data)).then(props.closeModal);
+    }
   };
   const isLoading = useSelector((state) => state.packages.addingIsLoading);
 

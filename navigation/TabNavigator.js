@@ -88,13 +88,12 @@ const TabNavigator = (props) => {
               Authorization: "Bearer " + token,
             },
           });
+          newSocket.emit("subscribe", { token });
 
           newSocket.on(
             "roomAdded",
-            ({ roomId, userId, userImageUrl, username, messages }) => {
-              dispatch(
-                addChat(roomId, userId, username, userImageUrl, messages)
-              );
+            ({ roomId, userId, userImage, username, messages }) => {
+              dispatch(addChat(roomId, userId, username, userImage, messages));
             }
           );
           dispatch(setSocket(newSocket));
@@ -106,6 +105,7 @@ const TabNavigator = (props) => {
   useEffect(() => {
     return () => {
       if (socket) {
+        socket.emit("unsubscribe", { token });
         socket.disconnect();
       }
     };

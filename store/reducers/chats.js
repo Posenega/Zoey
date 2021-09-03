@@ -55,8 +55,8 @@ export default chatsReducer = (state = initialState, action) => {
         ...chat,
         isLoading: true,
       };
-      state.myChats.splice(chatIndex, 1);
-      return { ...state, myChats: [fetchedChat, ...state.myChats] };
+      state.myChats.splice(chatIndex, 1, fetchedChat);
+      return { ...state, myChats: [...state.myChats] };
 
     case ADD_CHAT_MESSAGES_SUCCESS:
       const cIndex = state.myChats.findIndex(
@@ -71,8 +71,10 @@ export default chatsReducer = (state = initialState, action) => {
         isLoading: false,
         messages: action.messages,
       };
-      state.myChats.splice(cIndex, 1);
-      return { ...state, myChats: [fChat, ...state.myChats] };
+
+      state.myChats.splice(cIndex, 1, fChat);
+
+      return { ...state, myChats: [...state.myChats] };
     case ADD_MESSAGE:
       const targetedChatIndex = state.myChats.findIndex(
         (chat) => chat._id === action.chatId
@@ -92,10 +94,12 @@ export default chatsReducer = (state = initialState, action) => {
         ...state.myChats[targetedChatIndex],
         messages: [message, ...state.myChats[targetedChatIndex].messages],
       };
-      const updatedChats = state.myChats
-        .filter((chat) => chat._id !== targetedChat._id)
-        .concat(targetedChat);
-      return { ...state, myChats: updatedChats };
+
+      const updatedChatIndex = state.myChats.findIndex(
+        (chat) => chat._id === targetedChat._id
+      );
+      state.myChats.splice(updatedChatIndex, 1, targetedChat);
+      return { ...state, myChats: [...state.myChats] };
     case SET_CHATS:
       return {
         ...state,

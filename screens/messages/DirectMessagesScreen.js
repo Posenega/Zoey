@@ -106,7 +106,7 @@ export default function DirectMessagesScreen(props) {
               />
             </View>
             <KeyboardAvoidingView
-              keyboardVerticalOffset={135}
+              keyboardVerticalOffset={145}
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={styles.composerContainer}
             >

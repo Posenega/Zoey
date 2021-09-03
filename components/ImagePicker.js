@@ -27,7 +27,7 @@ function ImagePicker(props) {
 
       const result = await takeImageFunc({
         mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-        allowsEditing: false,
+        allowsEditing: true,
         aspect: props.aspect,
         quality: 0.2,
       });

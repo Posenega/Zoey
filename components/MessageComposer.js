@@ -17,7 +17,7 @@ function MessageComposer({ chatId, theme, userId, navigation }) {
   const onSubmit = (data) => {
     if (!isSending.current) {
       const resetInput = () => {
-        sound.replayAsync();
+        sound?.replayAsync();
         reset();
         isSending.current = false;
       };
