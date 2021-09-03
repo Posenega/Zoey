@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import Image from "../components/CustomImage";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
 
@@ -19,7 +19,7 @@ function HorizontalBook(props) {
     >
       <View onStartShouldSetResponder={() => true} style={styles.bookContainer}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} uri={props.image} />
+          <Image style={styles.image} image={props.image} />
         </View>
         <View style={styles.textContainer}>
           <Text numberOfLines={1} style={styles.titleText}>

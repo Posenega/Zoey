@@ -172,6 +172,7 @@ function AddPackage(props) {
           }}
           render={({ field: { onChange, value } }) => (
             <Options
+              isError={!!errors.categories}
               style={{ marginBottom: -10 }}
               multipleAllowed={true}
               watch={watch}

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
 
-function Option({ onChange, children, value, theme }) {
+function Option({ onChange, children, value, theme, isError }) {
   const isEnabled = value;
   const styles = getStyles(theme);
 
@@ -17,7 +17,12 @@ function Option({ onChange, children, value, theme }) {
     >
       <View
         style={
-          isEnabled
+          isError
+            ? {
+                ...styles.editableContainer,
+                backgroundColor: "red",
+              }
+            : isEnabled
             ? {
                 ...styles.editableContainer,
                 backgroundColor: getThemeColor("badgeBackground", theme),

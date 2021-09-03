@@ -177,6 +177,7 @@ function AddBook(props) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Options
+              isError={!!errors.categories}
               style={{ marginBottom: -10 }}
               multipleAllowed={watch("package")}
               watch={watch}

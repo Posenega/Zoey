@@ -1,7 +1,7 @@
 import React from "react";
-import axios from "axios";
+import Image from "../components/CustomImage";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+
 import { connect } from "react-redux";
 import moment from "moment-timezone";
 import Colors, { getThemeColor } from "../constants/Colors";
@@ -10,6 +10,7 @@ import Divider from "./Divider";
 
 const MessageInfoContainer = (props) => {
   const styles = getStyles(props.theme);
+
   return (
     <TouchableWithoutFeedback
       onPress={() =>
@@ -22,9 +23,9 @@ const MessageInfoContainer = (props) => {
             <View style={styles.profilePicture}>
               {props.userImage ? (
                 <Image
-                  resizeMode="cover"
                   style={{ flex: 1 }}
-                  uri={`${axios.defaults.baseURL}/${props.userImage}`}
+                  resizeMode="cover"
+                  image={props.userImage}
                 />
               ) : (
                 <IconPlaceholder />

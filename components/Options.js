@@ -9,6 +9,7 @@ export default function Options({
   value,
   multipleAllowed,
   style,
+  isError,
 }) {
   return (
     <View style={{ ...styles.options, ...style }}>
@@ -16,6 +17,7 @@ export default function Options({
         {items.map((item) => {
           return (
             <Option
+              isError={isError}
               key={item.value}
               value={
                 !multipleAllowed
@@ -45,7 +47,8 @@ export default function Options({
 
                   onChange([...value].filter(Boolean), item.value);
                 }
-              }}>
+              }}
+            >
               {item.label || item.value}
             </Option>
           );

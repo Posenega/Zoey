@@ -38,7 +38,7 @@ function Books({
         backgroundColor={book.backgroundColor}
         title={book.title}
         category={book.categories[0]}
-        image={`${axios.defaults.baseURL}/${book.imageUrl}`}
+        image={book.image}
         author={book.author}
         navigation={navigation}
         grade={book.grade}
@@ -52,7 +52,7 @@ function Books({
       BookComponent = () => (
         <HorizontalBook
           title={book.title}
-          image={`${axios.defaults.baseURL}/${book.imageUrl}`}
+          image={book.image}
           id={book?._id}
           navigation={navigation}
           isPackage={isPackage}

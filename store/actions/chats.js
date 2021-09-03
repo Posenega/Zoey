@@ -24,7 +24,7 @@ export const fetchChats = () => {
               _id: chat._id,
               userId: chat.user._id,
               username: chat.user.firstName + " " + chat.user.lastName,
-              userImage: chat.user.imageUrl,
+              userImage: chat.user.image,
               messages: chat.messages,
             };
           })
@@ -63,10 +63,11 @@ export const addMessageRequest = (chatId, text) => {
   return async (dispatch, getState) => {
     try {
       const socket = getState().auth.socket;
+      const token = getState().auth.token;
       const sendMessagePromise = new Promise((resolve, reject) => {
         socket?.emit(
           "sendMessage",
-          { roomId: chatId, text },
+          { roomId: chatId, text, token },
           ({ message, error }) => {
             dispatch(
               addMessage(
@@ -109,11 +110,11 @@ export const addChatMessagesFail = (chatId) => {
 export const requestAddChat = (secondUserId, firstMessage) => {
   return async (dispatch, getState) => {
     const socket = getState().auth.socket;
-
+    const token = getState().auth.token;
     const addChatPromise = new Promise((resolve, reject) => {
       socket?.emit(
         "addRoom",
-        { secondUserId, firstMessage },
+        { secondUserId, firstMessage, token },
         ({ chat, error }) => {
           if (error) reject(error);
           dispatch(
@@ -121,7 +122,7 @@ export const requestAddChat = (secondUserId, firstMessage) => {
               chat._id,
               chat.user._id,
               chat.user.firstName + " " + chat.user.lastName,
-              chat.user.imageUrl,
+              chat.user.image,
               chat.messages
             )
           );

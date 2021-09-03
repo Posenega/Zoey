@@ -22,7 +22,7 @@ import IconPlaceholder from "../components/IconPlaceholder";
 import { setTheme } from "../store/actions/theme";
 import themes, { getThemeColor } from "../constants/Colors";
 import ListIcon from "../components/Icons/ListIcon";
-import { Image } from "react-native-expo-image-cache";
+import Image from "../components/CustomImage";
 
 function SettingsScreen(props) {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ function SettingsScreen(props) {
 
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
-  const imageUrl = useSelector((state) => state.auth.imageUrl);
+  const image = useSelector((state) => state.auth.image);
 
   return (
     <View style={SharedStyles.screen}>
@@ -55,11 +55,8 @@ function SettingsScreen(props) {
         </View>
         <View style={styles.headerContent}>
           <View style={styles.imageContainer}>
-            {imageUrl ? (
-              <Image
-                style={styles.image}
-                uri={`${axios.defaults.baseURL}/${imageUrl}`}
-              />
+            {image ? (
+              <Image style={styles.image} image={image} />
             ) : (
               <IconPlaceholder size={60} iconSize={50} />
             )}
@@ -161,7 +158,7 @@ function SettingsScreen(props) {
       </View>
       <View style={styles.footer}>
         <Text style={styles.textFooter}>© Zoey 2021</Text>
-        <Text style={styles.textFooter}>version 0.1.0</Text>
+        <Text style={styles.textFooter}>version 1.0.0</Text>
         <Text style={{ ...styles.textFooter, fontStyle: "italic" }}>
           Private Beta
         </Text>

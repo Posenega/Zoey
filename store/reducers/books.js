@@ -50,7 +50,7 @@ const booksReducer = (state = initialState, action) => {
       const toBeAddedBook = {
         _id: action.id,
         title: action.title,
-        imageUrl: action.image,
+        image: action.image,
         author: action.author,
         categories: action.categories,
         description: action.description,

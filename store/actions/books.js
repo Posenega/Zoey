@@ -146,7 +146,7 @@ export const requestAddBook = ({
         const {
           title,
           description,
-          imageUrl,
+          image,
           _id: id,
           type,
           categories,
@@ -162,7 +162,7 @@ export const requestAddBook = ({
         dispatch(
           addBookSuccess(
             title,
-            imageUrl,
+            image,
             author,
             description,
             type,

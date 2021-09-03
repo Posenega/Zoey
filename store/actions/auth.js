@@ -43,7 +43,7 @@ const authUser = (
         firstName,
         lastName,
         userId,
-        imageUrl,
+        image,
         type: userType,
         isStudent,
         grade,
@@ -57,7 +57,7 @@ const authUser = (
           firstName,
           lastName,
           userId,
-          imageUrl,
+          image,
           userType,
           isStudent,
           grade,
@@ -74,7 +74,7 @@ const authUser = (
                 firstName,
                 lastName,
                 userId,
-                imageUrl,
+                image,
                 userType,
                 isStudent,
                 grade
@@ -115,7 +115,7 @@ const authSuccess = (
   firstName,
   lastName,
   userId,
-  imageUrl,
+  image,
   userType,
   isStudent,
   grade
@@ -128,7 +128,7 @@ const authSuccess = (
     firstName,
     lastName,
     userId,
-    imageUrl,
+    image,
     userType: userType || "user",
     isStudent,
     grade,
@@ -174,7 +174,7 @@ export const tryAutoLogin = () => {
         firstName,
         lastName,
         userId,
-        imageUrl,
+        image,
         userType,
         isStudent,
         grade,
@@ -190,7 +190,7 @@ export const tryAutoLogin = () => {
             firstName,
             lastName,
             userId,
-            imageUrl,
+            image,
             userType,
             isStudent,
             grade
@@ -300,8 +300,7 @@ export const updateUser = (
       },
     })
       .then((response) => {
-        const { firstName, lastName, imageUrl, isStudent, grade } =
-          response.data;
+        const { firstName, lastName, image, isStudent, grade } = response.data;
         const { token, email, userId } = getState().auth;
         SecureStore.setItemAsync(
           "userData",
@@ -311,13 +310,13 @@ export const updateUser = (
             firstName,
             lastName,
             userId,
-            imageUrl,
+            image,
             isStudent,
             grade,
           })
         );
         dispatch(
-          updateUserSuccess(firstName, lastName, imageUrl, isStudent, grade)
+          updateUserSuccess(firstName, lastName, image, isStudent, grade)
         );
         goBack();
       })
@@ -335,12 +334,12 @@ export const updateUser = (
 export const updateUserSuccess = (
   firstName,
   lastName,
-  imageUrl,
+  image,
   isStudent,
   grade
 ) => {
   const updatedState = { firstName, lastName, isStudent, grade };
-  if (imageUrl) updatedState.imageUrl = imageUrl;
+  if (image) updatedState.image = image;
   return {
     type: UPDATE_USER_SUCCESS,
     updatedState,
@@ -364,7 +363,7 @@ export const verifyUser = (confirmationCode, setError) => {
           firstName,
           lastName,
           _id: userId,
-          imageUrl,
+          image,
         } = response.data.user;
         SecureStore.setItemAsync(
           "userData",
@@ -374,7 +373,7 @@ export const verifyUser = (confirmationCode, setError) => {
             firstName,
             lastName,
             userId,
-            imageUrl,
+            image,
           })
         ).then(() => {
           dispatch(
@@ -384,7 +383,7 @@ export const verifyUser = (confirmationCode, setError) => {
               firstName,
               lastName,
               userId,
-              imageUrl
+              image
             )
           );
         });

@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import Image from "../components/CustomImage";
 import Divider from "../components/Divider";
 import Categories from "../constants/Categories";
 import { useSelector, useDispatch, connect, useStore } from "react-redux";
@@ -111,13 +111,10 @@ function BookDetailScreen(props) {
               resizeMode="cover"
               style={styles.bluredImage}
               blurRadius={8}
-              uri={`${axios.defaults.baseURL}/${displayedBook.imageUrl}`}
+              image={displayedBook.image}
             />
             <View style={styles.image}>
-              <Image
-                style={{ flex: 1 }}
-                uri={`${axios.defaults.baseURL}/${displayedBook.imageUrl}`}
-              />
+              <Image style={{ flex: 1 }} image={displayedBook.image} />
             </View>
           </View>
           <View style={styles.detailsContainer}>
@@ -268,7 +265,7 @@ function BookDetailScreen(props) {
                               displayedBook.creator.lastName,
                             messages: [],
                             isLoading: false,
-                            userImage: displayedBook.creator.imageUrl,
+                            userImage: displayedBook.creator.image,
                             userId: displayedBook.creator._id,
                           },
                         };

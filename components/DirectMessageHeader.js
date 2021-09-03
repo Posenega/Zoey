@@ -6,7 +6,7 @@ import ArrowButton from "./Icons/ArrowButton";
 import MenuButton from "./Icons/MenuButton";
 import { connect } from "react-redux";
 import { getThemeColor } from "../constants/Colors";
-import { Image } from "react-native-expo-image-cache";
+import Image from "../components/CustomImage";
 
 function DirectMessageHeader({ username, navigation, theme, userImage }) {
   const styles = getStyles(theme);
@@ -23,11 +23,7 @@ function DirectMessageHeader({ username, navigation, theme, userImage }) {
       <View style={styles.imageContainer}>
         <View style={styles.image}>
           {userImage ? (
-            <Image
-              resizeMode="cover"
-              style={{ flex: 1 }}
-              uri={`${axios.defaults.baseURL}/${userImage}`}
-            />
+            <Image resizeMode="cover" style={{ flex: 1 }} image={userImage} />
           ) : (
             <IconPlaceholder />
           )}

@@ -88,7 +88,7 @@ const TabNavigator = (props) => {
               Authorization: "Bearer " + token,
             },
           });
-          newSocket.emit("subscribe", { userId });
+
           newSocket.on(
             "roomAdded",
             ({ roomId, userId, userImageUrl, username, messages }) => {

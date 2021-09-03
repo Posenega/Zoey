@@ -12,7 +12,7 @@ import NoData from "../components/NoData";
 // import { getUser } from "../store/actions/auth";
 import BookPackageSelector from "../components/BookPackageSelector";
 import { fetchUserPackages } from "../store/actions/packages";
-import { Image } from "react-native-expo-image-cache";
+import Image from "../components/CustomImage";
 
 function ProfileScreen(props) {
   const styles = getStyles(props.theme);
@@ -43,18 +43,15 @@ function ProfileScreen(props) {
   });
   const firstName = useSelector((state) => state.auth.firstName);
   const lastName = useSelector((state) => state.auth.lastName);
-  const imageUrl = useSelector((state) => state.auth.imageUrl);
+  const image = useSelector((state) => state.auth.image);
   const city = useSelector((state) => state.auth.city);
   console.log(city);
 
   return (
     <View style={SharedStyles.screen}>
       <View style={styles.header}>
-        {imageUrl ? (
-          <Image
-            style={styles.image}
-            uri={`${axios.defaults.baseURL}/${imageUrl}`}
-          />
+        {image ? (
+          <Image style={styles.image} image={image} />
         ) : (
           <IconPlaceholder size={68} iconSize={60} />
         )}
