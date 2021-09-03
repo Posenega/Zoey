@@ -159,9 +159,6 @@ function SettingsScreen(props) {
       <View style={styles.footer}>
         <Text style={styles.textFooter}>© Zoey 2021</Text>
         <Text style={styles.textFooter}>version 1.0.0</Text>
-        <Text style={{ ...styles.textFooter, fontStyle: "italic" }}>
-          Private Beta
-        </Text>
       </View>
     </View>
   );
