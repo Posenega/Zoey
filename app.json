@@ -16,7 +16,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.tgs.zoey"
+      "bundleIdentifier": "com.tgs.zoey",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera for the image of the book that is uploaded.",
+        "NSPhotoLibraryUsageDescription": "This app uses the gallery for the image of the book that is uploaded."
+      }
     },
     "android": {
       "package": "com.tgs.zoey",
