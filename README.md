@@ -99,7 +99,7 @@ The motivation behind Zoey, The Book Exchange app, arose from the economic crisi
   - By clicking on the messages bottom tab icon you can see all your messages history!
   
 * Profile Screen <br/>
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_manage_grade.png"/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/profile.png"/>
   - By clicking on the profile bottom tab icon you can enter the profile screen
   - This screen includes all your own books (and packages)
   - You can also enter the settings by clicking on the settings' icon (top right corner)
