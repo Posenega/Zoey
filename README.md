@@ -1,15 +1,13 @@
 
 <h1 align="center">
-  Distancia - Web
+  Zoey
 </h1>
-
-<h4 align="center">Distancia ~ Digitilizing Education</h4>
+<h4 align="center">Zoey ~ The Book Exchange App</h4>
 
 
 
 <p align="center">
   <a href="#motivation">Motivation</a> •
-  <a href="#key-features">Live Demo</a> •
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#credits">Credits</a> •
@@ -17,11 +15,10 @@
 
 </p>
 
-
+[!](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/zoey.gif)
 
 ## Motivation
-The COVID-19 pandemic presented unprecedented challenges to the education system, with schools and universities closing their doors and transitioning to online learning. In this time of crisis, "Distancia" was born as a solution to facilitate the educational environment between students and teachers. Developed by Selim Ellieh and Theo Khalil, two coding passionates, "Distancia" is a web platform that provides students with a means of communication with their teachers, access to course materials, and the ability to stay on top of homework assignments. The motivation behind "Distancia" was to provide a comprehensive and convenient learning platform for students and teachers during a time of uncertainty and change. In 2021, Distancia won the first place in a web development contest by the Lebanese American University. This platform could be considered as an attempt to create a modern, secure and free open-source alternative to other platforms like BlackBoard and Moodle.
-
+The motivation behind Zoey, The Book Exchange app, arose from the economic crisis and monetary inflation that was impacting Lebanon in the early 2020s. As a result of these challenges, many parents were facing difficulties in purchasing books for their children's education. Recognizing this need, Selim Ellieh, Ghady Youssef, and Theo Khalil set out to create an app that would facilitate the exchange of books between students and parents at the LBP rate. Through the development and launch of Zoey, the team aim
 
 ## Live Demo
 You can visit an online live demo now by clicking [here](https://edudistancia.herokuapp.com/)!
