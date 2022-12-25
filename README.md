@@ -56,7 +56,7 @@ The motivation behind Zoey, The Book Exchange app, arose from the economic crisi
  
 * Email Verification<br/>
 
-  <img height="768px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/mail_verification.png"/>
+  <img height="420px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/mail_verification.png"/>
   
   - To validate the email, a mail will be sent to the user with a verification code
   - The user has then to enter the verification code
