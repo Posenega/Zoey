@@ -168,6 +168,6 @@ expo start
 > [theokhalil.me](https://www.theokhalil.me) &nbsp;&middot;&nbsp;
 > GitHub [@Posenega](https://github.com/Posenega) &nbsp;&middot;&nbsp;
 
-> GitHub [@Ghaadyy](https://github.com/Ghaadyy) &nbsp;&middot;&nbsp;
+> GitHub [@Ghaadyy](https://github.com/Ghaadyy)
 
 
