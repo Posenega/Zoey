@@ -64,7 +64,7 @@ The motivation behind Zoey, The Book Exchange app, arose from the economic crisi
 
 * Home Page<br/>
 
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/home.png"/>
+  <img src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/home.png"/>
   
   - You can check all books (or packages) available for sale or exchange on the home page
   - You can click on each of the books to open up its details
