@@ -144,7 +144,7 @@ expo start
 ````
 
 > **Note**
-> Make sure to have expo sdk version 46 otherwise you might run into some issues.
+> Make sure to have Expo sdk version 46 otherwise you might run into some issues.
 
 
 ## You may also like...
