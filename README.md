@@ -127,6 +127,8 @@ The motivation behind Zoey, The Book Exchange app, arose from the economic crisi
 
 ## How To Use
 
+> **Warning**
+> Before running this application, make sure to have the api up and running on some terminal. You can find the instructions to run it and download it on [Zoey-API](https://github.com/Ghaadyy/Zoey-API).
 To clone and run this application, you'll need [Git](https://git-scm.com), [React Native](https://reactnative.dev/), and [Expo](https://expo.dev/). You also need either a physical device or a simulator. From your command line:
 
 ```bash
@@ -149,8 +151,8 @@ expo start
 
 ## You may also like...
 
-- [Distancia](https://github.com/Ghaadyy/Distancia) - Digitalizing education
-- [Distancia - App](https://github.com/selimellieh72/DistanciaMobile) - Crossplatform implementation of Distancia
+- [Zoey-API](https://github.com/Ghaadyy/Zoey-API) - API of Zoey
+- [Distancia](https://github.com/selimellieh72/Distancia) - Digitalizing education
 
 ## Credits
 - [React](https://reactjs.org)
