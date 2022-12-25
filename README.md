@@ -15,7 +15,13 @@
 
 </p>
 
-[!](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/zoey.gif)
+<p align="center">
+  <img src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/zoey.gif"/>
+
+</p>
+
+
+
 
 ## Motivation
 The motivation behind Zoey, The Book Exchange app, arose from the economic crisis and monetary inflation that was impacting Lebanon in the early 2020s. As a result of these challenges, many parents were facing difficulties in purchasing books for their children's education. Recognizing this need, Selim Ellieh, Ghady Youssef, and Theo Khalil set out to create an app that would facilitate the exchange of books between students and parents at the LBP rate. Through the development and launch of Zoey, the team aim
