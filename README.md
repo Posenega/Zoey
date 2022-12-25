@@ -16,150 +16,146 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/zoey.gif"/>
-
+  <img src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/zoey.gif" alt="animated" />
 </p>
 
-
-
-
 ## Motivation
-The motivation behind Zoey, The Book Exchange app, arose from the economic crisis and monetary inflation that was impacting Lebanon in the early 2020s. As a result of these challenges, many parents were facing difficulties in purchasing books for their children's education. Recognizing this need, Selim Ellieh, Ghady Youssef, and Theo Khalil set out to create an app that would facilitate the exchange of books between students and parents at the LBP rate. Through the development and launch of Zoey, the team aim
+The motivation behind Zoey, The Book Exchange app, arose from the economic crisis and monetary inflation that was impacting Lebanon in the early 2020s. As a result of these challenges, many parents were facing difficulties in purchasing books for their children's education. Recognizing this need, Selim Ellieh, Ghady Youssef, and Theo Khalil set out to create an app that would facilitate the exchange of books between students and parents at the LBP rate. Through the development and launch of Zoey, the team aimed to provide a convenient and cost-effective solution for families seeking to obtain the books they needed for their children's education.
 
-## Live Demo
-You can visit an online live demo now by clicking [here](https://edudistancia.herokuapp.com/)!
+
 ## Key Features
-* Home Page <br/>
 
-  <img  height='528px' src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/distancia_home.png"/>
-  
-  - Our Home Page shows the different features you may find in our website.
-  
+
 * Authentication <br/>
 
-  <img  height='528px' src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/distancia_auth.png"/>
+  <img  height='528px' src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/authentication.png"/>
   
-  - Sign up with full name, email, password and profile picture 
-  - Specify if you are a teacher (or not)
-  - Login using email, password
-  - Signing up using google is also possible!
+  - Just when you join the app, the authentication screen is present where you can choose either to Sign Up or Log In
+  
+
+* Sign in<br/>
+
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signin.png"/>
+  
+  - You can sign in using your email and password
  
-* Join Course (Student)<br/>
-
-  <img height='528px' src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/distancia_courses-student.png"/>
   
-  - Join courses using a secure ID provided by your teacher
-  - The teacher may then accept the request
-  - Each course groups many tools such as: lectures, homeworks ...
+  
+* Sign Up <br/>
+
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_1.png"/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_2.png"/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_3.png"/>
+  
+  - You can sign up (create an account) through three steps
+  - Step 1: Enter your first name and last name (This will be used to identify you to other users)
+  - Step 2: Enter your email and password (You will need those to login later)
+  - Step 3: You can then enter your (Lebanese) city
+  - You will stay logged in even after you reopen the app!
  
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/distancia_grade-student-available.png"/>
-  
-* Homework Management (Student)<br/>
-
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/distancia_homework-student.png"/>
-  
-  - Students can easily manage their homeworks and keep track of it.
-  - We offer an incredible and interactive tool that lets student submit their due work.
  
-* Lecture Navigation (Student)<br/>
+* Email Verification<br/>
 
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/distancia_pd-reader(2).png"/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/mail_verification.png"/>
   
-  - Students can navigate through the material (videos, pdf, etc...) sent by the tutor.
-* Grades Dashboard (Teacher)
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_grades.png"/>
-  - Teachers can manage all their courses from the home page dashboard
+  - To validate the email, a mail will be sent to the user with a verification code
+  - The user has then to enter the verification code
+ 
 
-* Interact with Grade (Teacher)
+* Home Page<br/>
+
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/home.png"/>
+  
+  - You can check all books (or packages) available for sale or exchange on the home page
+  - You can click on each of the books to open up its details
+ 
+ * Filter books<br/>
+
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/filter.png"/>
+  
+  - You can filter the books by some flairs (The book's condition, if the book is new or used, etc...)
+  - You can can search books by their name too!
+ 
+* Book Details <br/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/book_details(1).png"/>
+  - You can see the details of a book just by clicking on it
+  - This includes the author, the description and some flairs (The book's condition, if the book is new or used, etc...)
+  - You can delete the entire book by clicking the trash button
+  - You can also add the book to your favorite books by clicking on the heart button on the right of the book's title
+  - You can also chat with the author of the book by clicking on the mesasge button
+ 
+ 
+* Chatting system <br/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/chat.png"/>
+  - By clicking on the message button on the book's details page you can enter a real time chat with the book's owner
+  - Uses web sockets
+ 
+* Favorite Books Screen <br/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/favorites.png"/>
+  - By clicking on the favorite bottom tab icon (the heart icon) you can see all the favorite books!
+
+* Messages Screen <br/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/messages.png"/>
+  - By clicking on the messages bottom tab icon you can see all your messages history!
+  
+* Profile Screen <br/>
   <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_manage_grade.png"/>
-  - Teachers can click on any of their courses in order to interact with it
-  - This will open a drawer on right side of the page
-  - The teacher can then either delete the course, add (or delete a new chapter), add a homework for each chapter and manage the grade as a whole
+  - By clicking on the profile bottom tab icon you can enter the profile screen
+  - This screen includes all your own books (and packages)
+  - You can also enter the settings by clicking on the settings' icon (top right corner)
+ 
 
-* Delete Grade (Teacher)
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_delete_grade.png"/>
-  - By clicking the delete button, a teacher may delete the whole course contents
-  - This include all materials, submitted homeworks!
-  - This action is dangerous, the website requires the teacher to type the entire grade name before proceeding
+* Settings <br/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/settings.png"/>
+  - In the settings you can see your profile and name
+  - You can logout using the logout button
+  - You can click on the account button to edit your account
+  - You can click on the appearence button to toogle dark mode (or light mode)
+  - You can click on the sold books button to check all your sold books
+
+
   
-* Manage Grade (Teacher)
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_manage_grade.png"/>
-  - By clicking the manage button, a teacher may manage the course
-  - The teacher can see any incoming requests to join the grade and may accept them (or reject them) accordingly
-  - The teacher can also see all the students enrolled in his class
+* Edit Account <br/>
+  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/edit_account.png"/>
+  - By clicking on the account button on the settings screen you can edit your account
+  - This includes your first name, last name, profile picture and password
 
-* Add Chapter (Teacher)
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_add_chapter.png"/>
-  - By clicking the add chapter button, a teacher may add a chapter to the course
-  - The teacher has to specify the name of that specific chapter
-  - Then, he may be able to post lecture materials, assignments related to this specific chapter (That the students enrolled may see)
-  
-* Upload Lecture material (Teacher)
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_add_lecture.png"/>
-  - By clicking on "Lecture" underneath each chapter, the teacher is able to post any lecture material for the students (in any format)
 
-* Add due homework (Teacher)
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/teacher_add_homework.png"/>
-  - By clicking on "Homework" underneath each chapter, the teacher is able to manage homeworks due to the students
-  - The teacher can add homeworks by specifying its name, its due date and if he wishes to accept answers
-  - The teacher can then check all the answers of the students
+* Appearence <br/>
+  - You can enable or disable dark mode by clicking on the appearence button in the settings screen
 
-* Chatting system \
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/chatting.png"/>
-  - Real-time chat between the student and the teacher directly in addition to the whole class
-  - Uses web sockets!
-  
-* Profile\
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/profile.png"/>
-  <img height="528px" src="https://github.com/selimellieh72/Distantia-MERN/blob/main/preview/edit_profile.png"/>
-  - Clicking on the profile picture in the dashboard will open a little pop-up
-  - You can click on "Edit profile" to edit your profile (First Name and Last Name)
 
 ## How To Use
 
-To clone and run this application, you'll need [Git](https://git-scm.com), [React](https://reactjs.org), [Node.js](https://nodejs.org/en/) and [MongoDB](https://www.mongodb.com). From your command line:
+To clone and run this application, you'll need [Git](https://git-scm.com), [React Native](https://reactnative.dev/), and [Expo](https://expo.dev/). You also need either a physical device or a simulator. From your command line:
 
 ```bash
 # Clone this repository 
-$ git clone https://github.com/selimellieh72/Distancia-Mern
+$ git clone https://github.com/Ghaadyy/Zoey
 
 # Go into the repository
-$ cd Distancia-Mern
+$ cd Zoey
 
 # Install dependencies
 $ npm install
 
-# Run the backend api
-node app.js
+# Run the app
+expo start
 ````
 
-On another terminal, run the client react app:
-
-```bash
-# Go to the client folder
-cd client
-
-# Install dependencies
-npm install
-
-# Run React App
-$ npm start
-```
-
 > **Note**
-> Make sure to run the backend (NodeJs) app alongside the client (React) app or the website will not work.
+> Make sure to have expo sdk version 46 otherwise you might run into some issues.
 
 
 ## You may also like...
 
-- [Distancia - App](https://github.com/selimellieh72/DistanciaMobile) - Digitializing education
-- [Zoey](https://github.com/Ghaadyy/book-app-frontend) - Exchanging books
+- [Distancia](https://github.com/Ghaadyy/Distancia) - Digitalizing education
+- [Distancia - App](https://github.com/selimellieh72/DistanciaMobile) - Crossplatform implementation of Distancia
 
 ## Credits
 - [React](https://reactjs.org)
-- [MongoDB](https://www.mongodb.com)
-- [Node.js](https://nodejs.org/en/)
-- [Express.js](https://expressjs.com/)
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
 - [Socket.IO](https://socket.io/)
 
 
