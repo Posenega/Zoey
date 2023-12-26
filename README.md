@@ -25,106 +25,82 @@ The motivation behind Zoey, The Book Exchange app, arose from the economic crisi
 
 ## Key Features
 
-
-* Authentication <br/>
-
-  <img  height='528px' src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/authentication.png"/>
+* **Authentication**  
+  ![Authentication Screen](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/authentication.png)  
+  - Just when you join the app, the authentication screen is present where you can choose either to Sign Up or Log In.
   
-  - Just when you join the app, the authentication screen is present where you can choose either to Sign Up or Log In
+* **Sign in**  
+  ![Sign in Screen](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signin.png)  
+  - You can sign in using your email and password.
   
-
-* Sign in<br/>
-
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signin.png"/>
-  
-  - You can sign in using your email and password
- 
-  
-  
-* Sign Up <br/>
-
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_1.png"/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_2.png"/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_3.png"/>
-  
+* **Sign Up**  
+  ![Sign Up Step 1](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_1.png)  
+  ![Sign Up Step 2](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_2.png)  
+  ![Sign Up Step 3](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/signup_3.png)  
   - You can sign up (create an account) through three steps
   - Step 1: Enter your first name and last name (This will be used to identify you to other users)
   - Step 2: Enter your email and password (You will need those to login later)
   - Step 3: You can then enter your (Lebanese) city
   - You will stay logged in even after you reopen the app!
- 
- 
-* Email Verification<br/>
-
-  <img height="420px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/mail_verification.png"/>
   
-  - To validate the email, a mail will be sent to the user with a verification code
-  - The user has then to enter the verification code
- 
+* **Email Verification**  
+  ![Email Verification](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/mail_verification.png)  
+  -  To validate the email, a mail will be sent to the user with a verification code
+  -  The user has then to enter the verification code
 
-* Home Page<br/>
-
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/home.png"/>
-  
+* **Home Page**  
+  ![Home Page](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/home.png)  
   - You can check all books (or packages) available for sale or exchange on the home page
   - You can click on each of the books to open up its details
- 
- * Filter books<br/>
 
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/filter.png"/>
-  
+* **Filter books**  
+  ![Filter Books](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/filter.png)  
   - You can filter the books by some flairs (The book's condition, if the book is new or used, etc...)
   - You can can search books by their name too!
- 
-* Book Details <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/book_details(1).png"/>
+
+* **Book Details**  
+  ![Book Details](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/book_details(1).png)  
   - You can see the details of a book just by clicking on it
   - This includes the author, the description and some flairs (The book's condition, if the book is new or used, etc...)
   - You can delete the entire book by clicking the trash button
   - You can also add the book to your favorite books by clicking on the heart button on the right of the book's title
   - You can also chat with the author of the book by clicking on the mesasge button
- 
- 
-* Chatting system <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/chat.png"/>
+
+* **Chatting system**  
+  ![Chatting System](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/chat.png)  
   - By clicking on the message button on the book's details page you can enter a real time chat with the book's owner
   - Uses web sockets
- 
-* Favorite Books Screen <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/favorites.png"/>
+
+* **Favorite Books Screen**  
+  ![Favorite Books](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/favorites.png)  
   - By clicking on the favorite bottom tab icon (the heart icon) you can see all the favorite books!
 
-* Messages Screen <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/messages.png"/>
+* **Messages Screen**  
+  ![Messages Screen](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/messages.png)  
   - By clicking on the messages bottom tab icon you can see all your messages history!
-  
-* Profile Screen <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/profile.png"/>
+
+* **Profile Screen**  
+  ![Profile Screen](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/profile.png)  
   - By clicking on the profile bottom tab icon you can enter the profile screen
   - This screen includes all your own books (and packages)
   - You can also enter the settings by clicking on the settings' icon (top right corner)
- 
 
-* Settings <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/settings.png"/>
+* **Settings**  
+  ![Settings](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/settings.png)  
   - In the settings you can see your profile and name
   - You can logout using the logout button
   - You can click on the account button to edit your account
   - You can click on the appearence button to toogle dark mode (or light mode)
   - You can click on the sold books button to check all your sold books
 
-
-  
-* Edit Account <br/>
-  <img height="528px" src="https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/edit_account.png"/>
+* **Edit Account**  
+  ![Edit Account](https://github.com/Ghaadyy/book-app-frontend/blob/main/preview/edit_account.png)  
   - By clicking on the account button on the settings screen you can edit your account
   - This includes your first name, last name, profile picture and password
-
-
-* Appearence <br/>
-  - You can enable or disable dark mode by clicking on the appearence button in the settings screen
-
-
+    
+* **Appearance**  
+  - You can enable or disable dark mode by clicking on the appearance button in the settings screen.
+  
 ## How To Use
 
 > **Warning**
